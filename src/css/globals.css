@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme{
+  --color-black-01: #0e100f;
+  --color-link-hover: rgb(244, 244, 245);
+  --color-green-01: #019d90e6;
+}

@@ -1,0 +1,5 @@
+echo '🏗️👷 Linting, formatting, type checking and building your project before committing'
+
+node --run lint:staged && node --run typecheck
+
+echo '✅ All test passed. Committing...'
