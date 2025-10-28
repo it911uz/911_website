@@ -24,16 +24,26 @@ export const CallBack = () => {
 
     const onSubmit = (data: CallBackSchemaType) => {
         startTransition(async () => {
-            const response = await callbackAction(data);
+            const response = await callbackAction({
+                body: {
+                    full_name: data.fullName,
+                    email: data.email,
+                    phone: data.phone,
+                    company_name: data.companyName,
+                    company_info: data.companyInfo || "",
+                },
+            });
 
             if (!response.ok) {
-                alert("Что-то пошло не так, попробуйте ещё раз");
+                alert("❌ Что-то пошло не так, попробуйте ещё раз");
+                return;
             }
 
             reset();
-            alert("Спасибо за заявку, мы свяжемся с вами в ближайшее время");
-        })
+            alert("✅ Спасибо за заявку, мы свяжемся с вами в ближайшее время!");
+        });
     };
+
 
     return (
         <section className="relative py-24 md:py-36 bg-linear-to-b from-[#fff5f0] to-white overflow-hidden">
@@ -147,7 +157,13 @@ export const CallBack = () => {
                             type="submit"
                             className="cursor-pointer w-full bg-linear-to-r from-[#fa4f02] to-[#ff7032] text-white font-semibold py-3 rounded-full hover:shadow-lg transition-all duration-300"
                         >
-                            Отправить заявку
+                            {
+                                pending ? (
+                                    "Отправка..."
+                                ) : (
+                                    "Отправить заявку"
+                                )
+                            }
                         </motion.button>
                     </motion.form>
 

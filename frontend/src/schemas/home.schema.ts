@@ -32,7 +32,7 @@ export const callBackSchema = z.object({
 	companyInfo: z
 		.string()
 		.max(1000, "Максимум 1000 символов")
-		.optional(),
+		
 });
 
 export type CallBackSchemaType = z.infer<typeof callBackSchema>;
