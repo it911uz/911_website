@@ -6,6 +6,7 @@ import { Cta } from "./_components/cta";
 import { Header } from "./_components/header";
 import { Services } from "./_components/services";
 import { Why } from "./_components/why";
+import { CallBack } from "./_components/callback";
 
 const Page = async ({ params }: PageProps<"/[locale]">) => {
 	const { locale } = await params;
@@ -25,6 +26,8 @@ const Page = async ({ params }: PageProps<"/[locale]">) => {
 			<Why />
 
 			<Clients />
+
+			<CallBack />
 		</>
 	);
 };
