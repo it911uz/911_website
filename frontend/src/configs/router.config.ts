@@ -1,7 +1,10 @@
 export const Routers = {
 	home: "/",
 	about: "/about",
-	services: "/services",
-	benefits: "/benefits",
+	brands: "/brands",
+	news: "/news",
 	contacts: "/contacts",
+	newsById: (id: number) => `/news/${id}`,
+	brandById: (id: number) => `/brands/${id}`,
+	offers: "/offers",
 } as const;

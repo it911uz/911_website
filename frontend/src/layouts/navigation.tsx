@@ -1,68 +1,93 @@
-"use client";
-
-import LogoSvg from "@public/logo.svg";
-import Image from "next/image";
-import { useLocale } from "next-intl";
-import type { ComponentProps } from "react";
 import { Container } from "@/components/widgets/container";
 import { Routers } from "@/configs/router.config";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Fragment, type ComponentProps } from "react";
+import LogoImage from "@public/logo.svg";
 import { navigation } from "@/const/navigation.const";
-import { Link, usePathname } from "@/i18n/navigation";
-import { cn, isActiveGroupPath } from "@/lib/util";
+import { getLocale } from "next-intl/server";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SwitchLang } from "./_components/switch-lang";
+import { TargetLinks } from "@/configs/target-links.config";
+import { Wrapper } from "@/components/ui/wrapper";
+import { Menu, X } from "lucide-react";
+import { MobileMenu } from "./_components/mobile-menu";
 
-export const Navigation = ({ className, ...props }: ComponentProps<"nav">) => {
-	const pathname = usePathname();
-	const locale = useLocale();
+export const Navigation = async ({ className, ...props }: ComponentProps<"nav">) => {
+    const locale = await getLocale();
 
-	return (
-		<nav
-			className={cn(
-				"bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-100",
-				className,
-			)}
-			{...props}
-		>
-			<Container>
-				<div className="py-3 flex items-center justify-between">
-					<Link className="inline-block shrink-0" href={Routers.home}>
-						<Image
-							priority
-							src={LogoSvg}
-							alt="Лого IT911"
-							width={120}
-							height={40}
-							className="transition-transform duration-300 hover:scale-[1.03]"
-						/>
-					</Link>
-
-					<div className="flex items-center gap-6">
-						<ul className="hidden md:flex gap-1 items-center">
-							{navigation.map((item) => (
-								<li key={item.id}>
-									<Link
-										href={item.path}
-										className={cn(
-											"px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200",
-											"text-gray-700 hover:text-[#fa4f02] hover:bg-[#fa4f02]/5",
-											{
-												"text-[#fa4f02] bg-[#fa4f02]/10 shadow-sm":
-													isActiveGroupPath(pathname, item.path),
-											},
-										)}
-									>
-										{item.name[locale]}
-									</Link>
-								</li>
-							))}
-						</ul>
-
-						<div className="hidden md:block h-6 w-px bg-gray-200" />
-
-						<SwitchLang />
-					</div>
-				</div>
-			</Container>
-		</nav>
-	);
+    return (
+        <nav
+            className={cn("bg-white py-3 shadow-md shadow-black/10 sticky top-0 z-50 left-0 right-0", className)}
+            {...props}
+        >
+            <Container>
+                
+                <Wrapper className="flex justify-between items-center lg:grid xl:grid-cols-[290px_1fr_580px] lg:gap-5">
+                    
+                 
+                    <Link href={Routers.home}>
+                        <Image priority className="w-28 h-8 lg:w-32 lg:h-11" alt="Лого" src={LogoImage} />
+                    </Link>
+                    
+                    <div className="hidden xl:flex justify-between items-center gap-5">
+                        {
+                            navigation.map((item) => (
+                                <Fragment key={item.id}>
+                                    {
+                                        (item.children?.length ?? 0) > 0 ? (
+                                            <Popover>
+                                                <PopoverTrigger className="text-base shrink-0" hasIcon={(item.children?.length ?? 0) > 0}>
+                                                    {item.name[locale]}
+                                                </PopoverTrigger>
+                                                <PopoverContent className="rounded-md p-0 shadow-lg">
+                                                    <ul className="w-fit min-w-[200px]">
+                                                        {
+                                                            item.children?.map((child) => (
+                                                                <li className="py-2 px-4 border-b border-b-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors" key={child.id}>
+                                                                    <Link className="text-sm font-medium" href={child.path ?? "#!"}>
+                                                                        {child.name[locale]}
+                                                                    </Link>
+                                                                </li>
+                                                            ))
+                                                        }
+                                                    </ul>
+                                                </PopoverContent>
+                                            </Popover>
+                                        ) : (
+                                            <Link 
+                                                className="text-base font-medium relative after:content-[''] after:w-0 after:h-0.5 after:bg-red-500 after:absolute after:bottom-0 after:left-0 after:transition-all hover:after:w-full after:duration-300" 
+                                                href={item.path ?? "#!"}
+                                            >
+                                                {item.name[locale]}
+                                            </Link>
+                                        )
+                                    }
+                                </Fragment>
+                            ))
+                        }
+                    </div>
+                    
+                    <div className="flex justify-end items-center gap-4 xl:gap-10">
+                        
+                        <SwitchLang />
+                        
+                        <a 
+                            href={`tel:${TargetLinks.phone}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="hidden xl:block"
+                        >
+                            <span className="text-xl font-semibold relative after:content-[''] after:w-0 after:h-0.5 after:bg-red-500 after:absolute after:bottom-0 after:left-0 after:transition-all hover:after:w-full after:duration-300">
+                                +998 95 955 39 33
+                            </span>
+                        </a>
+                        
+                        <MobileMenu />
+                    </div>
+                </Wrapper>
+            </Container>
+        </nav>
+    );
 };

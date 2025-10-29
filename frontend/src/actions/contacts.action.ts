@@ -1,5 +1,8 @@
 "use server";
 
+import { Env } from "@/configs/env.config";
+import { log } from "console";
+
 interface Props {
     body: {
         company_name: string;
@@ -10,9 +13,10 @@ interface Props {
     };
 }
 
-export const callbackAction = async ({ body }: Props) => {
+export const contactsAction = async ({ body }: Props) => {
+    
     try {
-        const response = await fetch("http://95.182.118.118:8000/leads/", {
+        const response = await fetch(`${Env.PUBLIC_API_URL}/leads`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {

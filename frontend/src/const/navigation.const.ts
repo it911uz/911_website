@@ -4,45 +4,56 @@ import type { Name } from "@/types/share.type";
 
 export const navigation: Menu[] = [
 	{
-		id: 1,
-		name: {
-			ru: "Главная",
-			en: "Home",
-			uz: "Bosh sahifa",
-		},
-		path: Routers.home,
-	},
-	{
 		id: 2,
 		name: {
-			ru: "О нас",
+			ru: "О компании",
 			en: "About",
 			uz: "Biz haqimizda",
 		},
-		path: Routers.about,
+		children: [
+			{
+				id: 2,
+				name: {
+					ru: "Наша команда",
+					en: "Our team",
+					uz: "Bizning komanda",
+				},
+				path: Routers.about,
+			}
+		]
 	},
 	{
 		id: 3,
 		name: {
-			ru: "Услуги",
-			en: "Services",
-			uz: "Xizmatlar",
+			ru: "Бренды",
+			en: "Brands",
+			uz: "Brendlar",
 		},
-		path: Routers.services,
+		path: Routers.brands,
 	},
 	{
 		id: 4,
+		name: {
+			ru: "Новости",
+			en: "News",
+			uz: "Yangiliklar",
+		},
+		path: Routers.news,
+	},
+	{
+		id: 5,
 		name: {
 			ru: "Контакты",
 			en: "Contacts",
 			uz: "Kontaktlar",
 		},
 		path: Routers.contacts,
-	},
+	}
 ] as const;
 
-interface Menu {
+export interface Menu {
 	id: Key;
 	name: Name;
-	path: string;
+	path?: string;
+	children?: Menu[];
 }

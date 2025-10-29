@@ -1,17 +1,26 @@
-import type { Metadata } from "next";
+import { routing } from "@/i18n/routing";
+import { Footer } from "@/layouts/footer";
 import { Navigation } from "@/layouts/navigation";
+import { hasLocale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-	title: "IT 911",
-	description: "IT 911",
-};
+const ClientLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
+	const { locale } = await params;
 
-const ClientLayout = async ({ children }: LayoutProps<"/">) => {
+	if (!hasLocale(routing.locales, locale)) {
+		notFound();
+	}
+
+	setRequestLocale(locale);
+
 	return (
 		<>
-			<Navigation className="sticky top-0 z-50 shrink-0" />
+			<Navigation className="shrink-0" />
 
 			<main className="flex-1">{children}</main>
+
+			<Footer />
 		</>
 	);
 };

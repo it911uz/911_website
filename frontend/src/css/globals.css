@@ -1,8 +1,40 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./fonts/circe-font.css";
 
-@theme{
-  --color-black-01: #0e100f;
-  --color-link-hover: rgb(244, 244, 245);
-  --color-green-01: #019d90e6;
+@theme {
+    /* font family */
+    --font-circe: 'Circe', sans-serif;
+
+    /* colors */
+
+    --color-gray-01: #7b7b7b;
+    --color-brand-orange: #fa4f02;
+    --color-brand-blue: #003061;
+    --color-brand-green: #198754;
+    --color-brand-red: #dc3545;
+    --color-brand-yellow: #ffc107;
+    --color-gray-02: #eaeaea;
+    --color-gray-03: #1e1e1f;
+    --color-gray-04: #e2e1e2;
+}
+
+@layer base {
+    * {
+        font-family: var(--font-circe) !important;
+    }
+
+    a,
+    button,
+    label,
+    span,
+    textarea,
+    input,
+    select {
+        display: inline-block;
+    }
+
+    ::selection {
+        @apply text-brand-orange;
+    }
 }
