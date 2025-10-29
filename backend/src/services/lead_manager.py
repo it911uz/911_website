@@ -47,9 +47,10 @@ class LeadManager:
             request: LeadRequest,
             target_id: uuid.UUID = None
     ):
-        target = await self.target_repo.get(target_id)
-        if not target:
-            raise NotFound(f"Target with id {target_id} not found")
+        if target_id:
+            target = await self.target_repo.get(target_id)
+            if not target:
+                raise NotFound(f"Target with id {target_id} not found")
         request.target_id = target_id
         lead = await self.repo.create(**request.model_dump())
         return LeadResponse.model_validate(lead)
