@@ -35,6 +35,7 @@ export const contactsAction = async ({ body }: Props) => {
             ok: false,
             status: 500,
             data: null,
+            res: error
         };
     }
 };
