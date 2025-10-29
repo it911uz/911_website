@@ -16,7 +16,7 @@ interface Props {
 export const contactsAction = async ({ body }: Props) => {
     
     try {
-        const response = await fetch(`${Env.PUBLIC_API_URL}/leads`, {
+        const response = await fetch(`fastapi-app:8000/leads`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
