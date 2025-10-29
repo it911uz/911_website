@@ -1,30 +1,18 @@
-/* src/components/sections/news.tsx */
+
 import { Wrapper } from "@/components/ui/wrapper"
 import { Container } from "@/components/widgets/container"
 import { NewsCarousel, type News as NewsType } from "./news-carousel"
-import Logo from "@public/logo.svg"
+import Image1 from "@public/images/1.jpg"
+import Image2 from "@public/images/2.jpg"
+import Image3 from "@public/images/3.jpg"
 import { LinkButton } from "@/components/ui/link-button"
 import { Routers } from "@/configs/router.config"
 import { Link } from "@/i18n/navigation"
 
 const news: NewsType[] = [
     {
-        id: 1,
-        image: Logo,
-        name: {
-            en: "We congratulate you on Teacher's and Mentor's Day!",
-            ru: "Поздравляем вас с Днём учителя и наставника!",
-            uz: "O‘qituvchi va murabbiylar kuni bilan tabriklaymiz!",
-        },
-        description: {
-            en: "Today we express our deepest gratitude to all teachers and mentors for their tireless work and dedication in shaping the future generation.",
-            ru: "Сегодня мы выражаем глубокую благодарность всем учителям и наставникам за их неустанный труд и вклад в воспитание будущего поколения.",
-            uz: "Bugun biz barcha o‘qituvchi va murabbiylarga yosh avlodni tarbiyalashdagi fidoyiligi uchun chuqur minnatdorchilik bildiramiz.",
-        }
-    },
-    {
         id: 2,
-        image: Logo,
+        image: Image1,
         name: {
             en: "New branch opening in Tashkent!",
             ru: "Открытие нового филиала в Ташкенте!",
@@ -38,7 +26,7 @@ const news: NewsType[] = [
     },
     {
         id: 3,
-        image: Logo,
+        image: Image2,
         name: {
             en: "Our team participated in the International IT Forum 2025",
             ru: "Наша команда приняла участие в Международном IT-форуме 2025",
@@ -52,7 +40,7 @@ const news: NewsType[] = [
     },
     {
         id: 4,
-        image: Logo,
+        image: Image3,
         name: {
             en: "Internship program 2025 has started!",
             ru: "Стартовала программа стажировок 2025!",
@@ -64,20 +52,6 @@ const news: NewsType[] = [
             uz: "Yosh mutaxassislar endi bizning jamoamizga qo‘shilib, tajriba orttirishlari va soha mutaxassislari bilan birga rivojlanishlari mumkin.",
         }
     },
-    {
-        id: 5,
-        image: Logo,
-        name: {
-            en: "Website redesign — new look and better performance",
-            ru: "Редизайн сайта — новый облик и улучшенная производительность",
-            uz: "Saytimiz yangilandi — yangi dizayn va yuqori samaradorlik!",
-        },
-        description: {
-            en: "We have updated our website for faster loading, improved accessibility, and a more modern visual experience.",
-            ru: "Мы обновили наш сайт для более быстрой загрузки, улучшенной доступности и современного визуального стиля.",
-            uz: "Saytimiz tezroq yuklanadigan, qulay va zamonaviy interfeys bilan yangilandi.",
-        }
-    }
 ]
 
 export const News = () => {

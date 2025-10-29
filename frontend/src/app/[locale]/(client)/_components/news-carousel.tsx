@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import type { Name } from "@/types/share.type";
 import { MoveRight } from "lucide-react";
 import { useLocale } from "next-intl";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 export const NewsCarousel = ({ newsData = [] }: Props) => {
@@ -56,8 +56,8 @@ export const NewsCarousel = ({ newsData = [] }: Props) => {
                     </p>
                 )}
 
-                <Link 
-                    href={Routers.newsById(currentSlide?.id ?? 0)} 
+                <Link
+                    href={Routers.newsById(currentSlide?.id ?? 0)}
                     className="mt-6 md:mt-10 inline-flex items-center gap-2 group text-red-500 hover:text-red-400 transition-colors"
                 >
                     <span className="text-sm font-semibold duration-300 transition-all ease-in-out">
@@ -98,7 +98,7 @@ interface Props {
 }
 
 export interface News {
-    image: string;
+    image: string | StaticImageData;
     name: Name;
     id: number;
     description?: Name;
