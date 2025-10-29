@@ -10,17 +10,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { ErrorMassage } from "@/components/ui/error-message";
 import { contactsAction } from "@/actions/contacts.action";
+import { toast } from "sonner";
 
 export const ContactsForm = () => {
     const [pending, startTransition] = useTransition();
 
-    const { register, handleSubmit, formState: { errors, isDirty } } = useForm<ContactSchemaType>({
+    const { register, handleSubmit, formState: { errors, isDirty }, reset, } = useForm<ContactSchemaType>({
         resolver: zodResolver(contactSchema)
     });
 
     const onSubmit = (values: ContactSchemaType) => {
         startTransition(async () => {
             const response = await contactsAction({ body: values });
+
+            if (!response.ok) {
+                console.error(response);
+                toast.error("Произошла ошибка");
+                return;
+            }
+
+            toast.success("Сообщение отправлено");
+            reset();
             console.log(response);
         })
     }

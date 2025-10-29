@@ -5,6 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 import { rubik } from "@/configs/font.config";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 export const generateStaticParams = () => {
 	return routing.locales.map((locale) => ({ locale }));
@@ -27,7 +28,11 @@ const RootLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
 	return (
 		<html lang={locale} translate="no" className={cn("scroll-smooth")}>
 			<body className="min-h-screen flex flex-col justify-between">
-				<NextIntlClientProvider>{children}</NextIntlClientProvider>
+				<NextIntlClientProvider>
+					{children}
+
+					<Toaster />
+				</NextIntlClientProvider>
 			</body>
 		</html>
 	);
