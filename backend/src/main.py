@@ -19,6 +19,7 @@ from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
 
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_user()
@@ -39,6 +40,9 @@ app = FastAPI(
         status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
     }
 )
+@app.get("/")
+async def health():
+    return {"status": "ok"}
 
 app.add_middleware(
     CORSMiddleware,
