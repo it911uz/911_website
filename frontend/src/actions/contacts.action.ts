@@ -1,8 +1,5 @@
 "use server";
 
-import { Env } from "@/configs/env.config";
-import { log } from "console";
-
 interface Props {
     body: {
         company_name: string;
