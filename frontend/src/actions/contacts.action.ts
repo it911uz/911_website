@@ -13,7 +13,7 @@ interface Props {
 export const contactsAction = async ({ body }: Props) => {
 
     try {
-        const response = await fetch(`https://api.it911.uz/leads`, {
+        const response = await fetch(`https://api.it911.uz/leads/`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
