@@ -3,7 +3,7 @@ import { Container } from "@/components/widgets/container"
 
 export const Today = () => {
     return (
-        <section data-slot="today" className="py-16">
+        <section data-slot="today" className="py-16 overflow-x-hidden">
             <Container>
                 <Wrapper className="gap-6" column={1} md={2} >
 

@@ -3,7 +3,7 @@ import { Routers } from "@/configs/router.config"
 import { Link } from "@/i18n/navigation"
 
 export const Footer = () => {
-    return <section data-slot="footer" className="bg-gray-04 py-12 md:py-20">
+    return <section data-slot="footer" className="bg-gray-04 py-12 md:py-20 overflow-x-hidden">
         <Container>
             <div className="space-y-8 md:space-y-16 max-w-5xl mx-auto">
                 <p className="text-xl md:text-2xl text-gray-01">

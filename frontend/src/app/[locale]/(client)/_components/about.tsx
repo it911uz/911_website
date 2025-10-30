@@ -3,7 +3,7 @@ import { Container } from "@/components/widgets/container"
 import { AboutContent } from "./about-content"
 
 export const About = () => {
-    return <section data-slot="about" className="py-12 md:py-16">
+    return <section data-slot="about" className="py-12 md:py-16 overflow-x-hidden">
         <Container>
             <Wrapper className="py-6 md:py-9 gap-6" column={1} md={2}>
 

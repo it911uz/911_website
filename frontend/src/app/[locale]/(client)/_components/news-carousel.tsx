@@ -46,12 +46,12 @@ export const NewsCarousel = ({ newsData = [] }: Props) => {
     return (
         <div className="overflow-hidden rounded-2xl flex flex-col md:flex-row shadow-xl">
             <div className="w-full md:w-[35%] h-auto md:h-[450px] flex flex-col justify-center md:justify-end py-6 px-4 md:pb-10 md:px-6 bg-gray-900 text-white order-2 md:order-1">
-                <h4 className="text-xl md:text-3xl font-semibold tracking-wide mb-3">
+                <h4 className="text-xl lg:text-3xl xl:text-xl 2xl:text-3xl font-semibold tracking-wide mb-3">
                     {currentSlide?.name?.[locale] ?? "Без названия"}
                 </h4>
 
                 {currentSlide?.description && (
-                    <p className="text-white/80 leading-relaxed text-sm md:text-base">
+                    <p className="text-white/80 leading-relaxed text-sm md:text-xs">
                         {currentSlide.description[locale] ?? ""}
                     </p>
                 )}
@@ -80,7 +80,7 @@ export const NewsCarousel = ({ newsData = [] }: Props) => {
                                     priority
                                     src={item.image}
                                     alt={item.name?.[locale] ?? ""}
-                                    className="object-cover w-full h-full"
+                                    className="w-full h-full object-center"
                                 />
                             </div>
                         </CarouselItem>

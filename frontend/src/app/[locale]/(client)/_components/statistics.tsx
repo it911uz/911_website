@@ -34,7 +34,7 @@ export const Statistics = () => {
     ];
 
     return (
-        <section data-slot="statistics" className="py-12 md:py-24 bg-white">
+        <section data-slot="statistics" className="py-12 md:py-24 bg-white overflow-x-hidden">
             <Container>
                 <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-10 border-b border-gray-200 place-items-end">
                     {statsData.map((stat, index) => (

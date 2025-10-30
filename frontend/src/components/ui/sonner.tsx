@@ -17,8 +17,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
     return (
         <Sonner
             theme={theme as ToasterProps["theme"]}
-            className="toaster group w-full! max-w-md! md:max-w-lg! lg:max-w-xl!"
             position="top-right"
+            className="toaster group w-full! max-w-md! md:max-w-lg! lg:max-w-xl!"
             icons={{
                 success: <CircleCheckIcon className="size-5 text-green-500" />,
                 info: <InfoIcon className="size-5 text-blue-500" />,
@@ -28,21 +28,21 @@ const Toaster = ({ ...props }: ToasterProps) => {
             }}
             style={
                 {
-                    "--normal-bg": "var(--popover)",
-                    "--normal-text": "var(--popover-foreground)",
-                    "--normal-border": "var(--border)",
+                    "--normal-bg": "#ffffff",
+                    "--normal-text": "#111827",
+                    "--normal-border": "#e5e7eb",
                     "--border-radius": "0.75rem",
-                    "--normal-shadow": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)",
+                    "--normal-shadow":
+                        "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05)",
 
-                    "--success-bg": "rgba(22, 163, 74, 0.9)",
-                    "--success-text": "#fff",
-
-                    "--error-bg": "rgba(220, 38, 38, 0.9)",
-                    "--error-text": "#fff",
-
-                    "--warning-bg": "rgba(251, 191, 36, 0.9)",
-                    "--warning-text": "#1f2937",
-
+                    "--success-bg": "#ffffff",
+                    "--success-text": "#16a34a",
+                    "--error-bg": "#ffffff",
+                    "--error-text": "#dc2626",
+                    "--warning-bg": "#ffffff",
+                    "--warning-text": "#b45309",
+                    "--info-bg": "#ffffff",
+                    "--info-text": "#2563eb",
                 } as CSSProperties
             }
             {...props}

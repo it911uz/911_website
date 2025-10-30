@@ -9,7 +9,7 @@ import { contactSchema, type ContactSchemaType } from "@/schemas/contact.schema"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { ErrorMassage } from "@/components/ui/error-message";
-import { contactsAction } from "@/actions/contacts.action";
+import { contactAction } from "@/actions/contact.action";
 import { toast } from "sonner";
 
 export const ContactsForm = () => {
@@ -21,17 +21,15 @@ export const ContactsForm = () => {
 
     const onSubmit = (values: ContactSchemaType) => {
         startTransition(async () => {
-            const response = await contactsAction({ body: values });
+            const response = await contactAction({ body: values });
 
             if (!response.ok) {
-                console.error(response);
                 toast.error("Произошла ошибка");
                 return;
             }
 
             toast.success("Сообщение отправлено");
             reset();
-            console.log(response);
         })
     }
 
