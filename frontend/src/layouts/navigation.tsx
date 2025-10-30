@@ -80,7 +80,7 @@ export const Navigation = async ({ className, ...props }: ComponentProps<"nav">)
                             className="hidden xl:block"
                         >
                             <span className="text-xl font-semibold relative after:content-[''] after:w-0 after:h-0.5 after:bg-red-500 after:absolute after:bottom-0 after:left-0 after:transition-all hover:after:w-full after:duration-300">
-                                +998 95 955 39 33
+                                +998 ( 77 ) 443-33-35
                             </span>
                         </a>
                         

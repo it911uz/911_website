@@ -93,7 +93,7 @@ export const MobileMenu = () => {
                                 rel="noopener noreferrer"
                                 className="text-xl font-bold text-red-600"
                             >
-                                +998 95 955 39 33
+                                +998 (77) 443-33-35
                             </a>
                         </div>
                     </div>

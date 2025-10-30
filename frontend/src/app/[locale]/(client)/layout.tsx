@@ -20,7 +20,18 @@ export const metadata: Metadata = {
 		"sayt yaratish", "veb-sayt ishlab chiqish", "CRM tizimini yaratish", "CRM ishlab chiqish", "telegram bot yaratish", "botlar integratsiyasi", "yaratish", "ishlab chiqish", "avtomatlashtirish", "O'zbekiston IT",
 
 		"website creation", "web development", "create CRM system", "CRM development", "telegram bot creation", "bot integration", "IT solutions", "custom development", "business automation", "Uzbekistan IT",
-	]
+	],
+
+	robots: {
+		follow: true,
+		index: true,
+		googleBot: {
+			follow: true,
+			index: true,
+			'max-snippet': -1,
+			'max-image-preview': 'large',
+		},
+	}
 };
 
 
