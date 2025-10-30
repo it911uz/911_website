@@ -88,7 +88,7 @@ export const News = () => {
                                     href={Routers.news}
                                     className="flex flex-col sm:flex-row sm:items-center justify-between hover:text-red-600 transition-colors duration-200"
                                 >
-                                    <span className="text-sm text-gray-400 mr-5">01.04.2023</span>
+                                    <span className="text-sm text-gray-400 mr-5">01.10.2025</span>
                                     <span className="text-gray-700 font-medium sm:text-right mt-1 sm:mt-0">
                                         Новая версия сайта
                                     </span>
@@ -100,9 +100,9 @@ export const News = () => {
                                     href={Routers.news}
                                     className="flex flex-col sm:flex-row sm:items-center justify-between hover:text-red-600 transition-colors duration-200"
                                 >
-                                    <span className="text-sm text-gray-400">15.03.2023</span>
+                                    <span className="text-sm text-gray-400">15.10.2025</span>
                                     <span className="text-gray-700 font-medium sm:text-right mt-1 sm:mt-0">
-                                        Новый офис в Самарканде
+                                        Новый офис в Ташкенте
                                     </span>
                                 </Link>
                             </li>
@@ -112,7 +112,7 @@ export const News = () => {
                                     href={Routers.news}
                                     className="flex flex-col sm:flex-row sm:items-center justify-between hover:text-red-600 transition-colors duration-200"
                                 >
-                                    <span className="text-sm text-gray-400">10.02.2023</span>
+                                    <span className="text-sm text-gray-400">15.10.2025</span>
                                     <span className="text-gray-700 font-medium sm:text-right mt-1 sm:mt-0">
                                         Обновление клиентского
                                     </span>

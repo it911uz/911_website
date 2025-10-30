@@ -29,7 +29,7 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
 
                         <div className="space-y-2 text-sm">
                             <p className="text-lg font-bold ">Свяжитесь с нами</p>
-                            <a href={`tel:${TargetLinks.phone}`} className="block">+998 90 123 45 67</a>
+                            <a href={`tel:${TargetLinks.phone}`} className="block">+998 (77) 443-33-35</a>
                             <a href={`mailto:${TargetLinks.email}`} className="block">
                                 {TargetLinks.email}
                             </a>
