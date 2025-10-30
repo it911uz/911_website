@@ -41,9 +41,9 @@ export const Footer = ({ className, ...props }: ComponentProps<"footer">) => {
 
                     <FooterLinks title="Карта сайта">
                         <FooterLink href={Routers.home}>Главная</FooterLink>
-                        <FooterLink href={Routers.home}>О нас</FooterLink>
-                        <FooterLink href={Routers.home}>Новости</FooterLink>
-                        <FooterLink href={Routers.home}>Контакты</FooterLink>
+                        <FooterLink href={Routers.about}>О нас</FooterLink>
+                        <FooterLink href={Routers.news}>Новости</FooterLink>
+                        <FooterLink href={Routers.contacts}>Контакты</FooterLink>
                     </FooterLinks>
 
                     <FooterLinks title="Наши услуги">

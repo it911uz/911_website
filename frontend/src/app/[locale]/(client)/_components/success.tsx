@@ -39,7 +39,7 @@ const paragraphVariants: Variants = {
 
 export const Success = () => {
     return (
-        <section data-slot="success" className="py-12 md:py-24 bg-white">
+        <section data-slot="success" className="py-12 md:py-24 bg-white overflow-x-hidden">
             <Container>
                 <Wrapper className="gap-6" column={1} md={2} >
                     <motion.h2

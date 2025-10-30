@@ -224,7 +224,7 @@ const DotButtonVariants = cva(
 	{
 		variants: {
 			selected: {
-				true: "bg-gray-900 scale-125",
+				true: "bg-orange-600 scale-125",
 				false: "bg-gray-300 hover:bg-gray-400",
 			},
 		},

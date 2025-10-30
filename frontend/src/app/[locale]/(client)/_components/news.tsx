@@ -56,7 +56,7 @@ const news: NewsType[] = [
 
 export const News = () => {
     return (
-        <section data-slot="news" className="py-12 md:py-16 bg-gray-50">
+        <section data-slot="news" className="py-12 md:py-16 bg-gray-50 overflow-x-hidden">
             <Container>
                 <Wrapper className="py-6 md:py-9 gap-6" column={1} xl={3}>
                     <h2 className="text-gray-900 text-3xl font-extrabold tracking-tight mb-4 md:mb-0">

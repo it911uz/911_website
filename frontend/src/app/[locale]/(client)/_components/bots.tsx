@@ -22,7 +22,7 @@ const botsItemVariants: Variants = {
 
 export const Bots = () => {
     return (
-        <section id="bot" data-slot="bot" className="py-24 bg-black text-white">
+        <section id="bot" data-slot="bot" className="py-24 bg-black text-white overflow-x-hidden">
             <Container>
                 <Wrapper className="gap-6" column={1} lg={3} >
 

@@ -38,7 +38,7 @@ const imageVariants: Variants = {
 
 export const Systems = () => {
     return (
-        <section id="system" data-slot="system" className="py-24 bg-black text-white">
+        <section id="system" data-slot="system" className="py-24 bg-black text-white overflow-x-hidden">
             <Container>
                 <Wrapper className="gap-6" column={1} lg={3} >
                     <h2 className="text-gray-300 text-2xl font-bold tracking-wider">

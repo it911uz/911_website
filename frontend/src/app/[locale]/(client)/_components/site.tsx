@@ -22,7 +22,7 @@ const siteItemVariants:Variants = {
 
 export const Site = () => {
     return (
-        <section id="site" data-slot="site" className="py-24 bg-black text-white">
+        <section id="site" data-slot="site" className="py-24 bg-black text-white overflow-x-hidden">
             <Container>
                 <Wrapper className="gap-6" column={1} lg={3} >
 
