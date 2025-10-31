@@ -11,7 +11,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { SwitchLang } from "./_components/switch-lang";
 import { TargetLinks } from "@/configs/target-links.config";
 import { Wrapper } from "@/components/ui/wrapper";
-import { Menu, X } from "lucide-react";
 import { MobileMenu } from "./_components/mobile-menu";
 
 export const Navigation = async ({ className, ...props }: ComponentProps<"nav">) => {

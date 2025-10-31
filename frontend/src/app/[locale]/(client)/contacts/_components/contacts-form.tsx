@@ -11,8 +11,10 @@ import { useTransition } from "react";
 import { ErrorMassage } from "@/components/ui/error-message";
 import { contactAction } from "@/actions/contact.action";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const ContactsForm = () => {
+    const t = useTranslations("ContactsPage.Form");
     const [pending, startTransition] = useTransition();
 
     const { register, handleSubmit, formState: { errors, isDirty }, reset, } = useForm<ContactSchemaType>({
@@ -35,52 +37,62 @@ export const ContactsForm = () => {
 
     return <form className="px-6 xl:px-24 space-y-8 md:space-y-10" onSubmit={handleSubmit(onSubmit)}>
 
-        <h3 className="text-3xl md:text-5xl">
-            Если у вас есть вопросы, свяжитесь с нами
-        </h3>
+        <h2 className="text-3xl md:text-5xl">
+            {t("title")}
+        </h2>
 
         <Field>
-            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="name">Ваше имя</FieldLabel>
+            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="name">
+                {t("name")}
+            </FieldLabel>
 
-            <Input border={false} type="text" id="name" placeholder="Введите полное имя" {...register("full_name")} />
+            <Input border={false} type="text" id="name" placeholder={t("namePlaceholder")} {...register("full_name")} />
 
             <ErrorMassage error={errors.full_name?.message} />
         </Field>
 
         <Field>
-            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="phone">Введите полный номер телефона</FieldLabel>
+            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="phone">
+                {t("phone")}
+            </FieldLabel>
 
-            <Input border={false} type="text" id="phone" placeholder="Номер телефона" {...register("phone")} />
+            <Input border={false} type="text" id="phone" placeholder={t("phonePlaceholder")} {...register("phone")} />
 
             <ErrorMassage error={errors.phone?.message} />
         </Field>
 
         <Field>
-            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="email">Введите email</FieldLabel>
+            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="email">
+                {t("email")}
+            </FieldLabel>
 
-            <Input border={false} type="email" id="email" placeholder="Введите email" {...register("email")} />
+            <Input border={false} type="email" id="email" placeholder={t("emailPlaceholder")} {...register("email")} />
 
             <ErrorMassage error={errors.email?.message} />
         </Field>
 
         <Field>
-            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="company_name">Название компании</FieldLabel>
+            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="company_name">
+                {t("organizationName")}
+            </FieldLabel>
 
-            <Input border={false} type="text" id="company_name" placeholder="Введите название компании" {...register("company_name")} />
+            <Input border={false} type="text" id="company_name" placeholder={t("organizationNamePlaceholder")} {...register("company_name")} />
 
             <ErrorMassage error={errors.company_name?.message} />
         </Field>
 
         <Field>
-            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="company_info">Дополнительная информация</FieldLabel>
+            <FieldLabel className="text-base md:text-xl text-white" required htmlFor="company_info">
+                {t("organizationInfo")}
+            </FieldLabel>
 
-            <Textarea bordered={false} placeholder="Ваш вопрос" {...register("company_info")} />
+            <Textarea bordered={false} placeholder={t("organizationInfoPlaceholder")} {...register("company_info")} />
 
             <ErrorMassage error={errors.company_info?.message} />
         </Field>
 
         <Button disabled={!isDirty} loading={pending} rounded={true} size={"lg"} className="font-black" variant={"red"}>
-            Отправить
+            {t("submit")}
         </Button>
     </form>
 }

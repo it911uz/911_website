@@ -1,8 +1,12 @@
 import { Routers } from "@/configs/router.config"
 import { TargetLinks } from "@/configs/target-links.config"
 import { Link } from "@/i18n/navigation"
+import { getTranslations } from "next-intl/server";
 
-export const Address = () => {
+export const Address = async () => {
+
+    const t = await getTranslations("ContactsPage.Address");
+
     return (
         <div className="space-y-6 md:space-y-8 px-4 sm:px-6 lg:px-8 xl:px-24">
             <Link
@@ -10,7 +14,7 @@ export const Address = () => {
                 href={Routers.contacts + "#!"}
                 className="block text-2xl md:text-3xl font-bold text-gray-900 border-b border-gray-200 pb-3"
             >
-                Ташкент
+                {t("title")}
             </Link>
 
             <div className="px-0 lg:px-4 space-y-8 md:space-y-10">
@@ -66,18 +70,18 @@ export const Address = () => {
 
                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-200 text-gray-700">
                     <div>
-                        <p className="text-sm md:text-base font-semibold mb-1 text-gray-900">Адрес:</p>
+                        <p className="text-sm md:text-base font-semibold mb-1 text-gray-900">{t("address.title")}</p>
                         <p className="text-sm md:text-base">
-                            Chorsu MFY, 4 дом, 135 квартира
+                            {t("address.address")}
                         </p>
                     </div>
                     <div>
-                        <p className="text-sm md:text-base font-semibold mb-1 text-gray-900">Часы работы:</p>
+                        <p className="text-sm md:text-base font-semibold mb-1 text-gray-900">{t("schedule.title")}</p>
                         <p className="text-sm md:text-base">
-                            Пн-Вс: 10:00–19:00
+                            {t("schedule.time")}
                         </p>
                         <p className="text-sm md:text-base">
-                            Без выходных
+                            {t("schedule.weekend")}
                         </p>
                     </div>
                 </div>

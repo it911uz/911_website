@@ -7,6 +7,7 @@ import { Routers } from "@/configs/router.config";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const botsItemVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
@@ -21,6 +22,8 @@ const botsItemVariants: Variants = {
 };
 
 export const Bots = () => {
+    const t = useTranslations("HomePage.Effect");
+
     return (
         <section id="bot" data-slot="bot" className="py-24 bg-black text-white overflow-x-hidden">
             <Container>
@@ -35,16 +38,16 @@ export const Bots = () => {
                         viewport={{ once: true, amount: 0.3 }}
                         className="space-y-6 col-span-3 md:col-span-2 xl:col-span-1 order-1 lg:order-0"
                     >
-                        <p className="text-6xl md:text-8xl font-extrabold tracking-tight mb-4">
-                            Боты и мессенджеры
-                        </p>
+                        <h3 className="text-6xl md:text-8xl font-extrabold tracking-tight mb-4">
+                            {t("Bots.title")}
+                        </h3>
 
                         <p className="text-xl md:text-2xl font-semibold text-gray-50">
-                            Автоматизация через Telegram и другие платформы
+                            {t("Bots.subtitle")}
                         </p>
 
                         <p className="text-lg text-gray-400 max-w-lg">
-                            Разрабатываем умных ботов для поддержки клиентов, приема заказов и интеграции с внутренними системами.
+                            {t("Bots.description")}
                         </p>
 
                         <div className="pt-8 text-right">
@@ -55,7 +58,7 @@ export const Bots = () => {
                                 size="lg"
                             >
                                 <span>
-                                    О проекте
+                                    {t("link")}
                                 </span>
                                 <ArrowRight className="w-5 h-5 ml-1" />
                             </LinkButton>
@@ -70,9 +73,15 @@ export const Bots = () => {
                         className="flex flex-col items-end lg:items-end w-full col-span-3 lg:col-span-1 lg:hidden xl:flex"
                     >
                         <div className="text-lg font-medium text-gray-400 space-x-4 mb-4">
-                            <Link href={Routers.home + "#system"} >~ CRM</Link>
-                            <Link href={Routers.home + "#site"} >~ Сайты</Link>
-                            <Link href={Routers.home + "#bot"} className="text-white font-bold">~ Боты</Link>
+                            <Link href={Routers.home + "#system"} >
+                                {t("anchor.1")}
+                            </Link>
+                            <Link href={Routers.home + "#site"} >
+                                {t("anchor.2")}
+                            </Link>
+                            <Link href={Routers.home + "#bot"} className="text-white font-bold">
+                                {t("anchor.3")}
+                            </Link>
                         </div>
                     </motion.div>
                 </Wrapper>

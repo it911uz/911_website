@@ -11,26 +11,18 @@ const textVariants: Variants = {
     },
 };
 
-interface Props {
-    value: number;
-    unit: string;
-    description: string;
-    height: string;
-    delay?: number;
-}
-
 export const StatColumn = ({ value, unit, description, height, delay = 0 }: Props) => {
 
     return (
         <motion.li
             style={{ height: height }}
-            className="border-l border-gray-200 flex flex-col justify-between px-4 md:px-10 pb-5 pt-16 md:pt-20"
+            className="border-l border-b border-gray-200 flex flex-col justify-between px-4 md:px-10 pb-5 pt-16 md:pt-20"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
         >
 
-            <div className="flex-1 relative pb-10 md:pb-16">
+            <div className="flex-1 relative! pb-10 md:pb-16">
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -53,3 +45,11 @@ export const StatColumn = ({ value, unit, description, height, delay = 0 }: Prop
         </motion.li>
     );
 };
+
+interface Props {
+    value: number;
+    unit: string;
+    description: string;
+    height: string;
+    delay?: number;
+}

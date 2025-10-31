@@ -2,13 +2,14 @@
 
 import { LinkButton } from "@/components/ui/link-button";
 import { Wrapper } from "@/components/ui/wrapper";
-import { Container  } from "@/components/widgets/container";
+import { Container } from "@/components/widgets/container";
 import { Routers } from "@/configs/router.config";
-import { Link  } from "@/i18n/navigation";
-import { ArrowRight  } from "lucide-react";
-import { motion , type Variants } from "framer-motion";
+import { Link } from "@/i18n/navigation";
+import { ArrowRight } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { useTranslations } from "next-intl";
 
-const siteItemVariants:Variants = {
+const siteItemVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
         opacity: 1,
@@ -21,6 +22,8 @@ const siteItemVariants:Variants = {
 };
 
 export const Site = () => {
+    const t = useTranslations("HomePage.Effect");
+
     return (
         <section id="site" data-slot="site" className="py-24 bg-black text-white overflow-x-hidden">
             <Container>
@@ -35,16 +38,16 @@ export const Site = () => {
                         viewport={{ once: true, amount: 0.3 }}
                         className="space-y-6 col-span-3 md:col-span-2 xl:col-span-1 order-1 lg:order-0"
                     >
-                        <p className="text-6xl md:text-8xl font-extrabold tracking-tight mb-4">
-                            Web-системы и сервисы
-                        </p>
+                        <h3 className="text-6xl md:text-8xl font-extrabold tracking-tight mb-4">
+                            {t("Web.title")}
+                        </h3>
 
                         <p className="text-xl md:text-2xl font-semibold text-gray-50">
-                            Проектирование и разработка порталов
+                            {t("Web.subtitle")}
                         </p>
 
                         <p className="text-lg text-gray-400 max-w-lg">
-                            Создаем высоконагруженные веб-сервисы, интернет-магазины и корпоративные порталы под ключ.
+                            {t("Web.description")}
                         </p>
 
                         <div className="pt-8 text-center">
@@ -55,7 +58,7 @@ export const Site = () => {
                                 size="lg"
                             >
                                 <span>
-                                    О проекте
+                                    {t("link")}
                                 </span>
                                 <ArrowRight className="w-5 h-5 ml-1" />
                             </LinkButton>
@@ -70,9 +73,15 @@ export const Site = () => {
                         className="flex flex-col items-end lg:items-end w-full col-span-3 lg:col-span-1 lg:hidden xl:flex"
                     >
                         <div className="text-lg font-medium text-gray-400 space-x-4 mb-4">
-                            <Link href={Routers.home + "#system"} >~ CRM</Link>
-                            <Link href={Routers.home + "#site"} className="text-white font-bold">~ Сайты</Link>
-                            <Link href={Routers.home + "#bot"}>~ Боты</Link>
+                            <Link href={Routers.home + "#system"}>
+                                {t("anchor.1")}
+                            </Link>
+                            <Link href={Routers.home + "#site"} className="text-white font-bold" >
+                                {t("anchor.2")}
+                            </Link>
+                            <Link href={Routers.home + "#bot"}>
+                                {t("anchor.3")}
+                            </Link>
                         </div>
                     </motion.div>
                 </Wrapper>
