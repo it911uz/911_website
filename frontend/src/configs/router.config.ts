@@ -9,4 +9,8 @@ export const Routers = {
 	offers: "/offers",
 	promotion: "/promotion",
 	policy: "/policy",
+	forgotPassword: "/forgot-password",
+	admin: {
+		dashboard: "/admin/dashboard",
+	}
 } as const;
