@@ -5,6 +5,8 @@ export const FooterLink = ({ href, children }: Props) => (
     <Link
         href={href}
         className="transition-colors duration-200 text-lg font-medium"
+        target="_blank"
+        rel="noopener noreferrer"
     >
         {children}
     </Link>

@@ -20,7 +20,7 @@ export const MobileMenu = () => {
         <div className="xl:hidden">
             <button
                 onClick={() => setIsOpen(true)}
-                className="p-2 text-gray-700 hover:text-red-500 transition-colors"
+                className="p-2 text-gray-700 hover:text-red-500 transition-colors cursor-pointer"
                 aria-label="Открыть меню"
             >
                 <Menu className="size-7" />
@@ -38,7 +38,7 @@ export const MobileMenu = () => {
                         <div className="flex justify-end mb-8">
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="p-2 text-gray-700 hover:text-red-500 transition-colors"
+                                className="p-2 text-gray-700 hover:text-red-500 transition-colors cursor-pointer"
                                 aria-label="Закрыть меню"
                             >
                                 <X className="size-7" />

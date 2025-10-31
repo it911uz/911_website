@@ -4,6 +4,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import { Routers } from "@/configs/router.config";
 import { MoveRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -24,6 +25,8 @@ const itemVariants = {
     },
 };
 export const AboutContent = () => {
+    const t = useTranslations("HomePage.About");
+
     return (
         <motion.div
             className="w-full text-2xl md:text-4xl font-bold space-y-4 md:space-y-5"
@@ -33,17 +36,23 @@ export const AboutContent = () => {
             viewport={{ once: true, amount: 0.3 }}
         >
             <motion.p variants={itemVariants}>
-                Мы специализируемся на создании веб-сайтов, разработке CRM-систем и телеграм-ботов, которые помогают бизнесу автоматизировать процессы и увеличивать прибыль.
+                {
+                    t("description.1")
+                }
             </motion.p>
 
             <motion.p variants={itemVariants} className="text-gray-600/80 text-xl md:text-3xl">
-                Мы помогаем бизнесу расти через современные цифровые технологии. Каждое решение создаём с фокусом на результат - увеличение продаж, автоматизацию процессов и повышение эффективности работы.
+                {
+                    t("description.2")
+                }
             </motion.p>
 
             <motion.div variants={itemVariants} className="pt-8 md:pt-16">
                 <LinkButton className="font-bold" rounded={true} size={"lg"} variant={"black"} href={Routers.about}>
                     <span>
-                        О Компании
+                        {
+                            t("link")
+                        }
                     </span>
                     <MoveRight />
                 </LinkButton>

@@ -1,10 +1,141 @@
 {
-    "ErrorPage": {
-        "error": "Что-то пошло не так",
-        "goHomePage": "Вернуться на главную",
-        "notFound": "Страница не найдена",
-        "serverError": "Ошибка сервера",
-        "tryAgain": "Попробуйте еще раз",
-        "description": "Запрашиваемый вами адрес не существует. Пожалуйста, проверьте URL или вернитесь на домашнюю страницу."
-    }
+	"ErrorPage": {
+		"error": "Nimadir noto‘g‘ri ketdi",
+		"goHomePage": "Bosh sahifaga qaytish",
+		"notFound": "Sahifa topilmadi",
+		"serverError": "Server xatosi",
+		"tryAgain": "Yana urinib ko‘ring",
+		"description": "Siz so‘ragan manzil mavjud emas. Iltimos, URL manzilni tekshiring yoki bosh sahifaga qayting."
+	},
+	"Footer": {
+		"requisite": {
+			"title": "Biz bilan bog‘laning",
+			"address": "O‘zbekiston, Toshkent shahri, Chorsu mahallasi, 4-uy, 135-xonadon"
+		},
+		"map": {
+			"title": "Sayt xaritasi",
+			"home": "Bosh sahifa",
+			"about": "Kompaniya haqida",
+			"news": "Yangiliklar",
+			"contact": "Aloqa"
+		},
+		"services": {
+			"title": "Bizning xizmatlar",
+			"crm": "CRM tizimlar",
+			"web": "Veb-tizimlar va servislar",
+			"bots": "Botlar va messenjerlar",
+			"support": "Qo‘llab-quvvatlash"
+		},
+		"info": {
+			"title": "Huquqiy ma’lumotlar",
+			"policy": "Maxfiylik siyosati",
+			"terms": "Foydalanuvchi kelishuvi",
+			"sales": "Aksiyalar"
+		},
+		"copyright": "<copyright></copyright> 2024-<year></year> (c) MCHJ IT 911. Barcha huquqlar himoyalangan.",
+		"love": "Biznesingiz uchun muhabbat bilan yaratilgan"
+	},
+	"HomePage": {
+		"News": {
+			"title": "~ Yangiliklarimiz",
+			"more": "Yana yangiliklar",
+			"all": "Barcha yangiliklar"
+		},
+        "About": {
+            "title": "~ Kompaniya haqida",
+            "description": {
+                "1": "Biz veb-saytlar yaratish, CRM tizimlarini ishlab chiqish va biznes jarayonlarini avtomatlashtirish hamda daromadni oshirishga yordam beruvchi Telegram botlar yaratishga ixtisoslashganmiz.",
+                "2": "Biz zamonaviy raqamli texnologiyalar orqali biznesni rivojlantirishga yordam beramiz. Har bir yechim natijaga yo‘naltirilgan — savdoni oshirish, jarayonlarni avtomatlashtirish va samaradorlikni kuchaytirish uchun yaratiladi."
+            },
+            "link": "Kompaniya haqida"
+        },
+		"Effect": {
+			"title": "~ Samarali boshqaruv uchun",
+			"anchor": {
+				"1": "~ CRM",
+				"2": "~ Saytlar",
+				"3": "~ Botlar"
+			},
+			"link": "Loyiha haqida",
+			"CRM": {
+				"title": "CRM tizimlari",
+				"subtitle": "Savdo va jarayonlarni avtomatlashtirish",
+				"description": "Biz biznesingizni samarali boshqarish va o‘sishini ta’minlash uchun individual CRM yechimlarini ishlab chiqamiz va joriy etamiz."
+			},
+			"Web": {
+				"title": "Veb-tizimlar va servislar",
+				"subtitle": "Portalni loyihalash va ishlab chiqish",
+				"description": "Biz yuqori yuklamali veb-servislar, internet-do‘konlar va korporativ portallarni to‘liq tayyor holatda yaratamiz."
+			},
+			"Bots": {
+				"title": "Botlar va messenjerlar",
+				"subtitle": "Telegram va boshqa platformalar orqali avtomatlashtirish",
+				"description": "Biz mijozlarni qo‘llab-quvvatlash, buyurtmalarni qabul qilish va ichki tizimlar bilan integratsiya uchun aqlli botlar yaratamiz."
+			}
+		},
+		"Success": {
+			"title": "~ Muvaffaqiyat garovi",
+			"description": {
+				"1": "IT 911 — raqamli yechimlar olamidagi ishonchli hamkoringiz. Biz ilg‘or digital texnologiyalar va ma’lumotlarni tahlil qilishdan tortib, ishonchli aloqa xizmatlarigacha to‘liq xizmatlarni taqdim etamiz.",
+				"2": "So‘nggi 5 yil davomida to‘plangan ish jarayonlarini tashkil etish tajribamiz mijozlarimiz biznesining muvaffaqiyatli rivojlanishiga asos bo‘ldi. Mutaxassislarimiz jamoasi siz bilan birgalikda zamonaviy va samarali yechim yaratishga tayyor."
+			}
+		},
+		"Statistics": {
+			"level": "Mijozlarimizning qoniqish darajasi — mukammal qo‘llab-quvvatlash va ilg‘or IT-yechimlarni joriy etish natijasida erishilgan.",
+			"clients": "O‘zbekiston Respublikasi bo‘ylab bizga ishonch bildirgan yirik bizneslar va korporativ mijozlar.",
+			"increase": "Raqamli transformatsiya orqali mijozlarimizda erishilgan o‘rtacha savdo o‘sishi.",
+			"projects": "O‘zbekiston bo‘ylab kompaniyalarga foyda va rivojlanish olib kelgan muvaffaqiyatli amalga oshirilgan loyihalar."
+		},
+		"Today": {
+			"title": "~ Bizning missiyamiz",
+			"subtitle": "Sizning muvaffaqiyatingiz — bizning eng asosiy ustuvorligimiz.",
+			"description": "Biz xizmatlarimiz sifatini doimiy ravishda yaxshilaymiz, sizga eng yuqori darajadagi xizmatni taqdim etishga intilamiz. Bizni tanlaganingiz va loyihalaringizni ishonib topshirganingiz uchun tashakkur!"
+		},
+		"Footer": {
+			"title": "~ Keling, dunyoni birgalikda o‘zgartiraylik!",
+			"link": "Biz bilan bog‘laning"
+		}
+	},
+	"ContactsPage": {
+		"Address": {
+			"title": "Toshkent",
+			"address": {
+				"title": "Manzil:",
+				"address": "O‘zbekiston, Toshkent shahri, Charso mahallasi, 4-uy, 135-xonadon"
+			},
+			"schedule": {
+				"title": "Ish vaqti:",
+				"time": "Dush–Yak: 10:00 – 19:00",
+				"weekend": "Dam olishsiz"
+			}
+		},
+		"Form": {
+			"title": "Savollaringiz bo‘lsa, biz bilan bog‘laning",
+			"name": "Ismingiz",
+			"email": "Elektron pochtangizni kiriting",
+			"phone": "To‘liq telefon raqamingizni kiriting",
+			"organizationName": "Kompaniya nomi",
+			"organizationInfo": "Qo‘shimcha ma’lumot",
+			"submit": "Yuborish",
+			"namePlaceholder": "To‘liq ismingizni kiriting",
+			"emailPlaceholder": "Elektron pochtangizni kiriting",
+			"phonePlaceholder": "Telefon raqamingizni kiriting",
+			"organizationNamePlaceholder": "Kompaniya nomini kiriting",
+			"organizationInfoPlaceholder": "Qo‘shimcha ma’lumot kiriting"
+		}
+	},
+	"AboutPage": {
+		"title": "IT 911 kompaniyasi haqida",
+		"theme": "CRM <dot></dot> Botlar <dot></dot> Veb-ishlab chiqish",
+		"content": {
+			"title": "IT 911 — raqamli transformatsiyada ishonchli hamkoringiz",
+			"description": {
+				"1": "<bold>IT 911</bold> kompaniyasi jahon tendensiyalariga amal qilgan holda, klassik IT-xizmatlardan raqamli transformatsiya sohasidagi kompleks yechimlarga o'tmoqda. Bu yondashuv bizga innovatsion mahsulotlar yaratish va biznes uchun o‘sish hamda kengayish imkoniyatlarini taqdim etish imkonini beradi. Bugun IT 911 O‘zbekistonda <bold>Digital Transformation</bold> sohasida yetakchi o‘rinlardan birini egallaydi.",
+				"2": "Jahon tendensiyalari va mahalliy bozorni tahlil qilib, <bold>IT 911</bold> raqamli transformatsiya (Digital Transformation, DX) nafaqat zamonaviy yo‘nalish, balki biznesning barqaror rivojlanish kaliti ekanini anglab yetdi.",
+				"3": "Raqamli texnologiyalar tez sur’atda rivojlanayotgan davrda transformatsiyaga bo‘lgan ehtiyoj kichik biznesdan tortib yirik korporatsiyalargacha bo‘lgan barcha sohalarga ta’sir ko‘rsatmoqda. Shu sababli biz kompaniyalarga moslashish, jarayonlarni optimallashtirish va yangi imkoniyatlarni ochishga yordam beradigan yechimlar yaratamiz.",
+				"4": "Bizning maqsadimiz — faqat texnologiyalarni joriy etish emas, balki biznesni rivojlanishga ilhomlantirish, innovatsiyalarni sodda, tushunarli va samarali qilishdir."
+			},
+			"link": "Biz bilan bog‘laning"
+		}
+	}
 }

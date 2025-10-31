@@ -50,9 +50,9 @@ export const NewsCarousel = ({ newsData = [] }: Props) => {
                     {currentSlide?.name?.[locale] ?? "Без названия"}
                 </h4>
 
-                {currentSlide?.description && (
+                {currentSlide?.short_description && (
                     <p className="text-white/80 leading-relaxed text-sm md:text-xs">
-                        {currentSlide.description[locale] ?? ""}
+                        {currentSlide.short_description[locale] ?? ""}
                     </p>
                 )}
 
@@ -80,7 +80,7 @@ export const NewsCarousel = ({ newsData = [] }: Props) => {
                                     priority
                                     src={item.image}
                                     alt={item.name?.[locale] ?? ""}
-                                    className="w-full h-full object-center"
+                                    className="w-full h-full object-top object-cover"
                                 />
                             </div>
                         </CarouselItem>
@@ -101,5 +101,5 @@ export interface News {
     image: string | StaticImageData;
     name: Name;
     id: number;
-    description?: Name;
+    short_description?: Name;
 }

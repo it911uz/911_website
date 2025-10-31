@@ -25,11 +25,11 @@ export const navigation: Menu[] = [
 	{
 		id: 3,
 		name: {
-			ru: "Бренды",
-			en: "Brands",
-			uz: "Brendlar",
+			ru: "Акция",
+			en: "Promotion",
+			uz: "Aksiyalar",
 		},
-		path: Routers.brands,
+		path: Routers.promotion,
 	},
 	{
 		id: 4,

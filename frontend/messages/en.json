@@ -1,10 +1,141 @@
 {
-    "ErrorPage": {
-        "error": "Что-то пошло не так",
-        "goHomePage": "Вернуться на главную",
-        "notFound": "Страница не найдена",
-        "serverError": "Ошибка сервера",
-        "tryAgain": "Попробуйте еще раз",
-        "description": "Запрашиваемый вами адрес не существует. Пожалуйста, проверьте URL или вернитесь на домашнюю страницу."
-    }
+	"ErrorPage": {
+		"error": "Something went wrong",
+		"goHomePage": "Go back to homepage",
+		"notFound": "Page not found",
+		"serverError": "Server error",
+		"tryAgain": "Try again",
+		"description": "The page you’re looking for doesn’t exist. Please check the URL or return to the homepage."
+	},
+	"Footer": {
+		"requisite": {
+			"title": "Contact us",
+			"address": "Uzbekistan, Tashkent city, Chorsu mahalla, house 4, apartment 135"
+		},
+		"map": {
+			"title": "Site map",
+			"home": "Home",
+			"about": "About company",
+			"news": "News",
+			"contact": "Contacts"
+		},
+		"services": {
+			"title": "Our services",
+			"crm": "CRM systems",
+			"web": "Web systems and services",
+			"bots": "Bots and messengers",
+			"support": "Support"
+		},
+		"info": {
+			"title": "Legal information",
+			"policy": "Privacy policy",
+			"terms": "User agreement",
+			"sales": "Promotions"
+		},
+		"copyright": "<copyright></copyright> 2024-<year></year> (c) LLC IT 911. All rights reserved.",
+		"love": "Made with love for your business"
+	},
+	"HomePage": {
+		"News": {
+			"title": "~ Our News",
+			"more": "More news",
+			"all": "All news"
+		},
+        "About": {
+            "title": "~ About the Company",
+            "description": {
+                "1": "We specialize in creating websites, developing CRM systems, and Telegram bots that help businesses automate processes and increase profits.",
+                "2": "We help businesses grow through modern digital technologies. Every solution we create is focused on results — boosting sales, automating workflows, and improving efficiency."
+            },
+            "link": "About the company"
+        },
+		"Effect": {
+			"title": "~ For effective management",
+			"anchor": {
+				"1": "~ CRM",
+				"2": "~ Websites",
+				"3": "~ Bots"
+			},
+			"link": "About the project",
+			"CRM": {
+				"title": "CRM Systems",
+				"subtitle": "Automation of sales and processes",
+				"description": "We develop and implement custom CRM solutions to help you manage and grow your business efficiently."
+			},
+			"Web": {
+				"title": "Web Systems and Services",
+				"subtitle": "Design and development of portals",
+				"description": "We create high-performance web services, online stores, and corporate portals on a turnkey basis."
+			},
+			"Bots": {
+				"title": "Bots and Messengers",
+				"subtitle": "Automation via Telegram and other platforms",
+				"description": "We develop intelligent bots for customer support, order processing, and integration with internal systems."
+			}
+		},
+		"Success": {
+			"title": "~ The key to success",
+			"description": {
+				"1": "IT 911 is your reliable partner in the world of digital solutions. We offer a full range of services — from advanced digital technologies and data analysis to reliable communication.",
+				"2": "Our 5 years of experience in organizing workflows have become the foundation for our clients’ successful business growth. Our team of professionals is ready to share this expertise with you, creating modern and efficient solutions together."
+			}
+		},
+		"Statistics": {
+			"level": "Client satisfaction level achieved through impeccable support and the implementation of only cutting-edge IT solutions.",
+			"clients": "Large businesses and corporate clients in the Republic of Uzbekistan who trust our expertise.",
+			"increase": "Average sales growth achieved by our clients through effective digital transformation.",
+			"projects": "Successfully completed projects that have brought measurable profit and growth to companies across Uzbekistan."
+		},
+		"Today": {
+			"title": "~ Our Mission",
+			"subtitle": "Your success is our top priority.",
+			"description": "We continuously improve the quality of our services to offer you exceptional solutions. Thank you for choosing us and trusting us with your projects!"
+		},
+		"Footer": {
+			"title": "~ Let's change the world together!",
+			"link": "Contact us"
+		}
+	},
+	"ContactsPage": {
+		"Address": {
+			"title": "Tashkent",
+			"address": {
+				"title": "Address:",
+				"address": "Uzbekistan, Tashkent, Charso mahalla, House 4, Apartment 135"
+			},
+			"schedule": {
+				"title": "Working hours:",
+				"time": "Mon–Sun: 10:00 – 19:00",
+				"weekend": "No days off"
+			}
+		},
+		"Form": {
+			"title": "If you have any questions, contact us",
+			"name": "Your name",
+			"email": "Enter your email",
+			"phone": "Enter your full phone number",
+			"organizationName": "Company name",
+			"organizationInfo": "Additional information",
+			"submit": "Send",
+			"namePlaceholder": "Enter your full name",
+			"emailPlaceholder": "Enter your email",
+			"phonePlaceholder": "Enter your phone number",
+			"organizationNamePlaceholder": "Enter your company name",
+			"organizationInfoPlaceholder": "Enter additional information"
+		}
+	},
+	"AboutPage": {
+		"title": "About IT 911",
+		"theme": "CRM <dot></dot> Bots <dot></dot> Web Development",
+		"content": {
+			"title": "IT 911 — your reliable partner in digital transformation",
+			"description": {
+				"1": "The company <bold>IT 911</bold>, following global trends, is shifting from classical IT services to comprehensive solutions in the field of digital transformation. This approach allows us to create innovative products and provide businesses with new opportunities for growth and scalability. Today, IT 911 holds a leading position in the field of <bold>Digital Transformation</bold> in Uzbekistan.",
+				"2": "By analyzing global trends and the local market, <bold>IT 911</bold> realized that digital transformation (Digital Transformation, DX) is not just a trend, but the key to sustainable business development.",
+				"3": "In the era of rapidly growing digital technologies, the need for transformation affects all sectors — from small businesses to large corporations. That is why we create solutions that help companies adapt, optimize processes, and discover new opportunities.",
+				"4": "We strive not only to implement technologies but to inspire businesses for growth — making innovation simple, understandable, and effective."
+			},
+			"link": "Contact us"
+		}
+	}
 }
