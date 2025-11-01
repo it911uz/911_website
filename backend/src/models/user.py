@@ -1,7 +1,9 @@
 from sqlalchemy import Column, String, BigInteger, Boolean
+from sqlalchemy.orm import relationship
 
 from models.base import Base
 from models.mixins import TimeStampMixin
+from models.tasks import user_tasks
 
 
 class User(Base, TimeStampMixin):
@@ -11,3 +13,5 @@ class User(Base, TimeStampMixin):
     username = Column(String(320), unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
+
+    tasks = relationship("Task", secondary=user_tasks, back_populates="users")

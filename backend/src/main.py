@@ -14,6 +14,7 @@ from routers.click import router as click_router
 from routers.deal import router as deal_router
 from routers.lead import router as lead_router
 from routers.target import router as target_router
+from routers.task import router as task_router
 from routers.telegram import router as telegram_router
 from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
@@ -56,6 +57,7 @@ app.include_router(click_router)
 app.include_router(deal_router)
 app.include_router(lead_router)
 app.include_router(target_router)
+app.include_router(task_router)
 app.include_router(telegram_router)
 app.include_router(user_router)
 

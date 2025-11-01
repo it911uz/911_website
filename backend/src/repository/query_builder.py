@@ -25,8 +25,9 @@ class QueryBuilder:
         if self.filters:
             stmt = self.filters.apply(self.stmt)
 
-        result = await self.db.execute(stmt)
-        self.paginator.set_total(len(result.scalars().all()))
+        if self.paginator:
+            result = await self.db.execute(stmt)
+            self.paginator.set_total(len(result.scalars().all()))
 
         if self.sorter:
             stmt = self.sorter.apply(stmt)

@@ -13,8 +13,11 @@ class LikeFilter(BaseFilter):
         if self.value:
             return stmt.where(self.column.ilike(f"%{self.value}%"))
         return stmt
+
+
 class SearchFilter:
     """Фильтр для поиска по нескольким колонкам через OR"""
+
     def __init__(self, columns: list, value: str | None):
         self.columns = columns
         self.value = value
@@ -25,6 +28,7 @@ class SearchFilter:
         pattern = f"%{self.value}%"
         stmt = stmt.where(or_(*(col.ilike(pattern) for col in self.columns)))
         return stmt
+
 
 class EqualFilter(BaseFilter):
     def __init__(self, column: Column, value=None):
@@ -43,7 +47,13 @@ class InFilter(BaseFilter):
         self.values = values
 
     def apply(self, stmt: Select):
-        if self.values:
+        if not self.values:
+            return stmt
+
+        if hasattr(self.column.prop, 'mapper'):
+            related_cls = self.column.prop.mapper.class_
+            stmt = stmt.where(self.column.any(related_cls.id.in_(self.values)))
+        else:
             stmt = stmt.where(self.column.in_(self.values))
         return stmt
 

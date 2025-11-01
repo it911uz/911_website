@@ -12,11 +12,13 @@ class BaseRepository(Generic[ModelType]):
         self.db = db
         self.model = model
 
-    async def create(self, **kwargs) -> ModelType:
+    async def create(self, commit=True, **kwargs) -> ModelType:
         obj = self.model(**kwargs)
         self.db.add(obj)
-        await self.db.commit()
-        await self.db.refresh(obj)
+        await self.db.flush()
+        if commit:
+            await self.db.commit()
+            await self.db.refresh(obj)
         return obj
 
     async def update(self, obj: ModelType) -> None:
