@@ -1,14 +1,26 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
+
+from fastapi_filter import FilterDepends
+
+from fastapi_pagination import Page
+
+from fastapi_utils.cbv import cbv
+
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from starlette import status
 
 from dependencies import get_current_user, get_db
+
+from filters.target_filter import TargetFilter
+
 from models.user import User
-from schemas.base import Sort
+
 from schemas.exceptions import ExceptionResponse
-from schemas.target import TargetCompanyRequest, TargetCompanyResponse, TargetCompanyListResponse
+from schemas.target import TargetCompanyRead, TargetCompanyCreate, TargetCompanyUpdate
+
 from services.target_company import TargetCompanyManager
 
 router = APIRouter(
@@ -17,139 +29,132 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/",
-    summary="Создание Таргет Компании",
-    response_model=TargetCompanyResponse,
-    status_code=status.HTTP_201_CREATED,
-    responses={
-        status.HTTP_201_CREATED: {"description": "Success", "model": TargetCompanyResponse},
-        status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        # 422
-    }
-)
-async def create_target(
-        request: TargetCompanyRequest,
-        user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    """
-    Создание новой компании.
+@cbv(router)
+class TargetCompanyCBV:
+    db: AsyncSession = Depends(get_db)
+    user: User = Depends(get_current_user)
 
-
-    ### Пример запроса:
-    ```json
-    {
-      "name": "Таргет В Инстаграм"
-    }
-    ```
-
-    ### Пример ответа (201):
-    ```json
-    {
-      "id": 1,
-      "name": "Таргет В Инстаграм"
-    }
-    ```
-
-    ### Ошибки:
-    - **403 Forbidden** — нет прав для создания компании
-    - **422	Validation Error** - Ошибка валидации
-    """
-    manager = TargetCompanyManager(db)
-    target = await manager.create_target(request)
-    return target
-
-
-@router.get(
-    "/",
-    summary="Получение Всех Таргет Компании",
-    response_model=TargetCompanyListResponse,
-    status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_200_OK: {"description": "Success", "model": TargetCompanyListResponse},
-        status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-    }
-)
-async def get_targets(
-        name: str = Query(None, alias="q"),
-        is_active: bool = Query(None),
-        sort_by: list[Sort] = Query(default=None, description="Сортировка"),
-        page: int = Query(default=1, ge=1, description="Страница"),
-        size: int = Query(default=1, ge=1, description="Размер Страницы"),
-        user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TargetCompanyManager(db)
-    targets = await manager.list_target(
-        name=name,
-        is_active=is_active,
-        sorts=sort_by,
-        page=page,
-        size=size,
+    @router.post(
+        "/",
+        summary="Создание Таргет Компании",
+        response_model=TargetCompanyRead,
+        status_code=status.HTTP_201_CREATED,
+        responses={
+            status.HTTP_201_CREATED: {"description": "Success", "model": TargetCompanyRead},
+            status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
+            # 422
+        }
     )
-    return targets
+    async def create_target(
+            self,
+            request: TargetCompanyCreate,
+    ):
+        """
+        Создание новой компании.
 
 
-@router.get(
-    "/{target_id}",
-    summary="Получение Таргет Компании по ИД",
-    response_model=TargetCompanyResponse,
-    status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_200_OK: {"description": "Success", "model": TargetCompanyResponse},
-        status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-        status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-    }
-)
-async def get_target(
-        target_id: uuid.UUID,
-        user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TargetCompanyManager(db)
-    target = await manager.get_target(target_id)
-    return target
+        ### Пример запроса:
+        ```json
+        {
+          "name": "Таргет В Инстаграм"
+        }
+        ```
 
+        ### Пример ответа (201):
+        ```json
+        {
+          "id": 1,
+          "name": "Таргет В Инстаграм"
+        }
+        ```
 
-@router.put(
-    "/{target_id}",
-    summary="Обновление Таргет Компании по ИД",
-    status_code=status.HTTP_204_NO_CONTENT,
-    response_model=None,
-    responses={
-        status.HTTP_204_NO_CONTENT: {"description": "Success"},
-        status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-        status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
-        status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-    }
-)
-async def update_target(
-        target_id: uuid.UUID,
-        request: TargetCompanyRequest,
-        user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TargetCompanyManager(db)
-    await manager.update_target(target_id, request)
+        ### Ошибки:
+        - **403 Forbidden** — нет прав для создания компании
+        - **422	Validation Error** - Ошибка валидации
+        """
+        manager = TargetCompanyManager(self.db)
+        target = await manager.create(**request.model_dump())
 
+        return TargetCompanyRead(
+            name=target.name,
+            id=target.id,
+            url=f"localhost:3000/contacts?target_id={target.id}",
+            is_active=target.is_active,
+        )
 
-@router.delete(
-    "/{target_id}",
-    summary="Удаление Таргет Компании по ИД",
-    status_code=status.HTTP_204_NO_CONTENT,
-    response_model=None,
-    responses={
-        status.HTTP_204_NO_CONTENT: {"description": "Success"},
-        status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-        status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
-        status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-    }
-)
-async def delete_target(
-        target_id: uuid.UUID,
-        user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TargetCompanyManager(db)
-    await manager.delete_target(target_id)
+    @router.get(
+        "/",
+        summary="Получение Всех Таргет Компании",
+        response_model=Page[TargetCompanyRead],
+        status_code=status.HTTP_200_OK,
+        responses={
+            status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
+        }
+    )
+    async def get_targets(
+            self,
+            filters: TargetFilter = FilterDepends(TargetFilter)
+    ):
+        manager = TargetCompanyManager(self.db)
+        targets = await manager.list(
+            filters=filters
+        )
+        return targets
+
+    @router.get(
+        "/{target_id}",
+        summary="Получение Таргет Компании по ИД",
+        response_model=TargetCompanyRead,
+        status_code=status.HTTP_200_OK,
+        responses={
+            status.HTTP_200_OK: {"description": "Success", "model": TargetCompanyRead},
+            status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
+            status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
+        }
+    )
+    async def get_target(
+            self,
+            target_id: uuid.UUID
+    ):
+        manager = TargetCompanyManager(self.db)
+        target = await manager.get(target_id)
+        return target
+
+    @router.put(
+        "/{target_id}",
+        summary="Обновление Таргет Компании по ИД",
+        status_code=status.HTTP_204_NO_CONTENT,
+        response_model=None,
+        responses={
+            status.HTTP_204_NO_CONTENT: {"description": "Success"},
+            status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
+            status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
+            status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
+        }
+    )
+    async def update_target(
+            self,
+            target_id: uuid.UUID,
+            request: TargetCompanyUpdate
+    ):
+        manager = TargetCompanyManager(self.db)
+        await manager.update(target_id, **request.model_dump())
+
+    @router.delete(
+        "/{target_id}",
+        summary="Удаление Таргет Компании по ИД",
+        status_code=status.HTTP_204_NO_CONTENT,
+        response_model=None,
+        responses={
+            status.HTTP_204_NO_CONTENT: {"description": "Success"},
+            status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
+            status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
+            status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
+        }
+    )
+    async def delete_target(
+            self,
+            target_id: uuid.UUID
+    ):
+        manager = TargetCompanyManager(self.db)
+        await manager.delete(target_id)

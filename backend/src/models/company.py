@@ -8,4 +8,4 @@ class Company(Base, TimeStampMixin):
     __tablename__ = 'companies'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255))
-    deal_id = Column(Integer, ForeignKey('deals.id', ondelete="SET NULL"), nullable=True)
+

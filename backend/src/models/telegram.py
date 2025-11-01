@@ -10,5 +10,5 @@ class TelegramUser(Base, TimeStampMixin):
     __tablename__ = "telegram_users"
     id = Column(Integer, primary_key=True)
     last_interaction = Column(DateTime, default=datetime.now)
-    company_id = Column(Integer, ForeignKey("companies.id"), nullable=True, default=None)
+    # company_id = Column(Integer, ForeignKey("companies.id"), nullable=True, default=None)
     lang = Column(String(2), nullable=False, default="ru")
