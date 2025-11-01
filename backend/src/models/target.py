@@ -1,6 +1,7 @@
 import uuid
 
 from sqlalchemy import Column, String, UUID, Boolean
+from sqlalchemy.orm import relationship
 
 from models.base import Base
 from models.mixins import TimeStampMixin
@@ -11,3 +12,5 @@ class TargetCompany(Base, TimeStampMixin):
     id = Column(UUID, primary_key=True, default=uuid.uuid4)
     name = Column(String(512), nullable=False)
     is_active = Column(Boolean, default=True)
+
+    leads = relationship("Lead", back_populates="target_company", lazy="selectin")

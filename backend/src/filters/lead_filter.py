@@ -1,41 +1,27 @@
-from sqlalchemy import Select
+from datetime import datetime
+from typing import Optional
 
-from filters.operators import InFilter, EqualFilter, RangeFilter
+from fastapi_filter.contrib.sqlalchemy import Filter
+
 from models.lead import Lead, LeadComment
 
 
-class LeadFilter:
-    def __init__(
-            self,
-            status=None,
-            target_id=None,
-            created_from=None,
-            created_to=None,
-    ):
-        self.filters = [
-            InFilter(Lead.status, status),
-            EqualFilter(Lead.target_id, target_id),
-            RangeFilter(Lead.created_at, created_from, created_to),
-        ]
+class LeadFilter(Filter):
+    # InFilter(Lead.status, status__in)
+    target_id: int | None = None
+    order_by: Optional[list[str]] = None
+    created_at__lte: Optional[datetime] = None
+    created_at__gte: Optional[datetime] = None
 
-    def apply(self, stmt: Select):
-        for f in self.filters:
-            stmt = f.apply(stmt)
-
-        return stmt
+    class Constants(Filter.Constants):
+        model = Lead
 
 
-class LeadCommentFilter:
-    def __init__(
-            self,
-            lead_id=None,
-    ):
-        self.filters = [
-            EqualFilter(LeadComment.lead_id, lead_id),
-        ]
+class LeadCommentFilter(Filter):
+    user_id__in: Optional[list[int]] = None
+    created_at__lte: Optional[datetime] = None
+    created_at__gte: Optional[datetime] = None
+    order_by: Optional[list[str]] = None
 
-    def apply(self, stmt: Select):
-        for f in self.filters:
-            stmt = f.apply(stmt)
-
-        return stmt
+    class Constants(Filter.Constants):
+        model = LeadComment

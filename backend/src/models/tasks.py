@@ -23,6 +23,8 @@ class TaskStatus(Base):
     __tablename__ = "task_statuses"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), unique=True)
+    hex = Column(String(7))
+    order = Column(Integer)
     is_completed = Column(Boolean, default=False)
 
 
@@ -36,4 +38,3 @@ class Task(Base, TimeStampMixin):
 
     tags = relationship("Tag", secondary=task_tags, back_populates="tasks", lazy="selectin")
     users = relationship("User", secondary=user_tasks, back_populates="tasks", lazy="selectin")
-
