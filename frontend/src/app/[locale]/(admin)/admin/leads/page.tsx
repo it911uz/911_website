@@ -1,18 +1,14 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Cards } from "./_components/cards";
-import { Charts } from "./_components/charts";
+import { LeadsContent } from "./_components/leads-content";
 
-const Page = async ({ params }: PageProps<"/[locale]/admin/dashboard">) => {
-
+const Page = async ({ params }: PageProps<"/[locale]/admin/leads">) => {
     const { locale } = await params;
     setRequestLocale(locale as Locale);
 
     return (
         <>
-            <Cards />
-
-            <Charts />
+            <LeadsContent />
         </>
     )
 }
