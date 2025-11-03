@@ -1,21 +1,21 @@
 "use client"
 
-import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { AlertTriangle, XCircle, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import type { VariantProps } from "class-variance-authority"
+import type { ComponentProps } from "react"
 
 function AlertDialog({
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Root>) {
     return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
 }
 
 function AlertDialogTrigger({
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Trigger>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Trigger>) {
     return (
         <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
     )
@@ -23,7 +23,7 @@ function AlertDialogTrigger({
 
 function AlertDialogPortal({
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Portal>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Portal>) {
     return (
         <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
     )
@@ -32,7 +32,7 @@ function AlertDialogPortal({
 function AlertDialogOverlay({
     className,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
     return (
         <AlertDialogPrimitive.Overlay
             data-slot="alert-dialog-overlay"
@@ -50,7 +50,7 @@ function AlertDialogOverlay({
 function AlertDialogContent({
     className,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Content>) {
     return (
         <AlertDialogPortal>
             <AlertDialogOverlay />
@@ -58,7 +58,7 @@ function AlertDialogContent({
                 data-slot="alert-dialog-content"
                 className={cn(
                     "fixed left-1/2 top-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2",
-                    "gap-5 rounded-2xl border border-border/40 bg-card p-6 shadow-2xl",
+                    "gap-5 rounded-2xl bg-white p-6 shadow-2xl",
                     "data-[state=open]:animate-in data-[state=closed]:animate-out",
                     "data-[state=open]:zoom-in-90 data-[state=closed]:zoom-out-95 sm:max-w-md",
                     className
@@ -72,7 +72,7 @@ function AlertDialogContent({
 function AlertDialogHeader({
     className,
     ...props
-}: React.ComponentProps<"div">) {
+}: ComponentProps<"div">) {
     return (
         <div
             data-slot="alert-dialog-header"
@@ -88,7 +88,7 @@ function AlertDialogHeader({
 function AlertDialogFooter({
     className,
     ...props
-}: React.ComponentProps<"div">) {
+}: ComponentProps<"div">) {
     return (
         <div
             data-slot="alert-dialog-footer"
@@ -105,7 +105,7 @@ function AlertDialogTitle({
     className,
     children,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Title>) {
     return (
         <AlertDialogPrimitive.Title
             data-slot="alert-dialog-title"
@@ -124,7 +124,7 @@ function AlertDialogTitle({
 function AlertDialogDescription({
     className,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Description>) {
     return (
         <AlertDialogPrimitive.Description
             data-slot="alert-dialog-description"
@@ -137,8 +137,9 @@ function AlertDialogDescription({
 function AlertDialogAction({
     className,
     colors,
+    children,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Action> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
+}: ComponentProps<typeof AlertDialogPrimitive.Action> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
     return (
         <AlertDialogPrimitive.Action
             className={cn(
@@ -149,7 +150,8 @@ function AlertDialogAction({
             {...props}
         >
             <CheckCircle2 className="size-4" />
-            Confirm
+
+            {children}
         </AlertDialogPrimitive.Action>
     )
 }
@@ -157,8 +159,9 @@ function AlertDialogAction({
 function AlertDialogCancel({
     className,
     colors,
+    children,
     ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Cancel> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
+}: ComponentProps<typeof AlertDialogPrimitive.Cancel> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
     return (
         <AlertDialogPrimitive.Cancel
             className={cn(
@@ -169,7 +172,7 @@ function AlertDialogCancel({
             {...props}
         >
             <XCircle className="size-4" />
-            Cancel
+            {children}
         </AlertDialogPrimitive.Cancel>
     )
 }

@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
 import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PenLine } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ErrorMassage } from "@/components/ui/error-message";
 
-export const ColumnEdit = () => {
+export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
 
     const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
@@ -23,17 +23,21 @@ export const ColumnEdit = () => {
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-        <PenLine className="hover:text-blue-500 text-2xl cursor-pointer" onClick={() => onOpenChange(true)} />
+
+        <Button className="text-lg" onClick={() => onOpenChange(true)} size={"md"} variant={"black"}>
+            <Plus />
+            <span>Добавить колонку</span>
+        </Button>
 
         <SheetContent className="w-md">
             <SheetHeader>
-                <SheetTitle>Редактирование</SheetTitle>
+                <SheetTitle>Добавить колонку</SheetTitle>
             </SheetHeader>
 
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <Field>
                     <FieldLabel className="text-lg" required htmlFor="name">
-                        Имя
+                        Название
                     </FieldLabel>
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />

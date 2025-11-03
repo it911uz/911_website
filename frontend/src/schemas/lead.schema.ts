@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const contactSchema = z.object({
+export const leadSchema = z.object({
 	full_name: z
 		.string()
 		.trim()
@@ -36,4 +36,19 @@ export const contactSchema = z.object({
 	company_info: z.string().trim().nonempty("Обязательное поле").max(1000, "Максимум 1000 символов"),
 });
 
-export type ContactSchemaType = z.infer<typeof contactSchema>;
+export type LeadSchemaType = z.infer<typeof leadSchema>;
+
+
+export const columnSchema = z.object({
+	name: z.string()
+		.trim()
+		.nonempty("Обязательное поле")
+		.min(3, "Минимум 3 символа")
+		.max(50, "Максимум 50 символов"),
+
+	hex: z.string()
+		.trim()
+		.nonempty("Обязательное поле")
+});
+
+export type ColumnSchemaType = z.infer<typeof columnSchema>;

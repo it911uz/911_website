@@ -1,12 +1,12 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { LeadContent } from "./_components/lead-content";
+import { TasksContent } from "./_components/tasks-content";
 
-const Page = async ({ params }: PageProps<"/[locale]/admin/leads">) => {
+const Page = async ({ params }: PageProps<"/[locale]/admin/tasks">) => {
     const { locale } = await params;
     setRequestLocale(locale as Locale);
 
-    return <LeadContent />
+    return <TasksContent />
 }
 
 export default Page;

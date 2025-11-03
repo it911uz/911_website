@@ -5,7 +5,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { contactSchema, type ContactSchemaType } from "@/schemas/contact.schema";
+import { leadSchema, type LeadSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { ErrorMassage } from "@/components/ui/error-message";
@@ -17,11 +17,11 @@ export const ContactsForm = () => {
     const t = useTranslations("ContactsPage.Form");
     const [pending, startTransition] = useTransition();
 
-    const { register, handleSubmit, formState: { errors, isDirty }, reset, } = useForm<ContactSchemaType>({
-        resolver: zodResolver(contactSchema)
+    const { register, handleSubmit, formState: { errors, isDirty }, reset, } = useForm<LeadSchemaType>({
+        resolver: zodResolver(leadSchema)
     });
 
-    const onSubmit = (values: ContactSchemaType) => {
+    const onSubmit = (values: LeadSchemaType) => {
         startTransition(async () => {
             const response = await contactAction({ body: values });
 

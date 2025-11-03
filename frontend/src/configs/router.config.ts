@@ -18,5 +18,6 @@ export const Routers = {
 	admin: {
 		dashboard: "/admin/dashboard",
 		leads: "/admin/leads",
+		tasks: "/admin/tasks",
 	}
 } as const;

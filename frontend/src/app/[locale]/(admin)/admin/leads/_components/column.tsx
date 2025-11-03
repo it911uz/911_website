@@ -1,36 +1,21 @@
 "use client";
 
 import { ClientNoData } from "@/components/widgets/client-no-data";
-import { useOpen } from "@/hooks/use-open";
-import type { Lead } from "@/types/leads.type";
-import { EllipsisVertical, Grip } from "lucide-react";
+import { Grip, GripVertical } from "lucide-react";
 import type { ComponentProps, CSSProperties } from "react";
+import { cn } from "@/lib/utils";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Leads } from "./leads";
+import type { ColumnType } from "./columns";
 import { ColumnEdit } from "./column-edit";
 import { DeleteColumn } from "./delete-column";
-import { cn } from "@/lib/utils";
-import { useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Issues } from "./issues";
 
-export const Column = ({ columnData: { columnId, hex = "#000", name, issues = [] }, className, ...props }: ComponentProps<"div"> & {
-    columnData: {
-        columnId: number;
-        hex: string;
-        issues: Lead[];
-        name: string;
-    }
-}) => {
-    const { open, onOpenChange } = useOpen();
-    const {
-        setNodeRef,
-        attributes,
-        listeners,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
-        id: columnId,
-        strategy: verticalListSortingStrategy,
+export const Column = ({
+    columnData: { columnId, hex, name, leads = [] },
+}: ComponentProps<"div"> & { columnData: ColumnType }) => {
+    const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+        id: `column-${columnId}`,
     });
 
     const style: CSSProperties = {
@@ -38,51 +23,37 @@ export const Column = ({ columnData: { columnId, hex = "#000", name, issues = []
         transition,
     };
 
-    return <div ref={setNodeRef}
-        {...attributes}
-        className={
-            cn("bg-white border border-dashed rounded-xl px-4 py-6 space-y-6 w-[470px]", {
-                "z-99999 shadow-xl drop-shadow-2xl": isDragging,
-            })}
-        style={{ ...style, borderColor: hex }}
-        data-column-id={columnId}
-        {...props}
-    >
+    return (
+        <div
+            ref={setNodeRef}
+            className={cn(
+                "bg-white border border-dashed rounded-xl px-4 py-6 space-y-6 w-[430px]",
+                { "z-10 shadow-xl drop-shadow-2xl": isDragging }
+            )}
+            style={{ ...style, borderColor: hex }}
+            {...attributes}
+        >
+            <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">
+                    {name} ({leads.length})
+                </h3>
 
-        <div className="flex justify-between items-center ">
-            <h3>{name} ({issues.length})</h3>
+                <div className="flex gap-2">
+                    <div className="group relative">
+                        <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
 
-            <div className={cn("flex gap-1.5")}>
-                <div className="relative group">
-                    <EllipsisVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
+                        <div className="absolute -top-1/2 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-1/2 ">
+                            <ColumnEdit />
 
-                    <div className="absolute top-1/2 -right-1/2 -translate-x-1/2 -translate-y-1/2 z-10
-                  bg-white opacity-0 group-hover:opacity-100 transition-opacity shadow-md rounded-md p-2 space-y-2">
-                        <ColumnEdit />
-                        <DeleteColumn />
+                            <DeleteColumn />
+                        </div>
                     </div>
+
+                    <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                 </div>
-
-
-                <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
             </div>
+
+            {leads.length > 0 ? <Leads leads={leads} /> : <ClientNoData />}
         </div>
-
-        {
-            issues.length > 0 ? <Issues issues={issues} /> : <ClientNoData />
-        }
-    </div>
-}
-
-export interface ColumnType {
-    columnId: number;
-    hex: string;
-    issues: Issue[];
-    name: string;
-    position: number;
-}
-
-interface Issue extends Lead {
-    created_at: Date;
-    updated_at: Date;
-}
+    );
+};

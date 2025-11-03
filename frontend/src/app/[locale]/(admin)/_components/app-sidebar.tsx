@@ -49,7 +49,7 @@ export const menus = {
       items: [
         {
           title: "Задачки",
-          url: Routers.admin.dashboard + "#admin-tasks",
+          url: Routers.admin.tasks,
           icon: ClipboardList,
         },
         {
