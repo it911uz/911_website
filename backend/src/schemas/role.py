@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -24,6 +22,13 @@ class RoleCreate(RoleBase):
 class RoleUpdate(RoleBase):
     pass
 
+class RoleMinRead(RoleBase):
+    id: int
+    permissions: list[PermissionRead] = []
+
+    model_config = {
+        "from_attributes": True
+    }
 
 class RoleRead(RoleBase):
     id: int

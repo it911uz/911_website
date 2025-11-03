@@ -4,6 +4,11 @@ from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
 
+class LeadMove(BaseModel):
+    lead_id: int
+    status_id: int
+
+
 class LeadStatusBase(BaseModel):
     name: str = Field(max_length=255)
     hex: str
@@ -21,9 +26,11 @@ class LeadStatusRead(LeadStatusBase):
     id: int
     order: int
 
+
 class LeadStatusMove(LeadStatusBase):
     status_id: int
     new_position: int
+
 
 class LeadCommentBase(BaseModel):
     comment: str = Field(max_length=2048)
