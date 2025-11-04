@@ -33,22 +33,57 @@ export const leadSchema = z.object({
 		.min(3, "Минимум 3 символа")
 		.max(50, "Максимум 50 символов"),
 
-	company_info: z.string().trim().nonempty("Обязательное поле").max(1000, "Максимум 1000 символов"),
+	company_info: z
+		.string()
+		.trim()
+		.nonempty("Обязательное поле")
+		.max(1000, "Максимум 1000 символов"),
 });
 
 export type LeadSchemaType = z.infer<typeof leadSchema>;
 
-
 export const columnSchema = z.object({
-	name: z.string()
+	name: z
+		.string()
 		.trim()
 		.nonempty("Обязательное поле")
 		.min(3, "Минимум 3 символа")
 		.max(50, "Максимум 50 символов"),
 
-	hex: z.string()
+	hex: z
+		.string()
 		.trim()
-		.nonempty("Обязательное поле")
+		.nonempty("Обязательное поле"),
 });
 
 export type ColumnSchemaType = z.infer<typeof columnSchema>;
+
+export const messageSchema = z.object({
+	message: z
+		.string()
+		.trim()
+		.nonempty("Обязательное поле")
+		.min(3, "Минимум 3 символа")
+		.max(500, "Максимум 500 символов"),
+
+	files: z
+		.array(
+			z
+				.instanceof(File)
+				.refine(
+					(file) =>
+						[
+							"image/jpeg",
+							"image/png",
+							"application/pdf",
+							"text/plain",
+							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						].includes(file.type),
+					"Недопустимый тип файла",
+				)
+				.refine((file) => file.size <= 5 * 1024 * 1024, "Файл не должен превышать 5MB"),
+		)
+		.optional(),
+});
+
+export type MessageSchemaType = z.infer<typeof messageSchema>;

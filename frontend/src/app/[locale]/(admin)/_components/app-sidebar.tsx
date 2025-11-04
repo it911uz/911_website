@@ -54,7 +54,7 @@ export const menus = {
         },
         {
           title: "Клиенты",
-          url: Routers.admin.dashboard + "#admin-clients",
+          url: Routers.admin.clients,
           icon: Users,
         },
       ],
