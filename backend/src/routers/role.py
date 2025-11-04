@@ -31,7 +31,7 @@ class RoleCBV:
     ):
         manager = RoleManager(db=self.db)
         response = await manager.list(filters)
-        return paginate(response)
+        return response
 
     @router.post(
         "/",

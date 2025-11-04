@@ -6,7 +6,7 @@ from models.role import Role
 
 
 class RoleFilter(Filter):
-    name__ilike:Optional[str]
+    name__ilike:Optional[str] = None
     order_by: Optional[list[str]] = None
 
     class Constants(Filter.Constants):
