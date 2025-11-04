@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from starlette import status
 
-from dependencies import get_current_user, get_db
+from dependencies import get_current_user, get_db, has_permission
 
 from filters.target_filter import TargetFilter
 
@@ -43,7 +43,8 @@ class TargetCompanyCBV:
             status.HTTP_201_CREATED: {"description": "Success", "model": TargetCompanyRead},
             status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
             # 422
-        }
+        },
+        dependencies=[Depends(has_permission("create_target_company"))]
     )
     async def create_target(
             self,
@@ -89,7 +90,8 @@ class TargetCompanyCBV:
         status_code=status.HTTP_200_OK,
         responses={
             status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_target_company"))]
     )
     async def get_targets(
             self,
@@ -107,10 +109,10 @@ class TargetCompanyCBV:
         response_model=TargetCompanyRead,
         status_code=status.HTTP_200_OK,
         responses={
-            status.HTTP_200_OK: {"description": "Success", "model": TargetCompanyRead},
             status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_target_company"))]
     )
     async def get_target(
             self,
@@ -126,11 +128,11 @@ class TargetCompanyCBV:
         status_code=status.HTTP_204_NO_CONTENT,
         response_model=None,
         responses={
-            status.HTTP_204_NO_CONTENT: {"description": "Success"},
             status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("update_target_company"))]
     )
     async def update_target(
             self,
@@ -146,11 +148,11 @@ class TargetCompanyCBV:
         status_code=status.HTTP_204_NO_CONTENT,
         response_model=None,
         responses={
-            status.HTTP_204_NO_CONTENT: {"description": "Success"},
             status.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             status.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("delete_target_company"))]
     )
     async def delete_target(
             self,
