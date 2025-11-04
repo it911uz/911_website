@@ -1,31 +1,27 @@
 import uuid
-from typing import List
 
 from pydantic import BaseModel, Field
 
-from schemas.base import PaginationResponse
 
-
-class TargetCompanyRequest(BaseModel):
+class TargetCompanyBase(BaseModel):
     name: str = Field(max_length=256)
 
 
-class TargetCompanyResponse(BaseModel):
+class TargetCompanyCreate(TargetCompanyBase):
+    pass
+
+
+class TargetCompanyUpdate(TargetCompanyBase):
+    is_active: bool
+
+
+class TargetCompanyRead(BaseModel):
     id: uuid.UUID
     name: str = Field(max_length=256)
-    url: str
+    url: str = None
     is_active: bool
-    clicks: int = 0
-    leads: int = 0
-
-    model_config = {
-        "from_attributes": True
-    }
-
-
-class TargetCompanyListResponse(BaseModel):
-    data: List[TargetCompanyResponse]
-    pagination: PaginationResponse
+    clicks_count: int = 0
+    leads_count: int = 0
 
     model_config = {
         "from_attributes": True

@@ -7,7 +7,7 @@ from exceptions import InvalidToken
 
 from models.user import User
 
-from schemas.auth import TokenResponse
+from schemas.auth import Token
 
 
 class TokenService:
@@ -26,10 +26,10 @@ class TokenService:
         )
         return token
 
-    def generate(self, user: User) -> TokenResponse:
+    def generate(self, user: User) -> Token:
         access_token = self.__generate_token(user)
         refresh_token = self.__generate_token(user, True)
-        return TokenResponse(
+        return Token(
             access_token=access_token,
             refresh_token=refresh_token,
             token_type="Bearer",

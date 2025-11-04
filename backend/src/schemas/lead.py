@@ -1,69 +1,86 @@
 import uuid
-from typing import List
+from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr
 
-from models.lead import StatusEnum
-from schemas.base import PaginationResponse
+
+class LeadMove(BaseModel):
+    lead_id: int
+    status_id: int
 
 
-class LeadRequest(BaseModel):
+class LeadStatusBase(BaseModel):
+    name: str = Field(max_length=255)
+    hex: str
+
+
+class LeadStatusCreate(LeadStatusBase):
+    pass
+
+
+class LeadStatusUpdate(LeadStatusBase):
+    pass
+
+
+class LeadStatusRead(LeadStatusBase):
+    id: int
+    order: int
+
+
+class LeadStatusMove(LeadStatusBase):
+    status_id: int
+    new_position: int
+
+
+class LeadCommentBase(BaseModel):
+    comment: str = Field(max_length=2048)
+
+
+class LeadCommentCreate(LeadCommentBase):
+    pass
+
+
+class LeadCommentUpdate(LeadCommentBase):
+    pass
+
+
+class LeadCommentRead(LeadCommentBase):
+    id: int
+    lead_id: int
+    user_id: int
+
+    model_config = {
+        "from_attributes": True
+    }
+
+
+class LeadBase(BaseModel):
     full_name: str = Field(max_length=512)
     email: EmailStr
     phone: str = Field(max_length=20)
     company_name: str = Field(max_length=512)
     company_info: str = Field(max_length=2048)
-    status: StatusEnum = StatusEnum.NEW
-    target_id: uuid.UUID = None
+    target_id: Optional[uuid.UUID] = None
 
 
-class LeadResponse(BaseModel):
+class LeadCreate(LeadBase):
+    pass
+
+
+class LeadUpdate(LeadBase):
+    status_id: int
+
+
+class LeadUpdateStatus(BaseModel):
+    status_id: int
+
+
+class LeadRead(LeadBase):
     id: int
-    full_name: str
-    email: EmailStr
-    phone: str
-    company_name: str
-    company_info: str
-    status: StatusEnum
-    target_id: uuid.UUID | None = None
+    status_id: Optional[int]
 
-    model_config = {
-        "from_attributes": True
-    }
-
-
-class LeadCommentRequest(BaseModel):
-    lead_id: int
-    comment: str = Field(max_length=2048)
-
-
-class LeadCommentResponse(BaseModel):
-    id: int
-    lead_id: int
-    user_id: int
-    comment: str
-
-    model_config = {
-        "from_attributes": True
-    }
-
-
-class ChangeStatusRequest(BaseModel):
-    status: StatusEnum
-
-
-class ListLeadResponse(BaseModel):
-    data: List[LeadResponse]
-    pagination: PaginationResponse
-
-    model_config = {
-        "from_attributes": True
-    }
-
-
-class ListLeadCommentResponse(BaseModel):
-    data: List[LeadCommentResponse]
-    pagination: PaginationResponse
+    comments: list[LeadCommentRead] = []
+    status: Optional[LeadStatusRead] = None
 
     model_config = {
         "from_attributes": True

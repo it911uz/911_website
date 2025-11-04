@@ -56,7 +56,7 @@ export const LoginForm = ({
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Пароль</FieldLabel>
                   <Link
-                    href={Routers.forgotPassword}
+                    href={Routers.auth.forgotPassword}
                     className="ml-auto text-sm underline-offset-2 hover:underline text-gray-700 hover:text-red-600 transition-colors"
                   >
                     Забыли пароль?

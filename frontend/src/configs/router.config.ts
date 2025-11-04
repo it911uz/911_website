@@ -9,8 +9,15 @@ export const Routers = {
 	offers: "/offers",
 	promotion: "/promotion",
 	policy: "/policy",
-	forgotPassword: "/forgot-password",
+	auth: {
+		signIn: "/auth/sign-in",
+		signUp: "/auth/sign-up",
+		forgotPassword: "/auth/restore",
+		newPassword: "/auth/password",
+	},
 	admin: {
 		dashboard: "/admin/dashboard",
+		leads: "/admin/leads",
+		tasks: "/admin/tasks",
 	}
 } as const;

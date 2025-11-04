@@ -1,22 +1,17 @@
-from sqlalchemy import Select
+from datetime import datetime
+from typing import Optional
 
-from filters.operators import EqualFilter, LikeFilter
+from fastapi_filter.contrib.sqlalchemy import Filter
+
 from models.user import User
 
 
-class UserFilter:
-    def __init__(
-            self,
-            is_superuser: bool = None,
-            full_name: str = None,
-    ):
-        self.filters = [
-            EqualFilter(User.is_superuser, is_superuser),
-            LikeFilter(User.full_name, full_name),
-        ]
+class UserFilter(Filter):
+    full_name__ilike: Optional[str] = None
+    username__ilike: Optional[str] = None
+    role_id__in: list[int] = None
+    created_at__lte: Optional[datetime] = None
+    updated_at__lte: Optional[datetime] = None
 
-    def apply(self, stmt: Select):
-        for f in self.filters:
-            stmt = f.apply(stmt)
-
-        return stmt
+    class Constants(Filter.Constants):
+        model = User

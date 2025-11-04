@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from configs import BOT_SECRET
 from db.session import async_session
 from exceptions import Forbidden
+from models.user import User
 from services.auth_manager import AuthManager
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -15,6 +16,7 @@ async def get_db():
         try:
             yield session
         finally:
+            await session.commit()
             await session.close()
 
 
@@ -26,14 +28,19 @@ async def get_current_user(
     return await manager.get_me(token)
 
 
-async def get_superuser(
-        token: str = Depends(oauth2_scheme),
-        db: AsyncSession = Depends(get_db),
-):
-    user = await get_current_user(token, db)
-    if not user.is_superuser:
-        raise Forbidden("Forbidden")
-    return user
+def has_permission(permission: str):
+    async def permission_checker(user: User = Depends(get_current_user)):
+        if user.is_superuser:
+            return None
+
+        # например, асинхронный доступ к БД
+        for perm in user.role.permissions:
+            if perm.codename == permission:
+                return None
+
+        raise Forbidden("Permission Denied")
+
+    return permission_checker
 
 
 async def verify_bot(
