@@ -6,7 +6,7 @@ export const Cards = () => {
     return (
         <>
             <div className="px-4 lg:px-6 pt-10">
-                <h2 className="text-3xl font-bold tracking-tight text-foreground">
+                <h2 className="text-3xl font-bold ">
                     Главная
                 </h2>
                 <p className="text-muted-foreground mt-1">
