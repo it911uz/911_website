@@ -5,12 +5,22 @@ const __createHttp = ky.create({
     prefixUrl: Env.PUBLIC_API_URL
 });
 
-const __internalHttp = async <T>(method: HTTPMethod, url: Input, options: Options): Promise<HttpResponse<T>> => {
+const __internalHttp = async <T>(method: HTTPMethod, url: Input, options: CustomOptions): Promise<HttpResponse<T>> => {
     try {
         const response = await __createHttp(url, {
             method,
             timeout: 10 * 60 * 1000,
             ...options,
+            hooks: {
+                beforeRequest: [
+                    (request) => {
+                        if (!options.token) {
+                            request.headers.set("Authorization", `Bearer ${options.token}`);
+                        }
+                        return request
+                    }
+                ]
+            }
         });
 
         const isJson = response.headers.get("content-type")?.includes("application/json");
@@ -32,7 +42,7 @@ const __internalHttp = async <T>(method: HTTPMethod, url: Input, options: Option
             ok: true,
             status: response.status,
         }
-    } catch (error) {        
+    } catch (error) {
         if (error instanceof HTTPError) {
             const data = await error.response.json<T>();
 
@@ -55,7 +65,7 @@ const __internalHttp = async <T>(method: HTTPMethod, url: Input, options: Option
 
 
 export const http = {
-    get<T>(url: Input, options?: Options) {
+    get<T>(url: Input, options?: CustomOptions) {
         return __internalHttp<T>("get", url, options ?? {});
     },
     post<T>(url: Input, options?: Options) {
@@ -86,3 +96,7 @@ type ErrorResponse<T> = {
 };
 
 type HTTPMethod = "get" | "post" | "patch" | "delete";
+
+interface CustomOptions extends Options {
+    token?: string;
+}
