@@ -1,7 +1,7 @@
 "use server";
 
 import { createLead } from "@/api/leads/create-lead.api";
-import type { ContactSchemaType } from "@/schemas/lead.schema";
+import type { LeadSchemaType } from "@/schemas/lead.schema";
 
 export const contactAction = async ({ body }: Props) => {
 
@@ -9,5 +9,5 @@ export const contactAction = async ({ body }: Props) => {
 };
 
 interface Props {
-    body: ContactSchemaType;
+    body: LeadSchemaType;
 }
