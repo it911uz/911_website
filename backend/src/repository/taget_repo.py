@@ -1,7 +1,8 @@
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, func, String, literal
 
-from models import Lead, Click
+from models.lead import Lead
+from models.click import  Click
 from models.target import TargetCompany
 from repository.base_repo import BaseRepository, ModelType
 

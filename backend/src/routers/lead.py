@@ -7,7 +7,7 @@ from starlette import status as status_codes
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies import get_db
+from dependencies import get_db, has_permission
 from filters.lead_filter import LeadFilter
 
 from schemas.exceptions import ExceptionResponse
@@ -51,7 +51,8 @@ class LeadRouter:
         responses={
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_leads"))]
 
     )
     async def list_leads(
@@ -72,7 +73,8 @@ class LeadRouter:
         responses={
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_leads"))]
     )
     async def get_lead(
             self,
@@ -92,7 +94,8 @@ class LeadRouter:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             status_codes.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("update_leads"))]
     )
     async def update_lead(
             self,
@@ -112,7 +115,8 @@ class LeadRouter:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             status_codes.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("update_leads"))]
     )
     async def update_status_lead(
             self,
@@ -132,7 +136,8 @@ class LeadRouter:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             status_codes.HTTP_404_NOT_FOUND: {"description": "Not Found", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("delete_leads"))]
     )
     async def delete_lead(
             self,
@@ -144,6 +149,7 @@ class LeadRouter:
     @router.post(
         "/move",
         status_code=status_codes.HTTP_201_CREATED,
+        dependencies=[Depends(has_permission("update_leads"))]
     )
     async def lead_move(
             self,

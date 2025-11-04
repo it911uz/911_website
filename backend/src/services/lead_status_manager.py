@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import LeadStatus
+from models.lead import LeadStatus
 from repository.base_repo import ModelType
 from repository.lead_repo import LeadStatusRepository
 

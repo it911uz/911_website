@@ -36,5 +36,5 @@ class Task(Base, TimeStampMixin):
     deadline = Column(DateTime)
     status_id = Column(Integer, ForeignKey('task_statuses.id', ondelete="RESTRICT"))
 
-    tags = relationship("Tag", secondary=task_tags, back_populates="tasks", lazy="selectin")
+    # tags = relationship("Tag", secondary=task_tags, backref="tasks", lazy="selectin")
     users = relationship("User", secondary=user_tasks, back_populates="tasks", lazy="selectin")

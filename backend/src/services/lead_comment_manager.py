@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from exceptions import BadRequest, NotFound
-from models import LeadComment, Lead
+from models.lead import LeadComment, Lead
 from repository.base_repo import ModelType
 from repository.lead_repo import LeadRepository, LeadCommentRepository
 from services.base_manager import BaseManager

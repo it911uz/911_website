@@ -3,7 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import roles
 
 from db.session import async_session
-from models import Permission, LeadStatus, Role, User
+from models.role import Permission, Role
+from models.lead import  LeadStatus
+from models.user import  User
 from models.base import Base
 from repository.user_repo import UserRepository
 from services.password_service import PasswordService

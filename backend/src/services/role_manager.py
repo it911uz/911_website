@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Role
+from models.role import Role
 from services.base_manager import BaseManager
 
 

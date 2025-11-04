@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Lead
+from models.lead import Lead
 from schemas.lead import LeadMove
 
 from services.base_manager import BaseManager

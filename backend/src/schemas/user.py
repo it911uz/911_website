@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, field_validator, EmailStr
 
-from src.schemas.auth import validate_password_strength
-from src.schemas.role import RoleRead, RoleMinRead
+from schemas.auth import validate_password_strength
+from schemas.role import RoleRead, RoleMinRead
 
 
 class UserBase(BaseModel):
