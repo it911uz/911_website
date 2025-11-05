@@ -19,6 +19,8 @@ import {
 } from "lucide-react"
 import { Routers } from "@/configs/router.config"
 import { NavMain } from "./nav-main"
+import { NavUser } from "./nav-user"
+import { auth } from "@/auth"
 
 export const menus = {
   user: {
@@ -74,7 +76,10 @@ export const menus = {
   ],
 }
 
-export const AppSidebar = () => {
+export const AppSidebar = async () => {
+
+  const session = await auth();
+
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader>
@@ -89,7 +94,11 @@ export const AppSidebar = () => {
         {/* <NavSecondary items={menus.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        {/* <NavUser user={menus.user} /> */}
+        <NavUser user={{
+          avatar: menus.user.avatar,
+          email: session?.user.email || menus.user.email,
+          name: session?.user.name || menus.user.name
+        }} />
       </SidebarFooter>
     </Sidebar>
   )

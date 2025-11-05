@@ -1,118 +1,148 @@
 import "server-only";
 
+import { type NextRequest, NextResponse } from "next/server";
+import { decode, encode, getToken, type JWT } from "next-auth/jwt";
 import createMiddleware from "next-intl/middleware";
-import { defaultLocale, locales } from "./i18n.config";
-import { NextResponse, type NextRequest } from "next/server";
-import { Routers } from "./router.config";
-import { SESSION_TOKEN_EXPIRATION, SESSION_TOKEN_NAME } from "./auth.config";
-import type { JWTType } from "@/types/jwt.type";
 import { refreshToken } from "@/api/auth/refresh-token.api";
+import { SESSION_TOKEN_EXPIRATION, SESSION_TOKEN_NAME } from "./auth.config";
+import { Env } from "./env.config";
+import { defaultLocale, locales } from "./i18n.config";
+import { Routers } from "./router.config";
 import { getMe } from "@/api/auth/get-me.api";
-import { decryptMessage, encryptMessage } from "@/lib/crypto.util";
 
-const handleI18nRouting = createMiddleware({
-    locales,
-    defaultLocale,
-    localePrefix: { mode: "as-needed" },
-    localeDetection: false,
+export const intlMiddleware = createMiddleware({
+	locales,
+	defaultLocale,
+	localePrefix: {
+		mode: "as-needed",
+	},
+	localeDetection: false,
 });
 
 const protectedPages = ["/admin"];
 
-const removeLocaleFromPath = (pathname: string): string => {
-    const localePattern = `^/(${locales.join("|")})(/|$)`;
-    return pathname.replace(new RegExp(localePattern, "i"), "/");
-};
+export function removeLocaleFromPath(pathname: string) {
+	const localePattern = `^/(${locales.join("|")})(/|$)`;
+	return pathname.replace(new RegExp(localePattern, "i"), "/");
+}
 
-const isProtectedRoute = (path: string): boolean => {
-    return protectedPages.some((protectedPage) => path.startsWith(protectedPage));
-};
+export function isProtectedRoute(path: string): boolean {
+	return protectedPages.some((page) => path.startsWith(page));
+}
 
-const mySignOut = async (request: NextRequest) => {
-    const response = NextResponse.redirect(new URL(Routers.auth.signIn, request.url));
-    response.cookies.delete(SESSION_TOKEN_NAME);
-    return response;
-};
+function shouldRefreshToken(jwt: JWT | null): boolean {
+	console.log("Date.now()", Date.now());
+	console.log("jwt.expiresAt", jwt?.expiresAt);
 
-const refreshAccessToken = async (jwt: JWTType): Promise<JWTType> => {
-    const response = await refreshToken(jwt.refresh_token);
+	return jwt ? Date.now() >= jwt.expiresAt : false;
+}
 
-    if (!response.data.access_token) {
-        console.error("Path: Middleware. API: refreshToken", response.error);
-        return jwt;
-    }
+async function mySignOut(request: NextRequest) {
+	const res = NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
+	res.cookies.delete({
+		name: SESSION_TOKEN_NAME,
+		path: "/",
+		secure: true,
+		httpOnly: true,
+		// domain: request.nextUrl.hostname,
+	});
+	return res;
+}
 
-    const me = await getMe(response.data.access_token);
+async function refreshAccessToken(jwt: JWT): Promise<JWT> {
+	const response = await refreshToken(jwt.refreshToken);
 
-    if (!me.data) {
-        console.error("Path: Middleware. API: getMe", me.error);
-        return jwt;
-    }
+	if (!response.data.access_token) {
+		console.error("Path: Middleware. API: refreshToken", response.error);
+		return { ...jwt, error: "RefreshTokenError" };
+	}
 
-    return {
-        ...jwt,
-        access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token,
-        user: me.data,
-        expiresAt: SESSION_TOKEN_EXPIRATION
-    };
-};
+	const me = await getMe(response.data.access_token);
 
-const refreshSessionCookie = async (jwt: JWTType, request: NextRequest) => {
-    const newJWT = await refreshAccessToken(jwt);
+	if (!me.data.id) {
+		console.error("Path: Middleware. API: getMe", me.error);
+		return { ...jwt, error: "RefreshTokenError" };
+	}
 
-    if (!newJWT.access_token) {
-        return mySignOut(request);
-    }
+	return {
+		...jwt,
+		id: me.data.id,
+		userId: me.data.id,
+		userEmail: me.data.email,
+		accessToken: response.data.access_token,
+		refreshToken: response.data.refresh_token,
+		expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
+	};
+}
 
-    const encodeSession = await encryptMessage(newJWT);
-    const response = handleI18nRouting(request);
+// Update session cookie with new session token
+async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
+	const newJWT = await refreshAccessToken(jwt);
+	console.log("newJWT.error", newJWT.error);
+	console.log(
+		'newJWT.error === "RefreshTokenError"',
+		newJWT.error === "RefreshTokenError",
+	);
 
-    response.cookies.set(SESSION_TOKEN_NAME, encodeSession, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-    });
+	if (newJWT.error === "RefreshTokenError") {
+		return mySignOut(request);
+	}
+	// Encode new session token
+	const encodedSession = await encode({
+		token: newJWT,
+		secret: Env.AUTH_SECRET,
+		salt: SESSION_TOKEN_NAME,
+	});
 
-    return response;
-};
+	const res = intlMiddleware(request);
 
-const shouldRefreshToken = (jwt: JWTType | null): boolean => {
-    return jwt ? Date.now() >= jwt.expiresAt : false;
-};
+	res.cookies.set({
+		name: SESSION_TOKEN_NAME,
+		value: encodedSession,
+		// domain: request.nextUrl.hostname,
+		path: "/",
+		httpOnly: true,
+		secure: true,
+		sameSite: "lax",
+	});
 
-export const proxyMiddleware = async (request: NextRequest): Promise<NextResponse> => {
-    const pathname = request.nextUrl.pathname;
-    const pathWithoutLocale = removeLocaleFromPath(pathname);
+	return res;
+}
 
-    // не проверяем логин
-    if (pathWithoutLocale === Routers.auth.signIn) {
-        return handleI18nRouting(request);
-    }
+export const proxyMiddleware = async (
+	request: NextRequest,
+): Promise<NextResponse<unknown>> => {
+	const pathname = request.nextUrl.pathname;
+	const pathWithoutLocale = removeLocaleFromPath(pathname);
+	const isPrivateRoute = isProtectedRoute(pathWithoutLocale);
 
-    const isPrivateRoute = isProtectedRoute(pathWithoutLocale);
-    const sessionToken = request.cookies.get(SESSION_TOKEN_NAME)?.value;
+	const jwt = await getToken({
+		req: request,
+		cookieName: SESSION_TOKEN_NAME,
+		secret: Env.AUTH_SECRET,
+		decode,
+		salt: SESSION_TOKEN_NAME,
+	});
 
-    if (!sessionToken && isPrivateRoute) {
-        return mySignOut(request);
-    }
+	// Handle public pages
+	if (isPrivateRoute) {
+		// Require valid session for private routes
+		if (!jwt) {
+			return NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
+		}
 
-    let jwt: JWTType | null = null;
+		if (jwt.error === "RefreshTokenError") {
+			return mySignOut(request);
+		}
 
-    if (sessionToken) {
-        jwt = await decryptMessage<JWTType>(sessionToken) as JWTType;
-    }
+		console.log("shouldRefreshToken(jwt)", shouldRefreshToken(jwt));
 
-    if (isPrivateRoute) {
-        if (!jwt) {
-            return mySignOut(request);
-        }
+		if (shouldRefreshToken(jwt)) {
+			return refreshSessionCookie(jwt, request);
+		}
+		return intlMiddleware(request);
+	}
 
-        if (shouldRefreshToken(jwt)) {
-            return refreshSessionCookie(jwt, request);
-        }
-    }
-
-    return handleI18nRouting(request);
+	// Public routes: never refresh in middleware
+	return intlMiddleware(request);
 };
