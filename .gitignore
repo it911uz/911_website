@@ -45,7 +45,6 @@ frontend/.pnpm-debug.log*
 # 🔐 Environment files
 # (keep example but ignore real envs)
 # ────────────────────────────────
-frontend/.env*
 !frontend/.env.example
 
 # ────────────────────────────────
@@ -58,7 +57,9 @@ frontend/.vercel/
 # ────────────────────────────────
 frontend/*.tsbuildinfo
 frontend/next-env.d.ts
+frontend/messages/*.d.json.ts
 
 frontend/.gitignore
 
 .env*
+!.env.local

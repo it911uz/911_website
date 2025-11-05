@@ -6,7 +6,10 @@ export interface Name {
 
 export type ResponseWithPagination<T> = {
 	data: T;
-	pagination: Pagination;
+	total: number;
+	page: number;
+	size: number;
+	pages: number;
 };
 
 export interface Pagination {

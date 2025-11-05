@@ -9,12 +9,17 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Routers } from "@/configs/router.config";
 import CoverImage from "@public/images/admin/sign-in.jpg"
 import Image from "next/image";
 import { useTransition, type ComponentProps } from "react";
 import { useForm } from "react-hook-form";
+import { loginSchema, type LoginSchema } from "@/schemas/login.schema";
+import { ErrorMassage } from "@/components/ui/error-message";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 export const LoginForm = ({
   className,
@@ -22,11 +27,26 @@ export const LoginForm = ({
 }: ComponentProps<"div">) => {
   const [pending, startTransition] = useTransition();
   const router = useRouter();
-  const { handleSubmit } = useForm();
+  const pathName = usePathname();
+  const { handleSubmit, register, formState: { errors } } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const onSubmit = () => {
+  const onSubmit = (values: LoginSchema) => {
+
     startTransition(async () => {
-      router.replace(Routers.admin.dashboard);
+      const data = await signIn("credentials", {
+        username: values.username,
+        password: values.password,
+        redirect: false,
+      });
+
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      router.push(Routers.admin.dashboard);
     });
   };
 
@@ -43,14 +63,16 @@ export const LoginForm = ({
                 </p>
               </div>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="username">Логин</FieldLabel>
                 <Input
-                  id="email"
-                  type="email"
+                  id="username"
+                  type="text"
                   placeholder="m@example.com"
-                  required
                   color="light"
+                  {...register("username", { required: true })}
                 />
+
+                <ErrorMassage error={errors.username?.message} />
               </Field>
               <Field>
                 <div className="flex items-center">
@@ -62,7 +84,9 @@ export const LoginForm = ({
                     Забыли пароль?
                   </Link>
                 </div>
-                <Input id="password" type="password" required color="light" />
+                <Input id="password" type="password" color="light" {...register("password", { required: true })} />
+
+                <ErrorMassage error={errors.password?.message} />
               </Field>
 
               <Button loading={pending} size={"lg"} variant="black" type="submit">

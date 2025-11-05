@@ -2,26 +2,56 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  logging: {
+    fetches: {
+      fullUrl: true,
+      hmrRefreshes: true,
+    },
+  },
+  poweredByHeader: false,
+  typedRoutes: true,
+  output: "standalone",
+  transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
+  images: {
+    qualities: [75, 100]
+  },
   reactCompiler: true,
   experimental: {
+    inlineCss: true,
+    turbopackFileSystemCacheForDev: true,
     optimizePackageImports: [
+      "@dnd-kit/core",
+      "@dnd-kit/modifiers",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
       "@hookform/resolvers",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-alert-dialog",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
       "@radix-ui/react-label",
       "@radix-ui/react-popover",
       "@radix-ui/react-separator",
       "@radix-ui/react-slot",
+      "@radix-ui/react-tooltip",
+      "apexcharts",
       "class-variance-authority",
       "clsx",
       "date-fns",
       "dayjs",
       "embla-carousel-react",
       "framer-motion",
+      "input-otp",
       "ky",
       "lucide-react",
       "next",
+      "next-auth",
       "next-intl",
       "next-themes",
+      "nuqs",
       "react",
+      "react-apexcharts",
       "react-day-picker",
       "react-dom",
       "react-hook-form",
@@ -29,9 +59,11 @@ const nextConfig: NextConfig = {
       "react-scroll-parallax",
       "simple-parallax-js",
       "sonner",
+      "suneditor",
+      "suneditor-react",
       "tailwind-merge",
       "tw-animate-css",
-      "zod"
+      "zod",
     ]
   },
   headers: async () => {
@@ -45,22 +77,23 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-
+      {
+        source: "/:path*{/}?",
+        headers: [
+          {
+            key: "X-Accel-Buffering",
+            value: "no",
+          },
+        ],
+      }
     ];
-  },
-  logging: {
-    fetches: {
-      fullUrl: true,
-      hmrRefreshes: true,
-    },
-  },
-  poweredByHeader: false,
-  typedRoutes: true,
-  output: "standalone",
-  images: {
-    qualities: [75, 100],
   },
 };
 
-const withNextIntl = createNextIntlPlugin();
+const withNextIntl = createNextIntlPlugin({
+  experimental: {
+    createMessagesDeclaration: "./messages/ru.json",
+  },
+});
+
 export default withNextIntl(nextConfig);
