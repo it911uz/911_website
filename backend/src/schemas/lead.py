@@ -24,7 +24,7 @@ class LeadStatusUpdate(LeadStatusBase):
 
 class LeadStatusRead(LeadStatusBase):
     id: int
-    order: int
+    level: int
 
 
 class LeadStatusMove(LeadStatusBase):
