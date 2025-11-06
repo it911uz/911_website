@@ -64,6 +64,8 @@ const nextConfig: NextConfig = {
       "tailwind-merge",
       "tw-animate-css",
       "zod",
+      "@tanstack/react-query",
+      "@tanstack/react-query-devtools",
     ]
   },
   headers: async () => {

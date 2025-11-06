@@ -10,16 +10,37 @@ import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMassage } from "@/components/ui/error-message";
+import { useTransition } from "react";
+import { createLeadStatus } from "@/api/leads/create-lead-status.api";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
 export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
-
+    const session = useSession();
+    const router = useRouter();
+    const [pending, startTransition] = useTransition();
     const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
         resolver: zodResolver(columnSchema)
     });
 
     const onSubmit = (values: ColumnSchemaType) => {
-        console.log(values);
+        startTransition(async () => {
+            const response = await createLeadStatus({
+                body: values,
+                token: session.data?.user.accessToken
+            });
+
+            if (!response.ok) {
+                toast.error("Произошла ошибка");
+                return;
+            }
+
+            toast.success("Колонка создана");
+            router.refresh();
+            onOpenChange(false);
+        })
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
@@ -55,7 +76,7 @@ export const CreateColumn = () => {
                     <ErrorMassage error={errors.hex?.message} />
                 </Field>
 
-                <Button variant={"black"} size={"lg"}>
+                <Button loading={pending} variant={"black"} size={"lg"}>
                     Сохранить
                 </Button>
             </form>

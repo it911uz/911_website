@@ -6,13 +6,20 @@ import { useOptimistic, useTransition, useState } from "react";
 import { cn } from "@/lib/utils";
 import { LeadCard } from "./lead-card";
 import { Column } from "./column";
+import { useSession } from "next-auth/react";
+import { editLeadColumnPosition } from "@/api/leads/edit-lead-column-position.api";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
+import { editLeadPosition } from "@/api/leads/edit-lead-position";
 
-export const Columns = () => {
+export const Columns = ({ columnsData = [] }: Props) => {
+
     const [pending, startTransition] = useTransition();
     const [activeItem, setActiveItem] = useState<{ type: "column" | "lead"; data: any } | null>(null);
-
+    const session = useSession();
+    const router = useRouter();
     const [optimisticColumns, setOptimisticColumns] = useOptimistic<ColumnType[]>(
-        initialColumns.sort((a, b) => a.position - b.position)
+        columnsData.sort((a, b) => a.position - b.position)
     );
 
     const findColumnContainer = (id: string): ColumnType | null => {
@@ -62,29 +69,71 @@ export const Columns = () => {
             const newIndex = optimisticColumns.findIndex((col) => col.columnId === overNumeric);
             if (oldIndex !== newIndex) {
                 const newColumns = arrayMove(optimisticColumns, oldIndex, newIndex);
-                startTransition(() => setOptimisticColumns(newColumns));
+                startTransition(async () => {
+                    setOptimisticColumns(newColumns);
+                    const newPositionColumn = newColumns.map((item, index) => ({ ...item, position: index + 1 })).find((item) => item.columnId === activeNumeric);
+
+                    const response = await editLeadColumnPosition({
+                        token: session.data?.user.accessToken,
+                        body: {
+                            status_id: newPositionColumn?.columnId ?? 0,
+                            new_position: newPositionColumn?.position ?? 0,
+                        }
+                    });
+
+                    if (!response.ok) {
+                        toast.error("Произошла ошибка");
+                        return
+                    }
+
+                    toast.success("Колонка перемещена");
+                    router.refresh();
+                });
             }
             return;
         }
 
         const activeCol = findColumnContainer(activeId);
         const overCol = findColumnContainer(overId);
+
         if (!activeCol || !overCol) return;
-        
-        if (activeCol.columnId === overCol.columnId) {
+
+        if (overCol.columnId) {
             const oldIndex = activeCol.leads.findIndex((i) => i.id === activeNumeric);
             const newIndex = overCol.leads.findIndex((i) => i.id === overNumeric);
             const updatedLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
-            startTransition(() =>
-                setOptimisticColumns((cols) =>
-                    cols.map((c) =>
-                        c.columnId === activeCol.columnId ? { ...c, leads: updatedLeads } : c
-                    )
-                )
-            );
+            startTransition(async () => {
+                const id = String(active.id);
+
+                if (id.startsWith("lead-")) {
+                    const numericId = Number(id.replace("lead-", ""));
+
+                    const activeLead = activeCol?.leads.find((i) => i.id === numericId);
+                    if (activeLead) {
+                        setActiveItem({ type: "lead", data: activeLead });
+
+                        const response = await editLeadPosition({
+                            token: session.data?.user.accessToken,
+                            body: {
+                                status_id: overCol.columnId,
+                                lead_id: activeLead?.id ?? 0,
+                            }
+                        });
+
+                        if (!response.ok) {
+                            toast.error("Произошла ошибка");
+                            return
+                        }
+
+                        toast.success("Лид перемещен");
+                        router.refresh();
+                    }
+                }
+            });
+
             return;
         }
-        
+
         const activeLead = activeCol.leads.find((i) => i.id === activeNumeric);
         if (!activeLead) return;
 
@@ -146,7 +195,10 @@ export const Columns = () => {
     );
 };
 
-// ------------------- Типы -------------------
+interface Props {
+    columnsData: ColumnType[];
+}
+
 export interface LeadType {
     id: number;
     full_name: string;
@@ -155,8 +207,8 @@ export interface LeadType {
     phone: string;
     email: string;
     status: number;
-    created_at: Date;
-    updated_at: Date;
+    created_at?: Date;
+    updated_at?: Date;
 }
 
 export interface ColumnType {
@@ -166,82 +218,3 @@ export interface ColumnType {
     position: number;
     leads: LeadType[];
 }
-
-// ------------------- Пример данных -------------------
-const initialColumns: ColumnType[] = [
-    {
-        columnId: 1,
-        name: "Новые лиды",
-        hex: "#ff4d4d",
-        position: 1,
-        leads: [
-            {
-                id: 1,
-                full_name: "Иван Иванов",
-                company_name: "TechCorp",
-                company_info: "Интересуется разработкой корпоративного сайта.",
-                phone: "+998 90 111 22 33",
-                email: "ivan@techcorp.uz",
-                status: 1,
-                created_at: new Date("2025-11-01"),
-                updated_at: new Date("2025-11-02"),
-            },
-            {
-                id: 2,
-                full_name: "Анна Смирнова",
-                company_name: "SoftLine",
-                company_info: "Хотят заказать мобильное приложение.",
-                phone: "+998 91 444 55 66",
-                email: "anna@softline.uz",
-                status: 1,
-                created_at: new Date("2025-10-28"),
-                updated_at: new Date("2025-10-29"),
-            },
-        ],
-    },
-    {
-        columnId: 2,
-        name: "В работе",
-        hex: "#f5a623",
-        position: 2,
-        leads: [
-            {
-                id: 3,
-                full_name: "Петр Петров",
-                company_name: "WebArt",
-                company_info: "Проектирование дизайна платформы.",
-                phone: "+998 93 123 45 67",
-                email: "petr@webart.uz",
-                status: 2,
-                created_at: new Date("2025-10-25"),
-                updated_at: new Date("2025-10-28"),
-            },
-        ],
-    },
-    {
-        columnId: 3,
-        name: "Заключение договора",
-        hex: "#0070f3",
-        position: 3,
-        leads: [
-            {
-                id: 4,
-                full_name: "Мария Ким",
-                company_name: "VisionPro",
-                company_info: "Подписан договор, ожидается аванс.",
-                phone: "+998 95 777 88 99",
-                email: "maria@visionpro.uz",
-                status: 3,
-                created_at: new Date("2025-10-20"),
-                updated_at: new Date("2025-10-23"),
-            },
-        ],
-    },
-    {
-        columnId: 4,
-        name: "Закрытые сделки",
-        hex: "#2ecc71",
-        position: 4,
-        leads: [],
-    },
-];

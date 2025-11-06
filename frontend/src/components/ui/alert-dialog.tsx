@@ -1,7 +1,7 @@
 "use client"
 
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
-import { AlertTriangle, XCircle, CheckCircle2 } from "lucide-react"
+import { AlertTriangle, XCircle, CheckCircle2, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import type { VariantProps } from "class-variance-authority"
@@ -110,7 +110,7 @@ function AlertDialogTitle({
         <AlertDialogPrimitive.Title
             data-slot="alert-dialog-title"
             className={cn(
-                "flex items-center gap-2 text-lg font-semibold text-foreground",
+                "flex items-center gap-2 text-lg font-semibold",
                 className
             )}
             {...props}
@@ -128,7 +128,7 @@ function AlertDialogDescription({
     return (
         <AlertDialogPrimitive.Description
             data-slot="alert-dialog-description"
-            className={cn("text-sm text-muted-foreground", className)}
+            className={cn("text-sm text-gray-500", className)}
             {...props}
         />
     )
@@ -138,8 +138,9 @@ function AlertDialogAction({
     className,
     colors,
     children,
+    loading,
     ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Action> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
+}: ComponentProps<typeof AlertDialogPrimitive.Action> & { colors: VariantProps<typeof buttonVariants>["variant"], loading?: boolean }) {
     return (
         <AlertDialogPrimitive.Action
             className={cn(
@@ -149,9 +150,15 @@ function AlertDialogAction({
             )}
             {...props}
         >
-            <CheckCircle2 className="size-4" />
 
-            {children}
+
+            {
+                loading ? <Loader2 className="animate-spin size-4" /> : <>
+                    <CheckCircle2 className="size-4" />
+
+                    {children}
+                </>
+            }
         </AlertDialogPrimitive.Action>
     )
 }
@@ -160,8 +167,9 @@ function AlertDialogCancel({
     className,
     colors,
     children,
+    loading,
     ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Cancel> & { colors: VariantProps<typeof buttonVariants>["variant"] }) {
+}: ComponentProps<typeof AlertDialogPrimitive.Cancel> & { colors: VariantProps<typeof buttonVariants>["variant"], loading?: boolean }) {
     return (
         <AlertDialogPrimitive.Cancel
             className={cn(
@@ -171,8 +179,12 @@ function AlertDialogCancel({
             )}
             {...props}
         >
-            <XCircle className="size-4" />
-            {children}
+            {
+                loading ? <Loader2 className="animate-spin size-4" /> : <>
+                    <XCircle className="size-4" />
+                    {children}
+                </>
+            }
         </AlertDialogPrimitive.Cancel>
     )
 }

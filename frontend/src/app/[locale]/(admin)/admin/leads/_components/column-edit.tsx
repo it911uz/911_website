@@ -10,16 +10,43 @@ import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PenLine } from "lucide-react";
 import { useForm } from "react-hook-form";
+import type { ColumnType } from "./columns";
+import { useTransition } from "react";
+import { editLeadStatus } from "@/api/leads/edit-lead-status.api";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { useRouter } from "@/i18n/navigation";
 
-export const ColumnEdit = () => {
+export const ColumnEdit = ({ columnsData }: Props) => {
     const { open, onOpenChange } = useOpen();
-
+    const [pending, startTransition] = useTransition();
+    const router = useRouter();
+    const session = useSession();
     const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
-        resolver: zodResolver(columnSchema)
+        resolver: zodResolver(columnSchema),
+        defaultValues: {
+            hex: columnsData.hex,
+            name: columnsData.name,
+        },
     });
 
     const onSubmit = (values: ColumnSchemaType) => {
-        console.log(values);
+        startTransition(async () => {
+            const response = await editLeadStatus({
+                id: columnsData.columnId,
+                body: values,
+                token: session.data?.user.accessToken
+            });
+
+            if (!response.ok) {
+                toast.error("Произошла ошибка");
+                return;
+            }
+
+            toast.success("Колонка обновлена");
+            router.refresh();
+            onOpenChange(false);
+        })
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
@@ -51,10 +78,14 @@ export const ColumnEdit = () => {
                     <ErrorMassage error={errors.hex?.message} />
                 </Field>
 
-                <Button variant={"black"} size={"lg"}>
+                <Button loading={pending} variant={"black"} size={"lg"}>
                     Сохранить
                 </Button>
             </form>
         </SheetContent>
     </Sheet>
+}
+
+interface Props {
+    columnsData: Omit<ColumnType, "leads" | "position">;
 }

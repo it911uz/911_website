@@ -5,7 +5,7 @@ export interface Name {
 }
 
 export type ResponseWithPagination<T> = {
-	data: T;
+	items: T;
 	total: number;
 	page: number;
 	size: number;
