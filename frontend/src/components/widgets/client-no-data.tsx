@@ -11,11 +11,10 @@ export const ClientNoData = () => {
             </div>
 
             <h2 className="text-xl font-semibold text-foreground mb-2">
-                Ошибка сервера
+                Нет данных
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-                Произошла ошибка при загрузке данных. Попробуйте обновить страницу или
-                проверить соединение.
+                По вашему запросу ничего не найдено. Попробуйте изменить запрос.
             </p>
         </div>
     );

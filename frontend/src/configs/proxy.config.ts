@@ -31,10 +31,18 @@ export function isProtectedRoute(path: string): boolean {
 }
 
 function shouldRefreshToken(jwt: JWT | null): boolean {
-	console.log("Date.now()", Date.now());
-	console.log("jwt.expiresAt", jwt?.expiresAt);
+	if (!jwt?.expiresAt) return false;
 
-	return jwt ? Date.now() >= jwt.expiresAt : false;
+	const now = Date.now();
+	const remaining = jwt.expiresAt - now;
+
+	const threshold = 5 * 60 * 1000; // Обновляем токен, если осталось меньше 5 минут (300000 мс)
+
+	console.log("Текущее время:", new Date(now).toISOString());
+	console.log("Время истечения токена:", new Date(jwt.expiresAt).toISOString());
+	console.log("Осталось до истечения:", Math.round(remaining / 60000), "минут");
+
+	return remaining <= threshold;
 }
 
 async function mySignOut(request: NextRequest) {
@@ -50,7 +58,13 @@ async function mySignOut(request: NextRequest) {
 }
 
 async function refreshAccessToken(jwt: JWT): Promise<JWT> {
-	const response = await refreshToken(jwt.refreshToken);
+	const response = await refreshToken({
+		refresh_token: jwt.refreshToken,
+		token: jwt.accessToken
+	});
+
+	console.warn("refreshToken response", response);
+
 
 	if (!response.data.access_token) {
 		console.error("Path: Middleware. API: refreshToken", response.error);

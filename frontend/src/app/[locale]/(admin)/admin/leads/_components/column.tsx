@@ -43,9 +43,9 @@ export const Column = ({
                         <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
 
                         <div className="absolute -top-1/2 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-1/2 ">
-                            <ColumnEdit />
+                            <ColumnEdit columnsData={{ columnId, hex, name }} />
 
-                            <DeleteColumn />
+                            <DeleteColumn columnId={columnId} />
                         </div>
                     </div>
 

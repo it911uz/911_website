@@ -11,16 +11,20 @@ import { leadSchema, type LeadSchemaType } from "@/schemas/lead.schema";
 import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
 
 export const CreateLead = () => {
     const { open, onOpenChange } = useOpen();
+    const [pending, startTransition] = useTransition()
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<LeadSchemaType>({
         resolver: zodResolver(leadSchema)
     });
 
     const onSubmit = (values: LeadSchemaType) => {
-        console.log(values);
+        startTransition(async () => {
+            console.log(values)
+        })
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
@@ -90,7 +94,7 @@ export const CreateLead = () => {
                     </Field>}
                 />
 
-                <Button type="submit" size={"lg"} variant={"black"}>Создать</Button>
+                <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>
             </form>
         </SheetContent>
     </Sheet>

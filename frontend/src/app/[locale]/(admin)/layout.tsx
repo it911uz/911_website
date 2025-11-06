@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/app-sidebar";
 import { AppHeader } from "./_components/app-header";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
     title: {
@@ -91,17 +93,20 @@ const AdminLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
     }
 
     setRequestLocale(locale);
+    const session = await auth()
 
     return (
         <SidebarProvider>
             <NuqsAdapter>
-                <AppSidebar />
+                <SessionProvider session={session}>
+                    <AppSidebar />
 
-                <main className="flex-1">
-                    <AppHeader />
+                    <main className="flex-1">
+                        <AppHeader />
 
-                    {children}
-                </main>
+                        {children}
+                    </main>
+                </SessionProvider>
             </NuqsAdapter>
         </SidebarProvider>
     );

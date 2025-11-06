@@ -3,14 +3,17 @@ import { createSearchParams } from "@/lib/utils"
 import type { Lead } from "@/types/leads.type"
 import type { BaseApiParams, ResponseWithPagination } from "@/types/share.type"
 
-export const getLeads = async ({ token, fromDate, toDate, orderBy, targetId }: Params) => {
+export const getLeads = async ({ token, fromDate, toDate, orderBy, targetId, page, perPage, statusIds }: Params) => {
 
     const searchParams = createSearchParams(
         {
             from_date: fromDate,
             to_date: toDate,
             order_by: orderBy,
-            target_id: targetId
+            target_id: targetId,
+            status_id__in: statusIds,
+            page,
+            size: perPage
         }
     )
 
@@ -21,9 +24,10 @@ export const getLeads = async ({ token, fromDate, toDate, orderBy, targetId }: P
 }
 
 interface Params extends BaseApiParams {
-    token: string;
+    token?: string;
     targetId?: string;
     orderBy?: string;
     fromDate?: string;
     toDate?: string;
+    statusIds?: number[]
 }

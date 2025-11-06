@@ -12,7 +12,7 @@ import { getMe } from "@/api/auth/get-me.api";
 
 export const SESSION_TOKEN_NAME = "authjs.session-token"
 
-export const SESSION_TOKEN_EXPIRATION = 3 * 60 * 1000; // 3 minutes
+export const SESSION_TOKEN_EXPIRATION = 110 * 60 * 1000; // 1h 50m
 
 class InvalidLoginError extends CredentialsSignin {
     constructor(message: string, cause?: unknown) {
@@ -103,9 +103,6 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 formData.append("password", data.data.password);
             }
 
-
-
-
             if (!data.success) {
                 console.error(
                     "PATH: auth CredentialsProvider. Invalid credentials in CredentialsProvider",
@@ -153,9 +150,10 @@ export const CredentialsProviderConfig: CredentialsConfig = {
 };
 
 async function refreshAccessToken(jwt: JWT): Promise<JWT> {
-    const response = await refreshToken(jwt.refreshToken);
-
-    console.log("refreshToken response", response);
+    const response = await refreshToken({
+        refresh_token: jwt.refreshToken,
+        token: jwt.accessToken
+    });
 
     if (!response.data.access_token) {
         return { ...jwt, error: "RefreshTokenError" };

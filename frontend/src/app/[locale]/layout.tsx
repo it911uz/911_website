@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { rubik } from "@/configs/font.config";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { ClientProviders } from "./_components/client.provider";
 
 export const generateStaticParams = () => {
 	return routing.locales.map((locale) => ({ locale }));
@@ -37,9 +37,11 @@ const RootLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
 			</head>
 			<body className="min-h-screen flex flex-col justify-between">
 				<NextIntlClientProvider>
-					{children}
+					<ClientProviders>
+						{children}
 
-					<Toaster />
+						<Toaster />
+					</ClientProviders>
 				</NextIntlClientProvider>
 			</body>
 		</html>
