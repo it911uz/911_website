@@ -54,6 +54,7 @@ async def health():
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+
 )
 
 app.add_middleware(GZipMiddleware, minimum_size=1000)
