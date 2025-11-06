@@ -20,6 +20,7 @@ from routers.target import router as target_router
 # from routers.task import router as task_router
 # from routers.telegram import router as telegram_router
 from routers.user import router as user_router
+from routers.task import router as task_router
 from schemas.exceptions import ExceptionResponse
 
 
@@ -65,7 +66,7 @@ app.include_router(lead_router)
 app.include_router(lead_comment_router)
 app.include_router(lead_status_router)
 app.include_router(target_router)
-# app.include_router(task_router)
+app.include_router(task_router)
 # app.include_router(telegram_router)
 app.include_router(user_router)
 

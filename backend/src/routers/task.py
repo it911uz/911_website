@@ -12,6 +12,7 @@ router = APIRouter(
 )
 
 
+
 @router.post(
     "/"
 )
@@ -39,7 +40,7 @@ async def get_tasks(
 
 
 @router.get(
-    "/task_id"
+    "/{task_id}"
 )
 async def get_task(
         task_id: int,

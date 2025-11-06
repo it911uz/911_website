@@ -63,3 +63,6 @@ frontend/.gitignore
 
 .env*
 !.env.local
+
+.idea/
+.vscode/

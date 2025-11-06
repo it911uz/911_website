@@ -1,3 +1,5 @@
+import dataclasses
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from exceptions import NotFound
