@@ -37,14 +37,14 @@ async def init_permissions(session: AsyncSession):
 
 async def create_status(session: AsyncSession):
     existing_lead_statuses = (await session.execute(
-        select(LeadStatus.name)
+        select(LeadStatus.id)
     )).scalars().all()
 
     new_statuses = []
 
     statuses = {1: "Новый", 2: "В Процессе", 3: "Обработанный"}
     for status_id, status_name in statuses.items():
-        if status_name not in existing_lead_statuses:
+        if status_id not in existing_lead_statuses:
             new_statuses.append(
                 LeadStatus(
                     id=status_id,

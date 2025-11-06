@@ -70,7 +70,7 @@ class LeadStatusCBV:
             request: LeadStatusUpdate,
     ):
         manager = LeadStatusManager(db=self.db)
-        await manager.update(status_id=status_id, **request.model_dump())
+        await manager.update(status_id, **request.model_dump())
 
     @router.get(
         "/{status_id}"
@@ -84,7 +84,8 @@ class LeadStatusCBV:
         return response
 
     @router.delete(
-        "/{status_id}"
+        "/{status_id}",
+        status_code=status_codes.HTTP_204_NO_CONTENT,
     )
     async def delete_lead_status(
             self,
