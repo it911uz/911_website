@@ -64,16 +64,12 @@ export const Header = async () => {
                         </p>
                         <p>
                             {
-                                t.rich("content.description.3", {
-                                    bold: (bold) => <strong>{bold}</strong>
-                                })
+                                t.rich("content.description.3")
                             }
                         </p>
                         <p>
                             {
-                                t.rich("content.description.4", {
-                                    bold: (bold) => <strong>{bold}</strong>
-                                })
+                                t.rich("content.description.4")
                             }
                         </p>
                     </div>
