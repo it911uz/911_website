@@ -27,7 +27,7 @@ class LeadStatusRead(LeadStatusBase):
     level: int
 
 
-class LeadStatusMove(LeadStatusBase):
+class LeadStatusMove(BaseModel):
     status_id: int
     new_position: int
 

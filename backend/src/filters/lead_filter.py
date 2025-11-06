@@ -12,6 +12,7 @@ class LeadFilter(Filter):
     order_by: Optional[list[str]] = None
     created_at__lte: Optional[datetime] = None
     created_at__gte: Optional[datetime] = None
+    status_id__in: list[int] = None
 
     class Constants(Filter.Constants):
         model = Lead

@@ -37,14 +37,14 @@ async def init_permissions(session: AsyncSession):
 
 async def create_status(session: AsyncSession):
     existing_lead_statuses = (await session.execute(
-        select(LeadStatus.name)
+        select(LeadStatus.id)
     )).scalars().all()
 
     new_statuses = []
 
     statuses = {1: "Новый", 2: "В Процессе", 3: "Обработанный"}
     for status_id, status_name in statuses.items():
-        if status_name not in existing_lead_statuses:
+        if status_id not in existing_lead_statuses:
             new_statuses.append(
                 LeadStatus(
                     id=status_id,
@@ -107,8 +107,8 @@ async def init_db():
     async with async_session() as session:
         permissions = await init_permissions(session)
         print(f"{len(permissions)} permissions were created")
-        statuses = await create_status(session)
-        print(f"{len(statuses)} lead status were created")
+        # statuses = await create_status(session)
+        # print(f"{len(statuses)} lead status were created")
         roles = await create_default_roles(session)
         print(f"{len(roles)} default roles were created")
         await create_superuser(session)
