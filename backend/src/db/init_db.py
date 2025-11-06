@@ -107,8 +107,8 @@ async def init_db():
     async with async_session() as session:
         permissions = await init_permissions(session)
         print(f"{len(permissions)} permissions were created")
-        statuses = await create_status(session)
-        print(f"{len(statuses)} lead status were created")
+        # statuses = await create_status(session)
+        # print(f"{len(statuses)} lead status were created")
         roles = await create_default_roles(session)
         print(f"{len(roles)} default roles were created")
         await create_superuser(session)
