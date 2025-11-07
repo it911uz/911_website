@@ -12,18 +12,34 @@ import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
+import { createLead } from "@/api/leads/create-lead.api";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
 export const CreateLead = () => {
     const { open, onOpenChange } = useOpen();
-    const [pending, startTransition] = useTransition()
+    const [pending, startTransition] = useTransition();
+    const router = useRouter();
 
-    const { register, handleSubmit, formState: { errors }, control } = useForm<LeadSchemaType>({
+    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<LeadSchemaType>({
         resolver: zodResolver(leadSchema)
     });
 
     const onSubmit = (values: LeadSchemaType) => {
         startTransition(async () => {
-            console.log(values)
+            const response = await createLead({
+                body: values
+            });
+
+            if (!response.ok) {
+                toast.error("Произошла ошибка");
+                return
+            }
+
+            toast.success("Лид создан");
+            reset();
+            router.refresh();
+            onOpenChange(false);
         })
     }
 

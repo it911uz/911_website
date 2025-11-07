@@ -1,9 +1,7 @@
 import { http } from "@/lib/https.util"
 import type { ActionResponse } from "@/types/share.type"
 
-export const createLeadStatus = ({ body, token }: Params) => {
-    console.log(body);
-    
+export const createLeadStatus = ({ body, token }: Params) => {    
     return http.post<ActionResponse<unknown>>("lead-statuses/", {
         token,
         json: body

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { LeadCard } from "./lead-card";
 import { Column } from "./column";
 import { useSession } from "next-auth/react";
-import { editLeadColumnPosition } from "@/api/leads/edit-lead-column-position.api";
+import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.api";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { editLeadPosition } from "@/api/leads/edit-lead-position";
@@ -73,11 +73,16 @@ export const Columns = ({ columnsData = [] }: Props) => {
                     setOptimisticColumns(newColumns);
                     const newPositionColumn = newColumns.map((item, index) => ({ ...item, position: index + 1 })).find((item) => item.columnId === activeNumeric);
 
-                    const response = await editLeadColumnPosition({
+                    if (!newPositionColumn) {
+                        toast.warning("Не удалось переместить колонку");
+                        return
+                    }
+
+                    const response = await editLeadStatusPosition({
                         token: session.data?.user.accessToken,
                         body: {
-                            status_id: newPositionColumn?.columnId ?? 0,
-                            new_position: newPositionColumn?.position ?? 0,
+                            status_id: newPositionColumn?.columnId,
+                            new_position: newPositionColumn?.position,
                         }
                     });
 
@@ -154,9 +159,12 @@ export const Columns = ({ columnsData = [] }: Props) => {
 
     return (
         <section
-            className={cn("py-10 px-4 lg:px-6 overflow-x-auto overflow-y-hidden", {
-                "pointer-events-none opacity-50": pending,
-            })}
+            className={cn(
+                "px-4 lg:px-6 grid grid-cols-1",
+                {
+                    "pointer-events-none opacity-50": pending,
+                }
+            )}
         >
             <DndContext
                 id="columns"
@@ -164,18 +172,22 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 onDragEnd={handleDragEnd}
                 collisionDetection={closestCorners}
             >
-                <div className="flex gap-6 min-w-max">
-                    <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
-                        {optimisticColumns.map((column) => (
-                            <SortableContext
-                                key={column.columnId}
-                                id={`column-${column.columnId}`}
-                                items={column.leads.map((i) => `lead-${i.id}`)}
-                            >
-                                <Column key={column.columnId} columnData={column} />
-                            </SortableContext>
-                        ))}
-                    </SortableContext>
+                <div className="w-full overflow-hidden">
+                    <div className={cn("grid overflow-x-auto gap-5 ")} style={{
+                        gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)`,
+                    }}>
+                        <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
+                            {optimisticColumns.map((column) => (
+                                <SortableContext
+                                    key={column.columnId}
+                                    id={`column-${column.columnId}`}
+                                    items={column.leads.map((i) => `lead-${i.id}`)}
+                                >
+                                    <Column key={column.columnId} columnData={column} />
+                                </SortableContext>
+                            ))}
+                        </SortableContext>
+                    </div>
                 </div>
 
                 <DragOverlay>
