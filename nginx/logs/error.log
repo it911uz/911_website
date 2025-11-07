@@ -904,3 +904,66 @@
 2025/11/07 08:03:37 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
 2025/11/07 08:04:37 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
 2025/11/07 08:05:37 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:06:38 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:07:38 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:08:38 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:09:39 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:10:39 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:11:39 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:12:40 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:13:40 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:14:40 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:15:40 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:16:41 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:17:41 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:18:41 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:19:42 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:20:42 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:21:42 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:22:42 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:23:43 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:24:43 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:25:43 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:26:44 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:27:44 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:28:44 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:29:45 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 08:30:45 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:31:45 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:32:46 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:33:46 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:34:46 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:35:47 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:36:47 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:37:47 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:38:48 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:39:48 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:40:48 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:41:48 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:42:49 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:43:49 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:44:49 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:45:50 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:46:50 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:47:50 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:48:51 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:49:51 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:50:51 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:51:52 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:52:52 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:53:52 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:54:52 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/07 08:55:53 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 08:56:53 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 08:57:54 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 08:58:54 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 08:59:54 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:00:55 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:01:55 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:02:55 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:03:56 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:04:56 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:05:56 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:06:56 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:07:57 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
+2025/11/07 09:08:57 [emerg] 1#1: unknown directive "i" in /etc/nginx/conf.d/it911.conf:16
