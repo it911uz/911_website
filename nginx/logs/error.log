@@ -867,3 +867,4 @@
 2025/11/07 07:36:37 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
 2025/11/07 07:37:37 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
 2025/11/07 07:38:38 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45
+2025/11/07 07:39:38 [emerg] 1#1: "add_header" directive is not allowed here in /etc/nginx/conf.d/it911.conf:45

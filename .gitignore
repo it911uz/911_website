@@ -61,5 +61,5 @@ frontend/messages/*.d.json.ts
 
 frontend/.gitignore
 
-.env*
+
 !.env.local
