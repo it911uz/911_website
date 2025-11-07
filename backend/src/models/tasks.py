@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from models.base import Base
 from models.mixins import TimeStampMixin
+from models.tag import Tag
 
 task_tags = Table(
     "task_tags",
@@ -36,5 +37,5 @@ class Task(Base, TimeStampMixin):
     deadline = Column(DateTime)
     status_id = Column(Integer, ForeignKey('task_statuses.id', ondelete="RESTRICT"))
 
-    # tags = relationship("Tag", secondary=task_tags, backref="tasks", lazy="selectin")
+    tags = relationship(Tag, secondary=task_tags, backref="tasks", lazy="selectin")
     users = relationship("User", secondary=user_tasks, back_populates="tasks", lazy="selectin")
