@@ -1,10 +1,12 @@
+from asyncpg import ForeignKeyViolationError, UniqueViolationError
 from fastapi import Depends, Header
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.exc import IntegrityError, DBAPIError, DataError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from configs import BOT_SECRET
 from db.session import async_session
-from exceptions import Forbidden
+from exceptions import Forbidden, Internal, Conflict, BadRequest
 from models.user import User
 from services.auth_manager import AuthManager
 
@@ -15,8 +17,24 @@ async def get_db():
     async with async_session() as session:
         try:
             yield session
-        finally:
             await session.commit()
+        except IntegrityError as e:
+            orig = getattr(e, "orig", None)
+            cause = getattr(orig, "__cause__", None)
+            inner = cause or orig
+            if isinstance(inner, UniqueViolationError) or "UniqueViolationError" in str(inner):
+                details = "Запись с таким уникальным значением уже существует."
+                raise Conflict(details)
+            elif isinstance(inner, ForeignKeyViolationError) or "ForeignKeyViolationError" in str(inner):
+                details = "Связанная запись не найдена (ошибка внешнего ключа)."
+                raise BadRequest(details)
+            else:
+                details = f"Ошибка целостности данных в базе: {inner}"
+                raise Internal(details)
+        except DBAPIError as e:
+            await session.rollback()
+            raise BadRequest("Неверный формат данных (ошибка типа или диапазона).")
+        finally:
             await session.close()
 
 

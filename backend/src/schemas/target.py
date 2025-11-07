@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class TargetCompanyBase(BaseModel):
-    name: str = Field(max_length=256)
+    name: str = Field(min_length=3, max_length=256)
 
 
 class TargetCompanyCreate(TargetCompanyBase):

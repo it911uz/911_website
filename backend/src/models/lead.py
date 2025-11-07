@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, UUID
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey, UUID, Boolean
 from sqlalchemy.orm import relationship
 
 from models.base import Base
@@ -11,6 +11,8 @@ class LeadStatus(Base, TimeStampMixin):
     name = Column(String(255), nullable=False, unique=True)
     hex = Column(String(7))
     level = Column(Integer)
+    can_delete = Column(Boolean, nullable=False, default=True)
+    can_edit = Column(Boolean, nullable=False, default=True)
     leads = relationship("Lead", back_populates="status", lazy="selectin")
 
 

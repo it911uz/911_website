@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from fastapi_filter import FilterDepends
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from fastapi_utils.cbv import cbv
 
 from starlette import status as status_codes
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies import get_db
+from dependencies import get_db, has_permission
 from filters.user_filter import UserFilter
 from schemas.exceptions import ExceptionResponse
 from schemas.user import UserRead, UserCreate, UserUpdate
@@ -30,14 +30,16 @@ class UserCBV:
         response_model=Page[UserRead],
         responses={
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_users"))]
     )
     async def get_users(
             self,
-            filters: UserFilter = FilterDepends(UserFilter)
+            filters: UserFilter = FilterDepends(UserFilter),
+            params: Params = Depends(),
     ):
         manager = UserManager(self.db)
-        response = await manager.list(filters)
+        response = await manager.list(filters, params=params)
         return response
 
 
@@ -50,7 +52,8 @@ class UserCBV:
             status_codes.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized", "model": ExceptionResponse},
             status_codes.HTTP_403_FORBIDDEN: {"description": "Forbidden", "model": ExceptionResponse},
             # 422
-        }
+        },
+        dependencies=[Depends(has_permission("create_users"))]
     )
     async def create_user(
             self,
@@ -72,7 +75,8 @@ class UserCBV:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized", "model": ExceptionResponse},
             status_codes.HTTP_409_CONFLICT: {"description": "Conflict", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("update_users"))]
     )
     async def update_user(
             self,
@@ -93,7 +97,8 @@ class UserCBV:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized", "model": ExceptionResponse},
             status_codes.HTTP_409_CONFLICT: {"description": "Conflict", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("delete_users"))]
     )
     async def delete_user(
             self,
@@ -112,7 +117,8 @@ class UserCBV:
             status_codes.HTTP_400_BAD_REQUEST: {"description": "Bad Request", "model": ExceptionResponse},
             status_codes.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized", "model": ExceptionResponse},
             status_codes.HTTP_409_CONFLICT: {"description": "Conflict", "model": ExceptionResponse},
-        }
+        },
+        dependencies=[Depends(has_permission("view_users"))]
     )
     async def get_user(
             self,

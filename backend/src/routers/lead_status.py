@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 
 from fastapi_utils.cbv import cbv
 
@@ -8,9 +8,7 @@ from starlette import status as status_codes
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies import get_db, get_current_user
-
-from models.user import User
+from dependencies import get_db, has_permission
 
 from schemas.lead import LeadStatusCreate, LeadStatusUpdate, LeadStatusRead, LeadStatusMove
 
@@ -29,17 +27,20 @@ class LeadStatusCBV:
     @router.get(
         "/",
         response_model=Page[LeadStatusRead],
+        dependencies=[Depends(has_permission("view_lead_statuses"))]
     )
     async def get_lead_statuses(
             self,
+            params: Params = Depends(),
     ):
         manager = LeadStatusManager(db=self.db)
-        response = await manager.list()
+        response = await manager.list(params=params)
         return response
 
     @router.post(
         "/move",
         status_code=status_codes.HTTP_201_CREATED,
+        dependencies=[Depends(has_permission("update_lead_statuses"))]
     )
     async def move_status(
             self,
@@ -51,6 +52,7 @@ class LeadStatusCBV:
     @router.post(
         "/",
         response_model=LeadStatusRead,
+        dependencies=[Depends(has_permission("create_lead_statuses"))]
     )
     async def create_lead_status(
             self,
@@ -63,6 +65,7 @@ class LeadStatusCBV:
     @router.put(
         "/{status_id}",
         status_code=status_codes.HTTP_204_NO_CONTENT,
+        dependencies=[Depends(has_permission("update_lead_statuses"))]
     )
     async def update_lead_status(
             self,
@@ -73,7 +76,9 @@ class LeadStatusCBV:
         await manager.update(status_id, **request.model_dump())
 
     @router.get(
-        "/{status_id}"
+        "/{status_id}",
+        response_model=LeadStatusRead,
+        dependencies=[Depends(has_permission("view_lead_statuses"))]
     )
     async def get_lead_status(
             self,
@@ -86,6 +91,7 @@ class LeadStatusCBV:
     @router.delete(
         "/{status_id}",
         status_code=status_codes.HTTP_204_NO_CONTENT,
+        dependencies=[Depends(has_permission("delete_lead_statuses"))]
     )
     async def delete_lead_status(
             self,

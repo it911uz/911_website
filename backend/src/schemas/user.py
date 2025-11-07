@@ -9,7 +9,7 @@ class UserBase(BaseModel):
     username: str = Field(max_length=320)
     email: EmailStr
     is_superuser: bool
-    role_id: int
+    role_id: int = Field(ge=1)
 
 
 class UserCreate(UserBase):

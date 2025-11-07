@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from exceptions import Forbidden
 from models.lead import LeadStatus
 from repository.base_repo import ModelType
 from repository.lead_repo import LeadStatusRepository
@@ -20,8 +21,16 @@ class LeadStatusManager(BaseManager[LeadStatus]):
         kwargs['level'] = max_level + 1
         return await super().create(**kwargs)
 
-    async def delete(self, obj_id) -> None:
+    async def update(self, obj_id, **kwargs) -> ModelType:
         obj = await self.get(obj_id)
+        if not obj.can_edit:
+            raise Forbidden("Нельзя ")
+        return await super().update(obj_id, **kwargs)
+
+    async def delete(self, obj_id) -> None:
+        obj: LeadStatus = await self.get(obj_id)
+        if not obj.can_delete:
+            raise Forbidden("Нельзя ")
         deleted_level = obj.level
 
         await self.repo.delete(obj)
@@ -34,7 +43,6 @@ class LeadStatusManager(BaseManager[LeadStatus]):
         old_position = status.level
         if old_position == new_position:
             return None
-
 
         # Если двигаем вверх
         await self.repo.move_level(status_id, new_position, old_position)

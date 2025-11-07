@@ -14,6 +14,7 @@ from schemas.exceptions import ExceptionResponse
 from schemas.lead import LeadCreate, LeadRead, LeadUpdate, LeadUpdateStatus, LeadMove
 
 from services.lead_manager import LeadManager
+from utils.pagination import LargeParams
 
 router = APIRouter(
     tags=["lead"],
@@ -57,11 +58,13 @@ class LeadRouter:
     )
     async def list_leads(
             self,
-            filters: LeadFilter = FilterDepends(LeadFilter)
+            filters: LeadFilter = FilterDepends(LeadFilter),
+            params: LargeParams = Depends()
     ):
         manager = LeadManager(self.db)
         response = await manager.list(
             filters=filters,
+            params=params
         )
         return response
 

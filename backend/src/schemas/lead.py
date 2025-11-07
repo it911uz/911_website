@@ -1,17 +1,24 @@
 import uuid
 from typing import Optional
 
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, field_validator
+
+from schemas.base import validate_hex_color
 
 
 class LeadMove(BaseModel):
-    lead_id: int
-    status_id: int
+    lead_id: int = Field(ge=1)
+    status_id: int = Field(ge=1)
 
 
 class LeadStatusBase(BaseModel):
     name: str = Field(max_length=255)
-    hex: str
+    hex: str = Field(max_length=7, min_length=4)
+
+    @field_validator("hex")
+    @classmethod
+    def validate_hex(cls, v):
+        return validate_hex_color(v)
 
 
 class LeadStatusCreate(LeadStatusBase):
@@ -25,15 +32,17 @@ class LeadStatusUpdate(LeadStatusBase):
 class LeadStatusRead(LeadStatusBase):
     id: int
     level: int
+    can_delete: bool
+    can_edit: bool
 
 
 class LeadStatusMove(BaseModel):
-    status_id: int
-    new_position: int
+    status_id: int = Field(ge=1)
+    new_position: int = Field(ge=1)
 
 
 class LeadCommentBase(BaseModel):
-    comment: str = Field(max_length=2048)
+    comment: str = Field(min_length=2, max_length=2048)
 
 
 class LeadCommentCreate(LeadCommentBase):
@@ -47,7 +56,7 @@ class LeadCommentUpdate(LeadCommentBase):
 class LeadCommentRead(LeadCommentBase):
     id: int
     lead_id: int
-    user_id: int
+    user_id: Optional[int] = None
 
     model_config = {
         "from_attributes": True
@@ -68,11 +77,11 @@ class LeadCreate(LeadBase):
 
 
 class LeadUpdate(LeadBase):
-    status_id: int
+    status_id: int = Field(ge=1)
 
 
 class LeadUpdateStatus(BaseModel):
-    status_id: int
+    status_id: int = Field(ge=1)
 
 
 class LeadRead(LeadBase):

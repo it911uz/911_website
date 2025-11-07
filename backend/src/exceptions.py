@@ -1,6 +1,8 @@
 from fastapi.exceptions import HTTPException
 
 
+
+
 class BadRequest(HTTPException):
     def __init__(self, detail: str):
         super().__init__(400, detail)
@@ -34,3 +36,6 @@ class MethodNotAllowed(HTTPException):
 class Conflict(HTTPException):
     def __init__(self, detail: str):
         super().__init__(409, detail)
+class Internal(HTTPException):
+    def __init__(self, detail: str):
+        super().__init__(500, detail)

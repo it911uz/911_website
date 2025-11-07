@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from fastapi_filter import FilterDepends
 
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 
 from fastapi_utils.cbv import cbv
 
@@ -95,11 +95,13 @@ class TargetCompanyCBV:
     )
     async def get_targets(
             self,
-            filters: TargetFilter = FilterDepends(TargetFilter)
+            filters: TargetFilter = FilterDepends(TargetFilter),
+            params: Params = Depends(),
     ):
         manager = TargetCompanyManager(self.db)
         targets = await manager.list(
-            filters=filters
+            filters=filters,
+            params=params
         )
         return targets
 

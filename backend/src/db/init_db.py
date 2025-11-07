@@ -1,8 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import roles
 
-from db.session import async_session
+from session import async_session
 from models.role import Permission, Role
 from models.lead import  LeadStatus
 from models.user import  User
@@ -50,7 +49,9 @@ async def create_status(session: AsyncSession):
                     id=status_id,
                     name=status_name,
                     hex="#ffffff",
-                    level=status_id
+                    level=status_id,
+                    can_edit=False,
+                    can_delete=False,
                 )
             )
     if new_statuses:

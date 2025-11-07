@@ -1,16 +1,9 @@
-from enum import Enum
+import re
 
-from pydantic import BaseModel
+HEX_COLOR_PATTERN = re.compile(r'^#(?:[0-9a-fA-F]{3}){1,2}$')
 
 
-class Sort(str, Enum):
-    asc = "created_at:asc"
-    desc = "created_at:desc"
-
-class PaginationResponse(BaseModel):
-    page: int
-    size: int
-    total: int
-    total_pages: int
-    has_next: bool
-    has_prev: bool
+def validate_hex_color(value):
+    if not HEX_COLOR_PATTERN.fullmatch(value):
+        raise ValueError("Invalid HEX color format (expected #RGB or #RRGGBB)")
+    return value

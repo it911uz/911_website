@@ -13,7 +13,7 @@ class LeadCommentRepository(BaseRepository[LeadComment]):
     async def list_comments(
             self,
             lead_id: int,
-            filters=None
+            filters=None,
     ):
         stmt = select(self.model).where(LeadComment.lead_id == lead_id)
 

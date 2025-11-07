@@ -1,8 +1,10 @@
 from typing import Generic, Type, TypeVar
 
+from fastapi_pagination import Params, Page
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination.ext.sqlalchemy import paginate
+
 ModelType = TypeVar("ModelType")
 
 
@@ -36,7 +38,8 @@ class BaseRepository(Generic[ModelType]):
 
     async def list(
             self,
-            filters=None
+            filters=None,
+            params: Params = None
     ):
         stmt = select(self.model)
 
@@ -44,5 +47,15 @@ class BaseRepository(Generic[ModelType]):
             stmt = filters.filter(stmt)
             stmt = filters.sort(stmt)
 
+        if not params.size:
+            result = await self.db.execute(stmt)
+            items = result.scalars().all()
+            return Page(
+                items=[item.as_dict() for item in items],
+                page=1,
+                size=len(items),
+                pages=1,
+                total=len(items)
+            )
 
         return await paginate(self.db, stmt)

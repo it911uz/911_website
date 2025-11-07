@@ -12,7 +12,7 @@ class PermissionRead(BaseModel):
 
 
 class RoleBase(BaseModel):
-    name: str = Field(max_length=255)
+    name: str = Field(min_length=3, max_length=255)
 
 
 class RoleCreate(RoleBase):

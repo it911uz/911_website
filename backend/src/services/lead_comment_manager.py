@@ -15,7 +15,10 @@ class LeadCommentManager(BaseManager[LeadComment]):
 
     async def create(self, **kwargs) -> ModelType:
         await self._check_lead(kwargs.get('lead_id'))
-        return await super().create(**kwargs)
+        comment = await self.repo.create(
+            **kwargs
+        )
+        return comment
 
     async def update(self, lead_comment_id: int, **kwargs) -> ModelType:
         await self._check_lead(kwargs.get('lead_id'))
