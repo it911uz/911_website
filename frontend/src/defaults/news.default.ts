@@ -1,71 +1,71 @@
-import NewSiteImage from "@public/images/new-website.png"
-import CRMUpdateImage from "@public/images/crm-update.jpg"
-import NewOfficeImage from "@public/images/new-office.jpg"
-import SalonBotImage from "@public/images/salon-bot.jpg"
+import CyberSecurityImage from "@public/images/cyber-security.jpg"
+import AiIntegrationImage from "@public/images/ai-integration.jpg"
+import DataCenterImage from "@public/images/data-center.jpg"
+import TechConferenceImage from "@public/images/tech-conference.jpg"
 
 export const newsData = [
     {
         id: 1,
         name: {
-            ru: "Новая версия сайта IT 911",
-            en: "New IT 911 Website Version",
-            uz: "IT 911 saytining yangi versiyasi",
+            ru: "Интеграция AI в систему мониторинга IT 911",
+            en: "AI Integration into IT 911 Monitoring System",
+            uz: "IT 911 monitoring tizimiga AI integratsiyasi",
         },
-        created_at: new Date("2025-10-01T12:00:00.000Z"),
-        category: "development",
-        image: NewSiteImage,
+        created_at: new Date("2025-10-25T10:00:00.000Z"),
+        category: "ai",
+        image: AiIntegrationImage,
         short_description: {
-            ru: "Мы запустили обновлённую версию сайта IT 911 — теперь он быстрее, удобнее и современнее. Обновлён дизайн, добавлены новые разделы и проекты.",
-            en: "We’ve launched the updated version of the IT 911 website — faster, more user-friendly, and modern. The design has been refreshed with new sections and project showcases.",
-            uz: "Biz IT 911 saytining yangilangan versiyasini ishga tushirdik — endi u tezroq, qulayroq va zamonaviyroq. Dizayn yangilandi, yangi bo‘limlar va loyihalar qo‘shildi.",
+            ru: "IT 911 внедрила искусственный интеллект в систему мониторинга. Теперь система способна предсказывать сбои и автоматически реагировать на критические ситуации.",
+            en: "IT 911 has integrated AI into its monitoring system. It can now predict failures and respond automatically to critical events.",
+            uz: "IT 911 monitoring tizimiga sun’iy intellekt qo‘shildi. Endi tizim nosozliklarni oldindan aniqlab, avtomatik javob bera oladi.",
         }
     },
     {
         id: 2,
         name: {
-            ru: "Обновление CRM IT 911",
-            en: "IT 911 CRM Update",
-            uz: "IT 911 CRM yangilanishi",
+            ru: "Открытие нового дата-центра в Ташкенте",
+            en: "New Data Center Opened in Tashkent",
+            uz: "Toshkentda yangi ma’lumotlar markazi ochildi",
         },
-        created_at: new Date("2025-10-05T12:00:00.000Z"),
-        category: "product",
-        image: CRMUpdateImage,
+        created_at: new Date("2025-11-01T15:00:00.000Z"),
+        category: "infrastructure",
+        image: DataCenterImage,
         short_description: {
-            ru: "Вышло обновление нашей CRM-системы: добавлена аналитика, интеграция с Telegram и улучшена производительность. Теперь управление бизнесом стало ещё проще.",
-            en: "Our CRM system has been updated: new analytics, Telegram integration, and improved performance. Managing your business just got easier.",
-            uz: "Bizning CRM tizimimiz yangilandi: yangi analitika, Telegram integratsiyasi va yaxshilangan unumdorlik. Endi biznesni boshqarish yanada osonlashdi.",
+            ru: "Мы открыли новый высокотехнологичный дата-центр, который обеспечивает более высокую скорость и надежность всех наших сервисов.",
+            en: "We’ve opened a new high-tech data center providing higher speed and reliability for all IT 911 services.",
+            uz: "Biz barcha IT 911 xizmatlari uchun yuqori tezlik va ishonchlilikni ta’minlovchi yangi texnologik ma’lumotlar markazini ochdik.",
         }
     },
     {
         id: 3,
         name: {
-            ru: "Новый офис IT 911 в Ташкенте",
-            en: "New IT 911 Office in Tashkent",
-            uz: "Toshkentda yangi IT 911 ofisi",
+            ru: "Кибербезопасность 2025: новые протоколы защиты",
+            en: "Cybersecurity 2025: New Protection Protocols",
+            uz: "Kiberxavfsizlik 2025: yangi himoya protokollari",
         },
-        created_at: new Date("2025-10-10T12:00:00.000Z"),
-        category: "company",
-        image: NewOfficeImage,
+        created_at: new Date("2025-11-10T11:00:00.000Z"),
+        category: "security",
+        image: CyberSecurityImage,
         short_description: {
-            ru: "IT 911 расширяет присутствие — мы открыли новый современный офис в центре Ташкента. Теперь мы ещё ближе к нашим клиентам и партнёрам.",
-            en: "IT 911 is expanding — a new modern office has opened in the heart of Tashkent. We’re now even closer to our clients and partners.",
-            uz: "IT 911 o‘z faoliyatini kengaytirmoqda — Toshkent markazida yangi zamonaviy ofisimiz ochildi. Endi mijozlarimiz va hamkorlarimizga yanada yaqinmiz.",
+            ru: "IT 911 внедрила обновлённые протоколы безопасности, включая поведенческий анализ и систему предотвращения атак нулевого дня.",
+            en: "IT 911 implemented updated security protocols, including behavioral analytics and zero-day attack prevention systems.",
+            uz: "IT 911 yangilangan xavfsizlik protokollarini joriy etdi, ular orasida xulq-atvor tahlili va nol kunlik hujumlarni oldini olish tizimi mavjud.",
         }
     },
     {
         id: 4,
         name: {
-            ru: "Telegram-бот для салонов красоты",
-            en: "Telegram Bot for Beauty Salons",
-            uz: "Go‘zallik salonlari uchun Telegram bot",
+            ru: "IT 911 на международной конференции TechFuture 2025",
+            en: "IT 911 at TechFuture 2025 Conference",
+            uz: "IT 911 TechFuture 2025 konferensiyasida",
         },
-        created_at: new Date("2025-10-15T12:00:00.000Z"),
-        category: "automation",
-        image: SalonBotImage,
+        created_at: new Date("2025-11-25T09:00:00.000Z"),
+        category: "events",
+        image: TechConferenceImage,
         short_description: {
-            ru: "IT 911 разработала Telegram-бот для салонов красоты: онлайн-запись, уведомления и управление клиентами в одном месте. Удобно, быстро и современно.",
-            en: "IT 911 has developed a Telegram bot for beauty salons: online booking, notifications, and client management in one place. Simple, fast, and modern.",
-            uz: "IT 911 go‘zallik salonlari uchun Telegram bot yaratdi: onlayn yozilish, bildirishnomalar va mijozlarni boshqarish — barchasi bitta joyda. Qulay, tez va zamonaviy.",
+            ru: "Наша команда представила инновационные решения в области кибербезопасности и AI-автоматизации на международной конференции TechFuture 2025.",
+            en: "Our team presented innovative cybersecurity and AI automation solutions at the TechFuture 2025 international conference.",
+            uz: "Jamoamiz TechFuture 2025 xalqaro konferensiyasida kiberxavfsizlik va AI avtomatlashtirish bo‘yicha innovatsion yechimlarni taqdim etdi.",
         }
     }
 ] as const;
