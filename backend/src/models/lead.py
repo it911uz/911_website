@@ -10,7 +10,7 @@ class LeadStatus(Base, TimeStampMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False, unique=True)
     hex = Column(String(7))
-    level = Column(Integer, unique=True)
+    level = Column(Integer)
     leads = relationship("Lead", back_populates="status", lazy="selectin")
 
 

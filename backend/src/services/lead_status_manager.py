@@ -31,16 +31,15 @@ class LeadStatusManager(BaseManager[LeadStatus]):
         """Перемещение статуса на новую позицию"""
         # Получаем статус
         status = await self.get(status_id)
-        old_position = status.order
-
+        old_position = status.level
         if old_position == new_position:
             return None
 
+
         # Если двигаем вверх
-        await self.repo.move_level(old_position, new_position)
+        await self.repo.move_level(status_id, new_position, old_position)
 
         # Обновляем позицию текущего статуса
-        status.order = new_position
+        status.level = new_position
         await self.repo.update(status)
-
         return None

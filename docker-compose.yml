@@ -3,7 +3,7 @@ services:
     build: ./backend
     container_name: fastapi-app
     env_file:
-      - test.env
+      - .env
     depends_on:
       - postgres
       - redis
@@ -23,11 +23,9 @@ services:
       - api
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: production
-      NEXT_TELEMETRY_DISABLED: "1"
-      # если фронт общается с backend по API — добавь:
-      NEXT_PUBLIC_API_URL: "http://localhost:8000"
+    env_file:
+      - .env
+
     # если хочешь live-обновления при разработке:
     # volumes:
     #   - ./frontend:/app
@@ -38,7 +36,7 @@ services:
     image: 'postgres:17.6-alpine3.22'
     restart: always
     env_file:
-      - test.env
+      - .env
     ports:
       - "5432:5432"
     volumes:

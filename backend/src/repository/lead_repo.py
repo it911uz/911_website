@@ -44,17 +44,21 @@ class LeadStatusRepository(BaseRepository[LeadStatus]):
             )
         )
 
-    async def move_level(self, new_position: int, old_position: int):
+    async def move_level(self, status_id:int,  new_position: int, old_position: int):
+        # n 4
+        # o 2
         if new_position < old_position:
             await self.db.execute(
                 update(LeadStatus)
-                .where(LeadStatus.order >= new_position, LeadStatus.order < old_position)
-                .values(order=LeadStatus.order + 1)
+                .where(LeadStatus.level >= new_position, LeadStatus.level < old_position)
+                .where(LeadStatus.id != status_id)
+                .values(level=LeadStatus.level + 1)
             )
         else:
             # Двигаем вниз — сдвигаем вверх статусы между old_position + 1 и new_position
             await self.db.execute(
                 update(LeadStatus)
-                .where(LeadStatus.order <= new_position, LeadStatus.order > old_position)
-                .values(order=LeadStatus.order - 1)
+                .where(LeadStatus.level <= new_position, LeadStatus.level > old_position)
+                .where(LeadStatus.id != status_id)
+                .values(level=LeadStatus.level - 1)
             )
