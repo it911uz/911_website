@@ -21,7 +21,7 @@ export const CreateColumn = () => {
     const session = useSession();
     const router = useRouter();
     const [pending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<ColumnSchemaType>({
         resolver: zodResolver(columnSchema)
     });
 
@@ -38,6 +38,7 @@ export const CreateColumn = () => {
             }
 
             toast.success("Колонка создана");
+            reset();
             router.refresh();
             onOpenChange(false);
         })

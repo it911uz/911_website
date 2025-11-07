@@ -26,7 +26,7 @@ export const menus = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: LogoImage,
+    avatar: "/logo.svg",
   },
   navMain: [
     {

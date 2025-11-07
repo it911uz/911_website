@@ -9,6 +9,7 @@ import { Env } from "./env.config";
 import { defaultLocale, locales } from "./i18n.config";
 import { Routers } from "./router.config";
 import { getMe } from "@/api/auth/get-me.api";
+import { WebOrigin } from "@/const/web-origin.const";
 
 export const intlMiddleware = createMiddleware({
 	locales,
@@ -123,6 +124,50 @@ async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
 	return res;
 }
 
+const checkWebOrigin = (request: NextRequest): NextResponse | null => {
+	const origin = request.headers.get("origin") || request.nextUrl.origin;
+	const pathname = request.nextUrl.pathname;
+
+	const adminPages = [
+		Routers.admin.dashboard,
+		Routers.admin.tasks,
+		Routers.admin.leads,
+		Routers.admin.clients,
+		Routers.auth.signUp,
+		Routers.auth.forgotPassword,
+		Routers.auth.newPassword,
+		Routers.auth.signIn,
+	];
+
+	const clientPages = [
+		Routers.home,
+		Routers.contacts,
+		Routers.news,
+		Routers.brands,
+		Routers.about,
+	];
+
+	// Проверяем источник и допустимые маршруты
+	if (origin === WebOrigin.admin) {
+		const isAdminPath = adminPages.some((p) => pathname.startsWith(p));
+		if (!isAdminPath) {
+			console.warn(`[OriginCheck] ❌ Клиентская страница (${pathname}) запрошена с admin-домена.`);
+			return NextResponse.redirect(new URL(Routers.admin.dashboard, WebOrigin.admin));
+		}
+	} else if (origin === WebOrigin.client) {
+		const isClientPath = clientPages.some((p) => pathname.startsWith(p));
+		if (!isClientPath) {
+			console.warn(`[OriginCheck] ❌ Админ-страница (${pathname}) запрошена с client-домена.`);
+			return NextResponse.redirect(new URL(Routers.home, WebOrigin.client));
+		}
+	} else {
+		console.warn(`[OriginCheck] ⚠️ Неизвестный источник: ${origin}`);
+	}
+
+	return null;
+};
+
+
 export const proxyMiddleware = async (
 	request: NextRequest,
 ): Promise<NextResponse<unknown>> => {
@@ -130,6 +175,11 @@ export const proxyMiddleware = async (
 	const pathWithoutLocale = removeLocaleFromPath(pathname);
 	const isPrivateRoute = isProtectedRoute(pathWithoutLocale);
 
+	// Проверяем источник и домен
+	const originCheck = checkWebOrigin(request);
+	if (originCheck) return originCheck;
+
+	// Получаем JWT
 	const jwt = await getToken({
 		req: request,
 		cookieName: SESSION_TOKEN_NAME,
@@ -138,9 +188,8 @@ export const proxyMiddleware = async (
 		salt: SESSION_TOKEN_NAME,
 	});
 
-	// Handle public pages
+	// Обработка защищённых маршрутов
 	if (isPrivateRoute) {
-		// Require valid session for private routes
 		if (!jwt) {
 			return NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
 		}
@@ -149,14 +198,12 @@ export const proxyMiddleware = async (
 			return mySignOut(request);
 		}
 
-		console.log("shouldRefreshToken(jwt)", shouldRefreshToken(jwt));
-
 		if (shouldRefreshToken(jwt)) {
 			return refreshSessionCookie(jwt, request);
 		}
 		return intlMiddleware(request);
 	}
 
-	// Public routes: never refresh in middleware
+	// Публичные маршруты
 	return intlMiddleware(request);
 };

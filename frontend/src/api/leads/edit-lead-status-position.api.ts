@@ -1,8 +1,8 @@
 import { http } from "@/lib/https.util"
 import type { ActionResponse } from "@/types/share.type"
 
-export const editLeadColumnPosition = async ({ body, token }: Params) => {
-    return await http.post<ActionResponse<unknown>>("lead-column-moves/", {
+export const editLeadStatusPosition = async ({ body, token }: Params) => {
+    return await http.post<ActionResponse<unknown>>("lead-statuses/move", {
         token,
         json: body
     })

@@ -48,7 +48,9 @@ export const LeadCard = ({ lead }: Props) => {
                     "h-auto": showAll,
                 })}
             >
-                <p>{lead.company_info}</p>
+                <div dangerouslySetInnerHTML={{
+                    __html: lead.company_info
+                }} />
             </CardContent>
 
             <CardFooter className="justify-between">

@@ -52,7 +52,7 @@ export const metadata: Metadata = {
         locale: "ru_RU",
         images: [
             {
-                url: "/images/opengraph-admin.jpg",
+                url: "/favicon/favicon-512x512.png",
                 width: 1200,
                 height: 630,
                 alt: "IT 911 — Админ-панель",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
         title: "Админ-панель | IT 911 Solutions",
         description:
             "Панель администратора IT 911 — управление всеми цифровыми решениями компании в одном месте.",
-        images: ["/images/opengraph-admin.jpg"],
+        images: "/favicon/favicon-512x512.png",
     },
 
     alternates: {
@@ -101,7 +101,7 @@ const AdminLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
                 <SessionProvider session={session}>
                     <AppSidebar />
 
-                    <main className="flex-1">
+                    <main className="w-full">
                         <AppHeader />
 
                         {children}
