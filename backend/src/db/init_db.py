@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from session import async_session
+from db.session import async_session
 from models.role import Permission, Role
 from models.lead import  LeadStatus
 from models.user import  User
@@ -35,28 +35,35 @@ async def init_permissions(session: AsyncSession):
 
 
 async def create_status(session: AsyncSession):
-    existing_lead_statuses = (await session.execute(
-        select(LeadStatus.id)
-    )).scalars().all()
+    # Получаем существующие ID статусов
+    result = await session.execute(select(LeadStatus.id))
+    existing_ids = set(result.scalars().all())
 
-    new_statuses = []
+    statuses = {
+        1: "Новый",
+        2: "В процессе",
+        3: "Обработанный"
+    }
 
-    statuses = {1: "Новый", 2: "В Процессе", 3: "Обработанный"}
-    for status_id, status_name in statuses.items():
-        if status_id not in existing_lead_statuses:
-            new_statuses.append(
-                LeadStatus(
-                    id=status_id,
-                    name=status_name,
-                    hex="#ffffff",
-                    level=status_id,
-                    can_edit=False,
-                    can_delete=False,
-                )
-            )
+    # Создаём только те статусы, которых нет
+    new_statuses = [
+        LeadStatus(
+            id=status_id,
+            name=status_name,
+            hex="#ffffff",
+            level=status_id,
+            can_edit=False,
+            can_delete=False
+        )
+        for status_id, status_name in statuses.items()
+        if status_id not in existing_ids
+    ]
+
+    # Добавляем новые записи, если есть
     if new_statuses:
         session.add_all(new_statuses)
-        await session.flush()
+        await session.commit()  # commit вместо flush, чтобы реально сохранить изменения
+
     return new_statuses
 
 

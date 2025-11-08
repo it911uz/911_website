@@ -10,7 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.responses import JSONResponse
 
-# from db.init_db import init_db
+from db.init_db import init_db
 from routers.auth import router as auth_router
 from routers.click import router as click_router
 from routers.role import router as role_router
@@ -26,7 +26,7 @@ from utils.cache import redis_cache
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await redis_cache.init()
-    # await init_db()
+    await init_db()
     print("Сервер Запущен")
     yield
     print("Работа Завершилась")

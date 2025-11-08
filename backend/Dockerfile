@@ -7,6 +7,13 @@ ENV PYTHONUNBUFFERED 1
 
 # ==== Рабочая директория ====
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    python3-dev \
+    postgresql-client \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
 
 # ==== Установка зависимостей ====
 COPY requirements.txt .
@@ -15,6 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ==== Копирование исходников ====
 COPY . .
 
+RUN chmod +x /app/run.sh
 # ==== Команда по умолчанию ====
 # Выполняет миграции Alembic, затем запускает main.py
-CMD alembic -c src/alembic.ini upgrade head && python src/main.py
+CMD ["sh", "/app/run.sh"]

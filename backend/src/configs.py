@@ -15,8 +15,7 @@ TIMEZONE = pytz.timezone('Asia/Tashkent')
 DATABASE_URL = os.getenv("DATABASE_URL")
 ASYNC_DATABASE_URL = os.getenv("ASYNC_DATABASE_URL")
 
-REDIS_HOST = os.getenv("REDIS_HOST")
-REDIS_PORT = int(os.getenv("REDIS_PORT"))
+REDIS_URL = os.getenv("REDIS_URL")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ACCESS_TIME = os.getenv("ACCESS_TIME")

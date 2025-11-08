@@ -28,7 +28,7 @@ class BaseManager(Generic[ModelType]):
         if not obj:
             raise NotFound(f"{self.model.__name__} not found")
 
-        await redis_cache.set(key, obj.__dict__)
+        await redis_cache.set(key, obj.as_dict())
         return obj
 
     async def list(self, filters=None, params: Params = None):
