@@ -131,7 +131,6 @@ export const Columns = ({ columnsData = [] }: Props) => {
                     return
                 }
 
-
                 const response = await editLeadPosition({
                     token: session.data?.user.accessToken,
                     body: {
@@ -151,7 +150,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                         if (column.columnId === overCol.columnId) {
                             return {
                                 ...column,
-                                leads: [...column.leads, lead],
+                                leads: [...column.leads.filter(item => item.id !== activeNumeric), lead],
                             }
                         }
 

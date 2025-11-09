@@ -87,6 +87,8 @@ async function refreshAccessToken(jwt: JWT): Promise<JWT> {
 		accessToken: response.data.access_token,
 		refreshToken: response.data.refresh_token,
 		expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
+		name: me.data.full_name,
+		email: me.data.email,
 	};
 }
 

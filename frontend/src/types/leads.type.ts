@@ -25,3 +25,9 @@ export interface LeadComment {
     lead_id: number;
     user_id: null;
 }
+
+export interface LeadFile {
+    id: string;
+    filename: string;
+    url: string;
+}

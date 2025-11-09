@@ -23,11 +23,6 @@ import { NavUser } from "./nav-user"
 import { auth } from "@/auth"
 
 export const menus = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/logo.svg",
-  },
   navMain: [
     {
       title: "Дашбоард",
@@ -94,11 +89,7 @@ export const AppSidebar = async () => {
         {/* <NavSecondary items={menus.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{
-          avatar: menus.user.avatar,
-          email: session?.user.email || menus.user.email,
-          name: session?.user.name || menus.user.name
-        }} />
+        <NavUser  />
       </SidebarFooter>
     </Sidebar>
   )
