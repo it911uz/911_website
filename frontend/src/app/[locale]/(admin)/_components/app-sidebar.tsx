@@ -20,7 +20,6 @@ import {
 import { Routers } from "@/configs/router.config"
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
-import { auth } from "@/auth"
 
 export const menus = {
   navMain: [
@@ -73,8 +72,6 @@ export const menus = {
 
 export const AppSidebar = async () => {
 
-  const session = await auth();
-
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader>
@@ -86,7 +83,6 @@ export const AppSidebar = async () => {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={menus.navMain} />
-        {/* <NavSecondary items={menus.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser  />

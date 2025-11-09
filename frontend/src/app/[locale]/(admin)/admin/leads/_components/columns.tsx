@@ -11,6 +11,7 @@ import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.ap
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { editLeadPosition } from "@/api/leads/edit-lead-position";
+import type { Lead } from "@/types/leads.type";
 
 export const Columns = ({ columnsData = [] }: Props) => {
 
@@ -18,7 +19,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
     const [activeItem, setActiveItem] = useState<{ type: "column" | "lead"; data: any } | null>(null);
     const session = useSession();
     const router = useRouter();
-    const [optimisticColumns, setOptimisticColumns] = useState<ColumnType[]>(
+    const [optimisticColumns, setOptimisticColumns] = useOptimistic<ColumnType[]>(
         columnsData.sort((a, b) => a.position - b.position)
     );
 
@@ -223,13 +224,7 @@ interface Props {
     columnsData: ColumnType[];
 }
 
-export interface LeadType {
-    id: number;
-    full_name: string;
-    company_name: string;
-    company_info: string;
-    phone: string;
-    email: string;
+export interface LeadType extends Pick<Lead, "full_name" | "company_name" | "company_info" | "phone" | "email" | "id" | "created_at"> {
     status: number;
     position: number
 }

@@ -16,6 +16,8 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar"
+import { Routers } from "@/configs/router.config"
+import { useRouter } from "@/i18n/navigation"
 import {
     MoreVertical,
     User,
@@ -28,6 +30,8 @@ export const NavUser = () => {
     const { isMobile } = useSidebar();
 
     const session = useSession();
+
+    const router = useRouter();
 
     return (
         <SidebarMenu>
@@ -77,7 +81,7 @@ export const NavUser = () => {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(Routers.admin.profile)}>
 
                                 <User className="mr-2 size-4" />
                                 Аккаунт
