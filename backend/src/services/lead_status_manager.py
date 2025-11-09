@@ -7,6 +7,10 @@ from repository.lead_repo import LeadStatusRepository
 
 from services.base_manager import BaseManager
 
+from exceptions import NotFound
+
+from utils.cache import redis_cache
+
 
 class LeadStatusManager(BaseManager[LeadStatus]):
     def __init__(
@@ -22,10 +26,17 @@ class LeadStatusManager(BaseManager[LeadStatus]):
         return await super().create(**kwargs)
 
     async def update(self, obj_id, **kwargs) -> ModelType:
-        obj = await self.get(obj_id)
+        obj = await self.repo.get(obj_id)
+        if not obj:
+            raise NotFound("Lead Status Not Found")
         if not obj.can_edit:
             raise Forbidden("Нельзя ")
-        return await super().update(obj_id, **kwargs)
+        for k, v in kwargs.items():
+            setattr(obj, k, v)
+        await self.repo.update(obj)
+        await redis_cache.delete(self._cache_key(f"id:{obj_id}"))
+        await redis_cache.delete_pattern(self._cache_key("list:*"))
+        return obj
 
     async def delete(self, obj_id) -> None:
         obj: LeadStatus = await self.get(obj_id)
@@ -39,15 +50,18 @@ class LeadStatusManager(BaseManager[LeadStatus]):
     async def move(self, status_id: int, new_position: int):
         """Перемещение статуса на новую позицию"""
         # Получаем статус
-        status = await self.get(status_id)
+        status = await self.repo.get(status_id)
+        if not status:
+            raise NotFound("Lead Status Not Found")
         old_position = status.level
         if old_position == new_position:
             return None
-
+        print("Hi")
         # Если двигаем вверх
         await self.repo.move_level(status_id, new_position, old_position)
-
+        print("Move")
         # Обновляем позицию текущего статуса
         status.level = new_position
+        print(status)
         await self.repo.update(status)
         return None

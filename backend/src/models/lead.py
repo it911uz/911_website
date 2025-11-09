@@ -5,7 +5,7 @@ from models.base import Base
 from models.mixins import TimeStampMixin
 
 
-class LeadStatus(Base, TimeStampMixin):
+class LeadStatus(Base):
     __tablename__ = 'lead_statuses'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False, unique=True)

@@ -17,6 +17,7 @@ from routers.role import router as role_router
 from routers.lead import router as lead_router
 from routers.lead_status import router as lead_status_router
 from routers.lead_comment import router as lead_comment_router
+from routers.lead_files import router as lead_files_router
 from routers.target import router as target_router
 from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
@@ -68,6 +69,7 @@ app.include_router(role_router)
 app.include_router(lead_router)
 app.include_router(lead_comment_router)
 app.include_router(lead_status_router)
+app.include_router(lead_files_router)
 app.include_router(target_router)
 # app.include_router(task_router)r)
 app.include_router(user_router)
