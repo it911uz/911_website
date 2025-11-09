@@ -11,6 +11,7 @@ import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.ap
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { editLeadPosition } from "@/api/leads/edit-lead-position";
+import type { Lead } from "@/types/leads.type";
 
 export const Columns = ({ columnsData = [] }: Props) => {
 
@@ -62,40 +63,48 @@ export const Columns = ({ columnsData = [] }: Props) => {
         const activeNumeric = Number(activeId.replace(/\D+/g, ""));
         const overNumeric = Number(overId.replace(/\D+/g, ""));
 
-        const isDraggingColumn = activeId.startsWith("column-");
+        if (activeId.startsWith("column-")) {
+            const oldIndex = optimisticColumns.findIndex(
+                (column) => column.columnId === activeNumeric,
+            );
 
-        if (isDraggingColumn) {
-            const oldIndex = optimisticColumns.findIndex((col) => col.columnId === activeNumeric);
-            const newIndex = optimisticColumns.findIndex((col) => col.columnId === overNumeric);
-            if (oldIndex !== newIndex) {
-                const newColumns = arrayMove(optimisticColumns, oldIndex, newIndex);
-                startTransition(async () => {
-                    setOptimisticColumns(newColumns);
-                    const newPositionColumn = newColumns.map((item, index) => ({ ...item, position: index + 1 })).find((item) => item.columnId === activeNumeric);
+            const newIndex = optimisticColumns.findIndex(
+                (column) => column.columnId === overNumeric,
+            );
 
-                    if (!newPositionColumn) {
-                        toast.warning("Не удалось переместить колонку");
-                        return
+            const newColumns = arrayMove(optimisticColumns, oldIndex, newIndex);
+
+            const body = newColumns.map((item, index) => ({
+                ...item,
+                position: index + 1
+            }));
+
+            startTransition(async () => {
+
+                const column = body.find((item) => item.columnId === activeNumeric);
+
+                if (!column) {
+                    toast.warning("Не удалось переместить колонку");
+                    return
+                }
+
+                const response = await editLeadStatusPosition({
+                    token: session.data?.user.accessToken,
+                    body: {
+                        status_id: column.columnId,
+                        new_position: column.position,
                     }
-
-                    const response = await editLeadStatusPosition({
-                        token: session.data?.user.accessToken,
-                        body: {
-                            status_id: newPositionColumn?.columnId,
-                            new_position: newPositionColumn?.position,
-                        }
-                    });
-
-                    if (!response.ok) {
-                        toast.error("Произошла ошибка");
-                        return
-                    }
-
-                    toast.success("Колонка перемещена");
-                    router.refresh();
                 });
-            }
-            return;
+
+                if (!response.ok) {
+                    toast.error("Не удалось переместить колонку");
+                    return;
+                }
+
+                toast.success("Колонка перемещена");
+                setOptimisticColumns(body);
+                router.refresh();
+            });
         }
 
         const activeCol = findColumnContainer(activeId);
@@ -103,58 +112,62 @@ export const Columns = ({ columnsData = [] }: Props) => {
 
         if (!activeCol || !overCol) return;
 
-        if (overCol.columnId) {
+        if (activeId.startsWith("lead-")) {
             const oldIndex = activeCol.leads.findIndex((i) => i.id === activeNumeric);
             const newIndex = overCol.leads.findIndex((i) => i.id === overNumeric);
-            const updatedLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
+
+            const newLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
+
+            const body = newLeads.map((item, index) => ({
+                ...item,
+                position: index + 1,
+            }));
+
             startTransition(async () => {
-                const id = String(active.id);
 
-                if (id.startsWith("lead-")) {
-                    const numericId = Number(id.replace("lead-", ""));
+                const lead = body.find((item) => item.id === activeNumeric);
 
-                    const activeLead = activeCol?.leads.find((i) => i.id === numericId);
-                    if (activeLead) {
-                        setActiveItem({ type: "lead", data: activeLead });
+                if (!lead) {
+                    toast.warning("Не удалось переместить лид");
+                    return
+                }
 
-                        const response = await editLeadPosition({
-                            token: session.data?.user.accessToken,
-                            body: {
-                                status_id: overCol.columnId,
-                                lead_id: activeLead?.id ?? 0,
+                const response = await editLeadPosition({
+                    token: session.data?.user.accessToken,
+                    body: {
+                        lead_id: lead.id,
+                        status_id: overCol.columnId,
+                    }
+                });
+
+                if (!response.ok) {
+                    toast.error("Не удалось переместить лид");
+                    return;
+                }
+
+                toast.success("Лид перемещен");
+                setOptimisticColumns(columns => {
+                    return columns.map(column => {
+                        if (column.columnId === overCol.columnId) {
+                            return {
+                                ...column,
+                                leads: [...column.leads.filter(item => item.id !== activeNumeric), lead],
                             }
-                        });
-
-                        if (!response.ok) {
-                            toast.error("Произошла ошибка");
-                            return
                         }
 
-                        toast.success("Лид перемещен");
-                        router.refresh();
-                    }
-                }
+                        if (column.columnId === activeCol.columnId) {
+                            return {
+                                ...column,
+                                leads: column.leads.filter((lead) => lead.id !== activeNumeric),
+                            }
+                        }
+
+                        return column
+                    })
+                });
+                router.refresh();
             });
-
-            return;
         }
-
-        const activeLead = activeCol.leads.find((i) => i.id === activeNumeric);
-        if (!activeLead) return;
-
-        startTransition(() =>
-            setOptimisticColumns((cols) =>
-                cols.map((c) => {
-                    if (c.columnId === activeCol.columnId) {
-                        return { ...c, leads: c.leads.filter((i) => i.id !== activeNumeric) };
-                    }
-                    if (c.columnId === overCol.columnId) {
-                        return { ...c, leads: [...c.leads, { ...activeLead, status: c.columnId }] };
-                    }
-                    return c;
-                })
-            )
-        );
     };
 
     return (
@@ -211,16 +224,9 @@ interface Props {
     columnsData: ColumnType[];
 }
 
-export interface LeadType {
-    id: number;
-    full_name: string;
-    company_name: string;
-    company_info: string;
-    phone: string;
-    email: string;
+export interface LeadType extends Pick<Lead, "full_name" | "company_name" | "company_info" | "phone" | "email" | "id" | "created_at"> {
     status: number;
-    created_at?: Date;
-    updated_at?: Date;
+    position: number
 }
 
 export interface ColumnType {

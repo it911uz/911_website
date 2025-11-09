@@ -55,9 +55,10 @@ export const LeadCard = ({ lead }: Props) => {
 
             <CardFooter className="justify-between">
                 <time dateTime={dayjs(lead.created_at).format("YYYY-MM-DD")}>
-                    {dayjs(lead.created_at).format("YYYY-MM-DD HH:mm")}
+                    {dayjs(lead.created_at).format("HH:mm YYYY-MM-DD")}
                 </time>
-                <LeadOption />
+
+                <LeadOption lead={lead} />
             </CardFooter>
         </Card>
     );

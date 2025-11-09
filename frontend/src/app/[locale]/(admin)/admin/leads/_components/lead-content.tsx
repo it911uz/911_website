@@ -15,6 +15,7 @@ export const LeadContent = async () => {
     const leads = await getLeads({
         token: session?.user.accessToken,
         statusIds: array ? array.map((id) => id) : undefined,
+        perPage: perPage,
     });
 
     const columnsData: ColumnType[] = leadStatuses.data.items?.map(status => {
@@ -23,14 +24,10 @@ export const LeadContent = async () => {
             hex: status.hex,
             name: status.name,
             position: status.level,
-            leads: leads.data.items.filter(lead => lead.status.id === status.id).map(lead => ({
-                id: lead.id,
-                full_name: lead.full_name,
-                company_name: lead.company_name,
-                company_info: lead.company_info,
-                phone: lead.phone,
-                email: lead.email,
-                status: lead.status_id,
+            leads: leads.data.items.filter(lead => lead.status_id === status.id).map((lead, index) => ({
+                ...lead,
+                status: status.id,
+                position: index + 1,
             }))
         }
     })

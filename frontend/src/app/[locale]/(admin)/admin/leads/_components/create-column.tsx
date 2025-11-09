@@ -14,12 +14,10 @@ import { useTransition } from "react";
 import { createLeadStatus } from "@/api/leads/create-lead-status.api";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/navigation";
 
 export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
     const session = useSession();
-    const router = useRouter();
     const [pending, startTransition] = useTransition();
     const { register, handleSubmit, formState: { errors }, reset } = useForm<ColumnSchemaType>({
         resolver: zodResolver(columnSchema)
@@ -38,8 +36,8 @@ export const CreateColumn = () => {
             }
 
             toast.success("Колонка создана");
+            window.location.reload();
             reset();
-            router.refresh();
             onOpenChange(false);
         })
     }

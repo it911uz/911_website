@@ -14,12 +14,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { createLead } from "@/api/leads/create-lead.api";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/navigation";
 
 export const CreateLead = () => {
     const { open, onOpenChange } = useOpen();
     const [pending, startTransition] = useTransition();
-    const router = useRouter();
 
     const { register, handleSubmit, formState: { errors }, control, reset } = useForm<LeadSchemaType>({
         resolver: zodResolver(leadSchema)
@@ -37,8 +35,8 @@ export const CreateLead = () => {
             }
 
             toast.success("Лид создан");
+            window.location.reload();
             reset();
-            router.refresh();
             onOpenChange(false);
         })
     }
