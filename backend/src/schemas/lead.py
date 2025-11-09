@@ -3,7 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr, field_validator
 
-from schemas.base import validate_hex_color
+from schemas.base import validate_hex_color, TimeStampSchema
+from schemas.user import UserMinRead
 
 
 class LeadMove(BaseModel):
@@ -53,10 +54,12 @@ class LeadCommentUpdate(LeadCommentBase):
     pass
 
 
-class LeadCommentRead(LeadCommentBase):
+class LeadCommentRead(LeadCommentBase, TimeStampSchema):
     id: int
     lead_id: int
     user_id: Optional[int] = None
+
+    user: UserMinRead
 
     model_config = {
         "from_attributes": True
@@ -84,7 +87,7 @@ class LeadUpdateStatus(BaseModel):
     status_id: int = Field(ge=1)
 
 
-class LeadRead(LeadBase):
+class LeadRead(LeadBase, TimeStampSchema):
     id: int
     status_id: Optional[int]
 
