@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import roles
 
@@ -36,26 +36,32 @@ async def init_permissions(session: AsyncSession):
 
 
 async def create_status(session: AsyncSession):
-    existing_lead_statuses = (await session.execute(
-        select(LeadStatus.name)
-    )).scalars().all()
+    existing_levels = set(
+        (await session.execute(select(LeadStatus.level))).scalars().all()
+    )
+
+    seed_statuses = [
+        {"name": "Новый", "hex": "#ffffff", "level": 1},
+        {"name": "В Процессе", "hex": "#ffffff", "level": 2},
+        {"name": "Обработанный", "hex": "#ffffff", "level": 3},
+    ]
 
     new_statuses = []
 
-    statuses = {1: "Новый", 2: "В Процессе", 3: "Обработанный"}
-    for status_id, status_name in statuses.items():
-        if status_name not in existing_lead_statuses:
-            new_statuses.append(
-                LeadStatus(
-                    id=status_id,
-                    name=status_name,
-                    hex="#ffffff",
-                    level=status_id
-                )
+    for s in seed_statuses:
+        if s["level"] in existing_levels:
+            await session.execute(
+                update(LeadStatus)
+                .where(LeadStatus.level == s["level"])
+                .values(name=s["name"], hex=s["hex"])
             )
+        else:
+            new_statuses.append(LeadStatus(**s))
+
     if new_statuses:
         session.add_all(new_statuses)
         await session.flush()
+
     return new_statuses
 
 

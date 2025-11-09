@@ -1,7 +1,9 @@
-import dataclasses
+from typing import Optional
 
+from fastapi_pagination import Params
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from services.base_manager import BaseManager
 from exceptions import NotFound
 from filters.task_filter import TaskFilter
 from models.tasks import TaskStatus, Task
@@ -12,8 +14,9 @@ from schemas.task import TaskRequest, TaskStatusRequest, TaskStatusResponse, Tas
 
 # TODO: Теперь еще файлы и комменты нужны
 
-class TaskStatusManager:
-    def __init__(self, db):
+class TaskStatusManager(BaseManager[TaskStatus]):
+    def __init__(self, db: AsyncSession):
+        super().__init__(db, TaskStatus)
         self.repo = TaskStatusRepository(db, TaskStatus)
 
     async def create_status(
@@ -59,11 +62,12 @@ class TaskStatusManager:
             raise NotFound(f"Task Status with id {status_id} not found")
         return TaskStatusResponse.model_validate(status)
 
-    async def list_statuses(
-            self
-    ):
-        data = await self.repo.list()
-        return TaskStatusResponse.model_validate(data)
+    # async def list_statuses(
+    #         self, filters = None
+    # ):
+    #     data = await self.repo.list(filters=filters)
+    #     return data
+    #     # return TaskStatusResponse.model_validate(data)
 
 
 class TaskManager:
@@ -92,7 +96,8 @@ class TaskManager:
         await self.repo.add_users(task, request.users)
 
         await self.db.flush()
-        return TaskResponse.model_validate(task)
+        # return TaskResponse.model_validate(task)
+        return task
 
     async def delete_task(
             self,
@@ -144,12 +149,13 @@ class TaskManager:
 
         await self.repo.update(task)
 
-    async def list_tasks(self, tags: list[int] = None, users: list[int] = None):
+    async def list_tasks(self, tags: list[int] = None, users: list[int] = None, params: Optional[Params] = None):
         filters = TaskFilter(
             tags=tags,
         )
         data = await self.repo.list(filters)
         return TaskListResponse.model_validate(data)
+        
 
     async def get_task(
             self,

@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from models.base import Base
 from models.mixins import TimeStampMixin
 
+
 task_tags = Table(
     "task_tags",
     Base.metadata,
@@ -25,6 +26,7 @@ class TaskStatus(Base):
     name = Column(String(255), unique=True)
     hex = Column(String(7))
     order = Column(Integer)
+    tasks = relationship("Task", back_populates="status", lazy="selectin")
     is_completed = Column(Boolean, default=False)
 
 
@@ -34,7 +36,8 @@ class Task(Base, TimeStampMixin):
     name = Column(String(255))
     description = Column(String(1024))
     deadline = Column(DateTime)
-    status_id = Column(Integer, ForeignKey('task_statuses.id', ondelete="RESTRICT"))
+    status_id = Column(Integer, ForeignKey('task_statuses.id', ondelete="SET NULL"), nullable=True)
 
-    # tags = relationship("Tag", secondary=task_tags, backref="tasks", lazy="selectin")
+    tags = relationship("Tag", secondary=task_tags, back_populates="tasks", lazy="selectin")
+    status = relationship("TaskStatus", back_populates="tasks", lazy="selectin")
     users = relationship("User", secondary=user_tasks, back_populates="tasks", lazy="selectin")

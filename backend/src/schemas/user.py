@@ -44,9 +44,9 @@ class UserRead(UserBase):
         "from_attributes": True
     }
 
-# class UserResponse(UserBase):
-#     id: int
-#     full_name: str
-#     username: str
-#     email: EmailStr
-#     is_superuser: bool
+class UserResponse(UserBase):
+    id: int
+    full_name: str
+    username: str
+    email: EmailStr
+    is_superuser: bool

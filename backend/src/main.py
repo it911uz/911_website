@@ -17,11 +17,13 @@ from routers.lead import router as lead_router
 from routers.lead_status import router as lead_status_router
 from routers.lead_comment import router as lead_comment_router
 from routers.target import router as target_router
-# from routers.task import router as task_router
+from routers.task import router as task_router
+from routers.task_status import router as task_status_router
 # from routers.telegram import router as telegram_router
 from routers.user import router as user_router
-from routers.task import router as task_router
+from routers.tag import router as tag_router
 from schemas.exceptions import ExceptionResponse
+
 
 
 @asynccontextmanager
@@ -67,8 +69,11 @@ app.include_router(lead_comment_router)
 app.include_router(lead_status_router)
 app.include_router(target_router)
 app.include_router(task_router)
+app.include_router(task_status_router)
 # app.include_router(telegram_router)
 app.include_router(user_router)
+app.include_router(tag_router)
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
