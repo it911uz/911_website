@@ -1,7 +1,7 @@
 # from models.base import Base
 # # from models.company import Company
 # from models.click import Click
-# from models.lead import Lead, LeadComment, LeadStatus
+# from models.lead import Lead, LeadComment, LeadStatus, LeadFile
 # from models.target import TargetCompany
 # from models.tasks import Task, TaskStatus, task_tags, user_tasks
 # from models.tag import Tag

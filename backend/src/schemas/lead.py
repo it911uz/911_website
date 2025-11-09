@@ -94,3 +94,10 @@ class LeadRead(LeadBase):
     model_config = {
         "from_attributes": True
     }
+
+
+class LeadFileRead(BaseModel):
+    id: uuid.UUID
+    filename: str
+    url: str
+

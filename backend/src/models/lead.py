@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, UUID, Boolean
+import uuid
+
+from sqlalchemy import Column, Integer, String, ForeignKey, UUID, Boolean
 from sqlalchemy.orm import relationship
 
 from models.base import Base
@@ -40,3 +42,11 @@ class LeadComment(Base, TimeStampMixin):
     comment = Column(String(2048), nullable=False)
 
     lead = relationship("Lead", back_populates="comments", lazy="selectin")
+
+
+class LeadFile(Base):
+    __tablename__ = 'lead_files'
+    id = Column(UUID, primary_key=True, nullable=False, index=True)
+    lead_id = Column(Integer, ForeignKey('leads.id', ondelete='CASCADE'), nullable=False)
+    filename = Column(String(512), nullable=False)
+    key = Column(String, nullable=False)

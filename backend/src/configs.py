@@ -4,10 +4,6 @@ import pytz
 
 from dotenv import load_dotenv
 
-import redis.asyncio as aioredis
-
-from functools import lru_cache
-
 load_dotenv()
 
 TIMEZONE = pytz.timezone('Asia/Tashkent')
@@ -21,14 +17,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ACCESS_TIME = os.getenv("ACCESS_TIME")
 REFRESH_TIME = os.getenv("REFRESH_TIME")
 
-
 BOT_SECRET = os.getenv("BOT_SECRET")
 
-@lru_cache
-def get_redis() -> aioredis.Redis:
-    return aioredis.Redis(
-        host=REDIS_HOST,
-        port=REDIS_PORT,
-        db=0,
-        decode_responses=True,
-    )
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_S3_REGION = os.getenv("AWS_S3_REGION")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
