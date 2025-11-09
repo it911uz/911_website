@@ -46,6 +46,8 @@ class LeadStatusManager(BaseManager[LeadStatus]):
 
         await self.repo.delete(obj)
         await self.repo.move_deleted(deleted_level)
+        await redis_cache.delete(self._cache_key(f"id:{obj_id}"))
+        await redis_cache.delete_pattern(self._cache_key("list:*"))
 
     async def move(self, status_id: int, new_position: int):
         """Перемещение статуса на новую позицию"""
