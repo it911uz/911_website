@@ -17,3 +17,11 @@ export interface Status {
     id: number;
     level: number;
 }
+
+
+export interface LeadComment {
+    comment: string;
+    id: number;
+    lead_id: number;
+    user_id: null;
+}

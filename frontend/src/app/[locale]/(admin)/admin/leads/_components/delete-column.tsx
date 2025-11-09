@@ -29,7 +29,7 @@ export const DeleteColumn = ({columnId}:Props) => {
             }
 
             toast.success("Колонка удалена");
-            router.refresh();
+            window.location.reload();
             onOpenChange(false);
         })
     }

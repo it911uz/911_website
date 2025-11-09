@@ -9,15 +9,25 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useOpen } from "@/hooks/use-open";
 import { CircleEllipsis } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import dayjs from "dayjs";
 import { ErrorMassage } from "@/components/ui/error-message";
 import { messageSchema, type MessageSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLeadComments } from "@/api/hooks/use-leads.api";
+import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 
-export const LeadOption = () => {
+export const LeadOption = ({ leadId }: Props) => {
     const { open, onOpenChange } = useOpen();
+    const session = useSession();
+    const queryClient = useQueryClient();
 
-    const { handleSubmit, control, formState: { errors } } = useForm<MessageSchemaType>({
+    const { data } = useLeadComments({
+        leadId,
+        token: session.data?.user?.accessToken,
+        enabled: open
+    });
+
+    const { handleSubmit, control } = useForm<MessageSchemaType>({
         resolver: zodResolver(messageSchema),
         defaultValues: {
             message: "",
@@ -42,12 +52,16 @@ export const LeadOption = () => {
                 </SheetHeader>
 
                 <Accordion type="single" className="w-full space-y-1.5">
-                    {messages.map((message) => (
+                    {data?.data.items?.map((message) => (
                         <AccordionItem key={message.id} value={message.id + ""}>
                             <AccordionTrigger className="cursor-pointer">
-                                {dayjs(message.create_at).format("DD.MM.YYYY HH:mm")}
+                                {message.comment.length > 50 ? message.comment.substring(0, 50) + "..." : message.comment}
                             </AccordionTrigger>
-                            <AccordionContent>{message.message}</AccordionContent>
+                            <AccordionContent>
+                                <div dangerouslySetInnerHTML={{
+                                    __html: message.comment
+                                }} />
+                            </AccordionContent>
                         </AccordionItem>
                     ))}
                 </Accordion>
@@ -102,3 +116,7 @@ const messages = [
     { id: 2, create_at: new Date(), message: "Привет 2" },
     { id: 3, create_at: new Date(), message: "Привет 3" },
 ] as const;
+
+interface Props {
+    leadId: number;
+}

@@ -18,7 +18,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
     const [activeItem, setActiveItem] = useState<{ type: "column" | "lead"; data: any } | null>(null);
     const session = useSession();
     const router = useRouter();
-    const [optimisticColumns, setOptimisticColumns] = useOptimistic<ColumnType[]>(
+    const [optimisticColumns, setOptimisticColumns] = useState<ColumnType[]>(
         columnsData.sort((a, b) => a.position - b.position)
     );
 
@@ -62,99 +62,49 @@ export const Columns = ({ columnsData = [] }: Props) => {
         const activeNumeric = Number(activeId.replace(/\D+/g, ""));
         const overNumeric = Number(overId.replace(/\D+/g, ""));
 
-        const isDraggingColumn = activeId.startsWith("column-");
+        if (activeId.startsWith("column-")) {
+            const oldIndex = optimisticColumns.findIndex(
+                (column) => column.columnId === activeNumeric,
+            );
 
-        if (isDraggingColumn) {
-            const oldIndex = optimisticColumns.findIndex((col) => col.columnId === activeNumeric);
-            const newIndex = optimisticColumns.findIndex((col) => col.columnId === overNumeric);
-            if (oldIndex !== newIndex) {
-                const newColumns = arrayMove(optimisticColumns, oldIndex, newIndex);
-                startTransition(async () => {
-                    setOptimisticColumns(newColumns);
-                    const newPositionColumn = newColumns.map((item, index) => ({ ...item, position: index + 1 })).find((item) => item.columnId === activeNumeric);
+            const newIndex = optimisticColumns.findIndex(
+                (column) => column.columnId === overNumeric,
+            );
 
-                    if (!newPositionColumn) {
-                        toast.warning("Не удалось переместить колонку");
-                        return
-                    }
+            const newColumns = arrayMove(optimisticColumns, oldIndex, newIndex);
 
-                    const response = await editLeadStatusPosition({
-                        token: session.data?.user.accessToken,
-                        body: {
-                            status_id: newPositionColumn?.columnId,
-                            new_position: newPositionColumn?.position,
-                        }
-                    });
+            const body = newColumns.map((item, index) => ({
+                ...item,
+                position: index + 1
+            }));
 
-                    if (!response.ok) {
-                        toast.error("Произошла ошибка");
-                        return
-                    }
-
-                    toast.success("Колонка перемещена");
-                    router.refresh();
-                });
-            }
-            return;
-        }
-
-        const activeCol = findColumnContainer(activeId);
-        const overCol = findColumnContainer(overId);
-
-        if (!activeCol || !overCol) return;
-
-        if (overCol.columnId) {
-            const oldIndex = activeCol.leads.findIndex((i) => i.id === activeNumeric);
-            const newIndex = overCol.leads.findIndex((i) => i.id === overNumeric);
-            const updatedLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
             startTransition(async () => {
-                const id = String(active.id);
 
-                if (id.startsWith("lead-")) {
-                    const numericId = Number(id.replace("lead-", ""));
+                const column = body.find((item) => item.columnId === activeNumeric);
 
-                    const activeLead = activeCol?.leads.find((i) => i.id === numericId);
-                    if (activeLead) {
-                        setActiveItem({ type: "lead", data: activeLead });
-
-                        const response = await editLeadPosition({
-                            token: session.data?.user.accessToken,
-                            body: {
-                                status_id: overCol.columnId,
-                                lead_id: activeLead?.id ?? 0,
-                            }
-                        });
-
-                        if (!response.ok) {
-                            toast.error("Произошла ошибка");
-                            return
-                        }
-
-                        toast.success("Лид перемещен");
-                        router.refresh();
-                    }
+                if (!column) {
+                    toast.warning("Не удалось переместить колонку");
+                    return
                 }
+
+                const response = await editLeadStatusPosition({
+                    token: session.data?.user.accessToken,
+                    body: {
+                        status_id: column.columnId,
+                        new_position: column.position,
+                    }
+                });
+
+                if (!response.ok) {
+                    toast.error("Не удалось переместить колонку");
+                    return;
+                }
+
+                toast.success("Колонка перемещена");
+                setOptimisticColumns(body);
+                router.refresh();
             });
-
-            return;
         }
-
-        const activeLead = activeCol.leads.find((i) => i.id === activeNumeric);
-        if (!activeLead) return;
-
-        startTransition(() =>
-            setOptimisticColumns((cols) =>
-                cols.map((c) => {
-                    if (c.columnId === activeCol.columnId) {
-                        return { ...c, leads: c.leads.filter((i) => i.id !== activeNumeric) };
-                    }
-                    if (c.columnId === overCol.columnId) {
-                        return { ...c, leads: [...c.leads, { ...activeLead, status: c.columnId }] };
-                    }
-                    return c;
-                })
-            )
-        );
     };
 
     return (
