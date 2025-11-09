@@ -24,7 +24,6 @@ class RoleUpdate(RoleBase):
 
 class RoleMinRead(RoleBase):
     id: int
-    permissions: list[PermissionRead] = []
 
     model_config = {
         "from_attributes": True

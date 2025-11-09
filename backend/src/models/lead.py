@@ -42,7 +42,7 @@ class LeadComment(Base, TimeStampMixin):
     comment = Column(String(2048), nullable=False)
 
     lead = relationship("Lead", back_populates="comments", lazy="selectin")
-
+    user = relationship("User", back_populates="lead_comments", lazy="selectin")
 
 class LeadFile(Base):
     __tablename__ = 'lead_files'

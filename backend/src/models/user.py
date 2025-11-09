@@ -18,3 +18,4 @@ class User(Base, TimeStampMixin):
 
     tasks = relationship("Task", secondary=user_tasks, back_populates="users")
     role = relationship("Role", back_populates="users", lazy="selectin")
+    lead_comments = relationship("LeadComment", back_populates="user", lazy="selectin")
