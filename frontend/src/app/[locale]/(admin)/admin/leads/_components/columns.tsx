@@ -105,6 +105,69 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 router.refresh();
             });
         }
+
+        const activeCol = findColumnContainer(activeId);
+        const overCol = findColumnContainer(overId);
+
+        if (!activeCol || !overCol) return;
+
+        if (activeId.startsWith("lead-")) {
+            const oldIndex = activeCol.leads.findIndex((i) => i.id === activeNumeric);
+            const newIndex = overCol.leads.findIndex((i) => i.id === overNumeric);
+
+            const newLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
+
+            const body = newLeads.map((item, index) => ({
+                ...item,
+                position: index + 1,
+            }));
+
+            startTransition(async () => {
+
+                const lead = body.find((item) => item.id === activeNumeric);
+
+                if (!lead) {
+                    toast.warning("Не удалось переместить лид");
+                    return
+                }
+
+
+                const response = await editLeadPosition({
+                    token: session.data?.user.accessToken,
+                    body: {
+                        lead_id: lead.id,
+                        status_id: overCol.columnId,
+                    }
+                });
+
+                if (!response.ok) {
+                    toast.error("Не удалось переместить лид");
+                    return;
+                }
+
+                toast.success("Лид перемещен");
+                setOptimisticColumns(columns => {
+                    return columns.map(column => {
+                        if (column.columnId === overCol.columnId) {
+                            return {
+                                ...column,
+                                leads: [...column.leads, lead],
+                            }
+                        }
+
+                        if (column.columnId === activeCol.columnId) {
+                            return {
+                                ...column,
+                                leads: column.leads.filter((lead) => lead.id !== activeNumeric),
+                            }
+                        }
+
+                        return column
+                    })
+                });
+                router.refresh();
+            });
+        }
     };
 
     return (
@@ -169,8 +232,7 @@ export interface LeadType {
     phone: string;
     email: string;
     status: number;
-    created_at?: Date;
-    updated_at?: Date;
+    position: number
 }
 
 export interface ColumnType {

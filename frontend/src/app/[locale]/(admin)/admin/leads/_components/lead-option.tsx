@@ -15,14 +15,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLeadComments } from "@/api/hooks/use-leads.api";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
+import type { LeadType } from "./columns";
 
-export const LeadOption = ({ leadId }: Props) => {
+export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
     const session = useSession();
     const queryClient = useQueryClient();
 
     const { data } = useLeadComments({
-        leadId,
+        leadId: lead.id,
         token: session.data?.user?.accessToken,
         enabled: open
     });
@@ -48,7 +49,7 @@ export const LeadOption = ({ leadId }: Props) => {
 
             <SheetContent className="max-w-5xl">
                 <SheetHeader>
-                    <SheetTitle>Задача</SheetTitle>
+                    <SheetTitle>Задача: {lead.company_name}</SheetTitle>
                 </SheetHeader>
 
                 <Accordion type="single" className="w-full space-y-1.5">
@@ -118,5 +119,5 @@ const messages = [
 ] as const;
 
 interface Props {
-    leadId: number;
+    lead: LeadType
 }

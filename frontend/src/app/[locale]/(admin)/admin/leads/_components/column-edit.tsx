@@ -15,12 +15,10 @@ import { useTransition } from "react";
 import { editLeadStatus } from "@/api/leads/edit-lead-status.api";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { useRouter } from "@/i18n/navigation";
 
 export const ColumnEdit = ({ columnsData }: Props) => {
     const { open, onOpenChange } = useOpen();
     const [pending, startTransition] = useTransition();
-    const router = useRouter();
     const session = useSession();
     const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
         resolver: zodResolver(columnSchema),
@@ -44,7 +42,7 @@ export const ColumnEdit = ({ columnsData }: Props) => {
             }
 
             toast.success("Колонка обновлена");
-            router.refresh();
+            window.location.reload();
             onOpenChange(false);
         })
     }
