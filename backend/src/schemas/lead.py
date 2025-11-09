@@ -59,7 +59,7 @@ class LeadCommentRead(LeadCommentBase, TimeStampSchema):
     lead_id: int
     user_id: Optional[int] = None
 
-    user: UserMinRead
+    user: UserMinRead | None = None
 
     model_config = {
         "from_attributes": True
