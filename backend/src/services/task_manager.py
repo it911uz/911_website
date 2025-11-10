@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from fastapi_pagination import Params
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -71,8 +71,9 @@ class TaskStatusManager(BaseManager[TaskStatus]):
     #     # return TaskStatusResponse.model_validate(data)
 
 
-class TaskManager:
+class TaskManager(BaseManager[Task]):
     def __init__(self, db: AsyncSession):
+        super().__init__(db, Task)
         self.status_repo = TaskStatusRepository(db, TaskStatus)
         self.repo = TaskRepository(db, Task)
         self.db = db
@@ -163,12 +164,18 @@ class TaskManager:
 
         await self.repo.update(task)
 
-    async def list_tasks(self, tags: list[int] = None, users: list[int] = None, params: Optional[Params] = None):
+    async def list_tasks(self, tags: List[int] = None, users: List[int] = None, params: Optional[Params] = None):
+        payload = {}
+        if tags is not None:
+            payload['tags'] = tags
+        if users is not None:
+            payload['users'] = users
         filters = TaskFilter(
-            tags=tags,
-        )
+            **payload
+        ) if payload else None
         data = await self.repo.list(filters)
-        return TaskListResponse.model_validate(data)
+        # return TaskListResponse.model_validate(data)
+        return data
         
 
     async def get_task(
