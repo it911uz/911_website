@@ -137,5 +137,21 @@
 			},
 			"link": "Contact us"
 		}
+	},
+	"PromoPage": {
+		"title": "MEGA NOVEMBER SALE",
+		"theme": "Only for the first <span>20 customers</span>",
+		"description": {
+			"1": "Hurry up! Get up to <span>100%</span> discount on all services",
+			"2": "Only this November — a unique opportunity to get premium services at reduced prices. The promotion is available for a limited time, so don’t miss your chance to save and gain maximum benefit!",
+			"3": "<strong>🎁 Bonus for early clients:</strong> the first 20 orders receive not only a discount but also an additional gift from our team.",
+			"4": "<strong>⏰ Promotion period:</strong> from November 1 to November 30. After the promotion ends, prices return to standard rates.",
+			"5": "<strong>📍 Learn more:</strong> contact us in any convenient way — our managers will help you place an order and calculate your personal discount."
+		},
+		"link": "Contact us",
+		"content": {
+			"title": "IT 911 PROMOTIONS",
+			"subtitle": "We’ve prepared exclusive offers to help you start your digital business transformation right now. Take advantage of the special conditions and get the most out of it."
+		}
 	}
 }
