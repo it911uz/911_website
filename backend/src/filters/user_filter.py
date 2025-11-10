@@ -12,6 +12,6 @@ class UserFilter(Filter):
     role_id__in: list[int] = None
     created_at__lte: Optional[datetime] = None
     updated_at__lte: Optional[datetime] = None
-
+    order_by: Optional[list[int]] = None
     class Constants(Filter.Constants):
         model = User

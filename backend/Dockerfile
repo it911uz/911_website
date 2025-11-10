@@ -22,6 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ==== Копирование исходников ====
 COPY . .
 
+
 RUN chmod +x /app/run.sh
 # ==== Команда по умолчанию ====
 # Выполняет миграции Alembic, затем запускает main.py

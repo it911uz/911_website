@@ -2,7 +2,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, func, String, literal
 
 from models.lead import Lead
-from models.click import  Click
+from models.click import Click
 from models.target import TargetCompany
 from repository.base_repo import BaseRepository, ModelType
 
@@ -28,8 +28,7 @@ class TargetCompanyRepository(BaseRepository[TargetCompany]):
     async def list(
             self,
             filters=None,
-            paginator=None,
-            sorter=None,
+            params=None,
     ):
         stmt = (select(
             TargetCompany.id,
