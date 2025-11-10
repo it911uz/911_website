@@ -137,5 +137,21 @@
 			},
 			"link": "Biz bilan bog‘laning"
 		}
+	},
+	"PromoPage": {
+		"title": "NOYABR MEGA AKSIYASI",
+		"theme": "Faqat birinchi <span>20 xaridor</span> uchun",
+		"description": {
+			"1": "Shoshiling! Barcha xizmatlarga <span>100%</span> gacha chegirma oling",
+			"2": "Faqat noyabr oyida — eng yaxshi xizmatlarni arzon narxlarda olish imkoniyati. Aksiya cheklangan muddatda amal qiladi, imkoniyatni boy bermang va maksimal foyda oling!",
+			"3": "<strong>🎁 Dastlabki mijozlar uchun bonus:</strong> birinchi 20 ta buyurtma nafaqat chegirma, balki bizning jamoamizdan qo‘shimcha sovg‘a ham oladi.",
+			"4": "<strong>⏰ Aksiya muddati:</strong> 1 noyabrdan 30 noyabrgacha. Aksiya tugagach, narxlar odatiy holatga qaytadi.",
+			"5": "<strong>📍 Batafsil ma’lumot:</strong> biz bilan sizga qulay usulda bog‘laning — menejerlar buyurtmani rasmiylashtirishga va shaxsiy chegirmangizni hisoblashga yordam beradi."
+		},
+		"link": "Biz bilan bog‘lanish",
+		"content": {
+			"title": "IT 911 AKSIYALARI",
+			"subtitle": "Biz siz uchun biznesingizni raqamli transformatsiya qilishni boshlashga yordam beradigan maxsus takliflar tayyorladik. Maxsus shartlardan foydalaning va maksimal foyda oling."
+		}
 	}
 }

@@ -71,7 +71,7 @@ export const LeadOption = ({ lead }: Props) => {
         await Promise.all(
             values.map(async (file) => {
                 const formData = new FormData();
-                formData.append("file", file);
+                formData.append("lead_file", file);
 
                 await uploadLeadFile({
                     lead_id: lead.id,
