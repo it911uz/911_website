@@ -55,7 +55,7 @@ async def health():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://app.it911.uz", "https://it911.uz", "http://localhost:3000", "http://nextjs-app:3000", "http://app.it911.uz", "http://it911.uz"],
     allow_credentials=True,
     allow_methods=["*"],  # важно: чтобы разрешить DELETE, PATCH, PUT и т.д.
     allow_headers=["*"],
