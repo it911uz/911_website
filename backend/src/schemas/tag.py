@@ -6,5 +6,6 @@ class TagRequest(BaseModel):
     hex: str
 
 class TagResponse(BaseModel):
+    id: int
     name: str
     hex: str
