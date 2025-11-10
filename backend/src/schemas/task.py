@@ -6,6 +6,10 @@ from schemas.user import UserResponse
 from schemas.tag import TagResponse
 from schemas.user import UserResponse
 
+class TaskMove(BaseModel):
+    task_id: int
+    new_position: int
+    status_id: int
 
 class TaskStatusRequest(BaseModel):
     name: str = Field(max_length=255)

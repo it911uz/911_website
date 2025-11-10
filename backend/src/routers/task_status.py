@@ -53,7 +53,6 @@ class TaskStatusCBV:
 
 
     @router.delete(
-            
         "/{status_id}"
     )
     async def delete_status(

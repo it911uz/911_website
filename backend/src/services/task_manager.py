@@ -8,7 +8,7 @@ from exceptions import NotFound
 from filters.task_filter import TaskFilter
 from models.tasks import TaskStatus, Task
 from repository.task_repo import TaskStatusRepository, TaskRepository
-from schemas.task import TaskRequest, TaskStatusRequest, TaskStatusResponse, TaskResponse, TaskListResponse, \
+from schemas.task import TaskMove, TaskRequest, TaskStatusRequest, TaskStatusResponse, TaskResponse, TaskListResponse, \
     TaskStatusChangeRequest
 
 
@@ -53,6 +53,7 @@ class TaskStatusManager(BaseManager[TaskStatus]):
             raise NotFound(f"Task Status with id {status_id} not found")
         await self.repo.delete(status)
 
+
     async def get_status(
             self,
             status_id: int,
@@ -75,6 +76,19 @@ class TaskManager:
         self.status_repo = TaskStatusRepository(db, TaskStatus)
         self.repo = TaskRepository(db, Task)
         self.db = db
+
+    async def move_task(self, request: TaskMove):
+        task = await self.repo.get(request.task_id)
+        if not task:
+            raise NotFound(f"Task with id {request.task_id} not found")
+        status = await self.status_repo.get(
+            request.status_id
+        )
+        if not status:
+            raise NotFound(f"Task Status with id {request.status_id} not found")
+
+        task.status_id = request.status_id
+        await self.repo.update(task)
 
     async def create_task(
             self,
