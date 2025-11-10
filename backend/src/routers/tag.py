@@ -41,6 +41,17 @@ class tagCBV:
         manager = TagManager(db=self.db)
         await manager.update_tag(tag_id, request)
 
+    @router.delete(
+        "/{tag_id}"
+    )
+    async def delete(
+        self,
+        tag_id: int,
+        db: AsyncSession = Depends(get_db)
+    ):
+        manager = TagManager(db)
+        await  manager.delete_tag(tag_id)
+
 
     @router.post(
     "/"

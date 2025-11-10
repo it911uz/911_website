@@ -31,3 +31,12 @@ class TagManager(BaseManager[Tag]):
         await self.repo.update(
             tag
         )
+
+    async def delete_tag(
+            self,
+            tag_id: int,
+    ):
+        tag = await self.repo.get(tag_id)
+        if not tag:
+            raise NotFound(f"Tag with id {tag_id} not found")
+        await self.repo.delete(tag)
