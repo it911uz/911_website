@@ -50,7 +50,7 @@ add_pagination(app)
 
 @app.get("/")
 async def health():
-    return {"status": "ok"}
+    return {"status": "123145"}
 
 
 app.add_middleware(

@@ -3527,3 +3527,28 @@
 2025/11/11 09:58:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
 2025/11/11 09:59:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
 2025/11/11 10:00:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
+2025/11/11 22:20:25 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:25 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:26 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:26 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:27 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:29 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:32 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:39 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:20:52 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:21:17 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:22:09 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 22:28:38 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:39 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:39 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:40 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:40 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:42 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:46 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:28:52 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:29:05 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:29:31 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:30:22 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:31:22 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:32:22 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 22:33:23 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
