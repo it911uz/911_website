@@ -15,7 +15,6 @@ export const LeadContent = async () => {
     const leads = await getLeads({
         token: session?.user.accessToken,
         statusIds: array ? array.map((id) => id) : undefined,
-        perPage: 100,
     });
 
     const columnsData: ColumnType[] = leadStatuses.data.items?.map(status => {
