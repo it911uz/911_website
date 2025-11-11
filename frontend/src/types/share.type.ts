@@ -21,7 +21,7 @@ export interface Pagination {
 	has_prev: boolean;
 }
 
-export type ActionResponse<T> = T & { error?: ResponseError[] };
+export type ActionResponse<T> = T & { error?: ResponseError[], detail?: string };
 
 export interface BaseApiParams {
 	page?: number;

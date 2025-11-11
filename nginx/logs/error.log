@@ -3215,3 +3215,27 @@
 2025/11/10 10:09:12 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
 2025/11/10 10:10:12 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
 2025/11/10 10:11:12 [emerg] 1#1: cannot load certificate "/etc/letsencrypt/live/it911.uz/fullchain.pem": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/etc/letsencrypt/live/it911.uz/fullchain.pem, r) error:10000080:BIO routines::no such file)
+2025/11/11 04:55:42 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:42 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:43 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:43 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:45 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:47 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:50 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:55:57 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:56:10 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:56:36 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:57:28 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:58:28 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 04:59:28 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:00:29 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:01:29 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:02:29 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:03:30 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:04:30 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:05:30 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:06:31 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:07:31 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:08:31 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:09:32 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/11 05:10:32 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68

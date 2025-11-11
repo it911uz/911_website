@@ -234,5 +234,6 @@ export interface ColumnType {
     name: string;
     hex: string;
     position: number;
+    canEdit: boolean;
     leads: LeadType[];
 }

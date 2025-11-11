@@ -28,7 +28,8 @@ export const LeadContent = async () => {
                 ...lead,
                 status: status.id,
                 position: index + 1,
-            }))
+            })),
+            canEdit: status.can_edit
         }
     })
 

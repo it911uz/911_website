@@ -12,7 +12,7 @@ import { ColumnEdit } from "./column-edit";
 import { DeleteColumn } from "./delete-column";
 
 export const Column = ({
-    columnData: { columnId, hex, name, leads = [] },
+    columnData: { columnId, hex, name, leads = [], canEdit },
 }: ComponentProps<"div"> & { columnData: ColumnType }) => {
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: `column-${columnId}`,
@@ -39,15 +39,18 @@ export const Column = ({
                 </h3>
 
                 <div className="flex gap-2">
-                    <div className="group relative">
-                        <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
+                    {
+                        canEdit &&
+                        <div className="group relative">
+                            <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
 
-                        <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
-                            <ColumnEdit columnsData={{ columnId, hex, name }} />
+                            <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
+                                <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
 
-                            <DeleteColumn columnId={columnId} />
+                                <DeleteColumn columnId={columnId} />
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                 </div>
