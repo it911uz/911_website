@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import Script from "next/script";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
 	title: {
@@ -46,12 +48,39 @@ const ClientLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
 
 	return (
 		<>
-			<Navigation className="shrink-0" />
+			<Script id="facebook-pixel" strategy="afterInteractive">
+				{`
+					!function(f,b,e,v,n,t,s)
+					{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+					n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+					if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+					n.queue=[];t=b.createElement(e);t.async=!0;
+					t.src=v;s=b.getElementsByTagName(e)[0];
+					s.parentNode.insertBefore(t,s)}(window, document,'script',
+					'https://connect.facebook.net/en_US/fbevents.js');
+					fbq('init', '1150212770641880');
+					fbq('track', 'PageView');
+				`}
+			</Script>
 
-			<main className="flex-1">{children}</main>
+			<noscript>
+				<img
+					height="1"
+					width="1"
+					style={{ display: "none" }}
+					src="https://www.facebook.com/tr?id=1150212770641880&ev=PageView&noscript=1"
+					alt=""
+				/>
+			</noscript>
+			<NuqsAdapter>
+				<Navigation className="shrink-0" />
 
-			<Footer />
+				<main className="flex-1">{children}</main>
+
+				<Footer />
+			</NuqsAdapter>
 		</>
+
 	);
 };
 

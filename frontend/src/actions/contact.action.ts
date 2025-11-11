@@ -9,5 +9,9 @@ export const contactAction = async ({ body }: Props) => {
 };
 
 interface Props {
-    body: LeadSchemaType;
+    body: Payload;
+}
+
+interface Payload extends LeadSchemaType {
+    target_id: string | null
 }

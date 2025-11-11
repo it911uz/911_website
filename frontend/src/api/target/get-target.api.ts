@@ -11,7 +11,7 @@ export const getTarget = async ({ token, isActive, page, perPage, query }: Param
         size: perPage
     });
 
-    return await http.get<ResponseWithPagination<Target[]>>(`targets`, {
+    return await http.get<ResponseWithPagination<Target[]>>(`target/`, {
         token,
         searchParams
     });

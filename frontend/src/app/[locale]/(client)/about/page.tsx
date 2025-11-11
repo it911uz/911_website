@@ -3,10 +3,12 @@ import { setRequestLocale } from "next-intl/server";
 import { Header } from "./_components/header";
 import type { Metadata } from "next";
 import { SectionHistory } from "./_components/history";
+import { searchParamsCache } from "@/lib/search-params.util";
 
-const Page = async ({ params }: PageProps<"/[locale]/about">) => {
+const Page = async ({ params, searchParams }: PageProps<"/[locale]/about">) => {
     const { locale } = await params;
     setRequestLocale(locale as Locale);
+    await searchParamsCache.parse(searchParams);
 
     return <>
         <Header />
