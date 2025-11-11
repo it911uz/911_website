@@ -66,3 +66,5 @@ frontend/.vercel/
 frontend/.gitignore
 
 nginx/logs/
+nginx/logs/error.log
+/nginx/logs
