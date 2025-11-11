@@ -59,6 +59,12 @@ export const menus = {
       title: "Маркетинг",
       url: Routers.admin.dashboard + "#marketing",
       icon: Megaphone,
+      items: [
+        {
+          title: "Таргеты",
+          url: Routers.admin.target,
+        }
+      ],
     },
   ],
   navSecondary: [
@@ -85,7 +91,7 @@ export const AppSidebar = async () => {
         <NavMain items={menus.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser  />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

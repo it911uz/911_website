@@ -21,5 +21,6 @@ export const Routers = {
 		tasks: "/admin/tasks",
 		clients: "/admin/clients",
 		profile: "/admin/profile",
+		target: "/admin/target",
 	}
 } as const;

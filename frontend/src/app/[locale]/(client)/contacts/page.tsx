@@ -2,12 +2,13 @@ import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { ContactsContent } from "./_components/content";
 import type { Metadata } from "next";
+import { searchParamsCache } from "@/lib/search-params.util";
 
-const Page = async ({ params }: PageProps<"/[locale]/contacts">) => {
+const Page = async ({ params, searchParams }: PageProps<"/[locale]/contacts">) => {
 
     const { locale } = await params;
-
     setRequestLocale(locale as Locale);
+    await searchParamsCache.parse(searchParams);
 
     return <ContactsContent />
 }

@@ -3,4 +3,6 @@ export interface LeadStatus {
     hex: string;
     id: number;
     level: number;
+    can_delete: boolean;
+    can_edit: boolean;
 }

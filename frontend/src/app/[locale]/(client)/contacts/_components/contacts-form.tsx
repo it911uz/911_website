@@ -12,10 +12,13 @@ import { ErrorMassage } from "@/components/ui/error-message";
 import { contactAction } from "@/actions/contact.action";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useQueryStates } from "nuqs";
+import { searchParamsParsers } from "@/lib/search-params.util";
 
 export const ContactsForm = () => {
     const t = useTranslations("ContactsPage.Form");
     const [pending, startTransition] = useTransition();
+    const [{ targetId }] = useQueryStates(searchParamsParsers)
 
     const { register, handleSubmit, formState: { errors, isDirty }, reset, } = useForm<LeadSchemaType>({
         resolver: zodResolver(leadSchema)
@@ -23,7 +26,12 @@ export const ContactsForm = () => {
 
     const onSubmit = (values: LeadSchemaType) => {
         startTransition(async () => {
-            const response = await contactAction({ body: values });
+            const response = await contactAction({
+                body: {
+                    ...values,
+                    target_id: targetId
+                }
+            });
 
             if (!response.ok) {
                 toast.error("Произошла ошибка");

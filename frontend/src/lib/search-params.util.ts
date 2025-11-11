@@ -33,7 +33,7 @@ export const searchParamsParsers = {
         history: "replace",
         clearOnDefault: true,
     }),
-    isActive: parseAsBoolean.withOptions({
+    isActive: parseAsBoolean.withDefault(true).withOptions({
         shallow: false,
         history: "push",
     }),
@@ -61,11 +61,16 @@ export const searchParamsParsers = {
         history: "replace",
         clearOnDefault: true,
     }),
-    perPage: parseAsInteger.withDefault(10).withOptions({
+    perPage: parseAsInteger.withDefault(100).withOptions({
         shallow: false,
         history: "push",
         clearOnDefault: true,
-    })
+    }),
+    targetId: parseAsString.withOptions({
+        shallow: false,
+        history: "replace",
+        clearOnDefault: true,
+    }),
 };
 
 export const serialize = createSerializer(searchParamsParsers);

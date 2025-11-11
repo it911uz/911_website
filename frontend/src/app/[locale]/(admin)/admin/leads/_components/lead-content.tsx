@@ -8,14 +8,14 @@ import { searchParamsCache } from "@/lib/search-params.util"
 
 export const LeadContent = async () => {
     const session = await auth();
-    const { perPage, page, array } = searchParamsCache.all();
+    const { array } = searchParamsCache.all();
 
     const leadStatuses = await getLeadStatuses(session?.user.accessToken);
 
     const leads = await getLeads({
         token: session?.user.accessToken,
         statusIds: array ? array.map((id) => id) : undefined,
-        perPage: perPage,
+        perPage: 100,
     });
 
     const columnsData: ColumnType[] = leadStatuses.data.items?.map(status => {
@@ -24,11 +24,12 @@ export const LeadContent = async () => {
             hex: status.hex,
             name: status.name,
             position: status.level,
-            leads: leads.data.items.filter(lead => lead.status_id === status.id).map((lead, index) => ({
+            leads: [...leads.data.items ?? []].filter(lead => lead.status_id === status.id).map((lead, index) => ({
                 ...lead,
                 status: status.id,
                 position: index + 1,
-            }))
+            })),
+            canEdit: status.can_edit
         }
     })
 

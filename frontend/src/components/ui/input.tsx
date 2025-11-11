@@ -44,7 +44,7 @@ export function Input({ className, type, variant, border, color, sizes, ...props
     const isDarkBackground = color === 'default';
 
     return (
-        <div className="relative flex items-center w-full">
+        <div className="relative flex items-center w-fit">
             <input
                 type={inputType}
                 data-slot="input"
