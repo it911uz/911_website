@@ -37,3 +37,5 @@ export const employSchema = z.object({
             "Пароль должен содержать минимум 9 символов, включая заглавные и строчные буквы, цифры и специальные символы"
         ),
 });
+
+export type EmploySchemaType = z.infer<typeof employSchema>;

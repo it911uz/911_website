@@ -1,8 +1,8 @@
 import { LinkButton } from "@/components/ui/link-button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Routers } from "@/configs/router.config";
+import { WebOrigin } from "@/const/web-origin.const";
 import { cn } from "@/lib/utils"
-import { ExternalLink, HomeIcon } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 
 export const AppHeader = () => {
     return (
@@ -18,7 +18,7 @@ export const AppHeader = () => {
 
                 <div className="ml-auto flex items-center gap-3">
 
-                    <LinkButton className="text-lg" href={Routers.home} size={"sm"}>
+                    <LinkButton className="text-lg" href={WebOrigin.client} size={"sm"} target="_blank">
                         <span>Перейти на сайт</span>
                         <ExternalLink className="ml-2 size-4" />
                     </LinkButton>

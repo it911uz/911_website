@@ -6,40 +6,44 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
-import { Plus } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
+import type { User } from "@/types/user.type";
 import { employSchema, type EmploySchemaType } from "@/schemas/employ.schema";
+import { editUser } from "@/api/users/edit-user.api";
 import { SelectRole } from "./select-role";
-import { createUser } from "@/api/users/create-user.api";
 
-export const CreateEmploy = () => {
+export const EditEmploy = ({ user }: Props) => {
     const { open, onOpenChange } = useOpen();
     const [pending, startTransition] = useTransition();
     const router = useRouter();
     const { register, handleSubmit, formState: { errors }, reset, control } = useForm<EmploySchemaType>({
-        resolver: zodResolver(employSchema)
+        resolver: zodResolver(employSchema),
+        defaultValues: user
     });
 
     const session = useSession();
 
     const onSubmit = (values: EmploySchemaType) => {
         startTransition(async () => {
-            const response = await createUser({
+
+            const response = await editUser({
+                id: user.id,
                 body: values,
                 token: session.data?.user.accessToken
-            });
+            })
 
             if (!response.ok) {
                 toast.error(response.data.detail);
                 return;
             }
 
-            toast.success("Сотрудник создан");
+            toast.success("Сотрудник изменен");
             router.refresh();
             reset();
             onOpenChange(false);
@@ -47,17 +51,11 @@ export const CreateEmploy = () => {
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-        <Button className="text-lg" onClick={() => onOpenChange(true)} size={"md"} variant={"black"}>
-            <Plus />
-
-            <span>
-                Добавить
-            </span>
-        </Button>
+        <PenLine className="hover:text-red-500 text-2xl cursor-pointer" onClick={() => onOpenChange(true)} />
 
         <SheetContent className="w-2/5">
             <SheetHeader>
-                <SheetTitle>Создание роли</SheetTitle>
+                <SheetTitle>Изменить сотрудника</SheetTitle>
             </SheetHeader>
 
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -108,3 +106,7 @@ export const CreateEmploy = () => {
         </SheetContent>
     </Sheet>
 };
+
+interface Props {
+    user: User;
+}

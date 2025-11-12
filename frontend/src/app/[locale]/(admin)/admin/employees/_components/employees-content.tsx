@@ -1,3 +1,6 @@
+import { CreateEmploy } from "./create-employ";
+import { EmployeesTable } from "./employees-table";
+
 export const EmployeesContent = () => {
     return <>
         <section
@@ -13,9 +16,11 @@ export const EmployeesContent = () => {
                         Управляйте своими сотрудниками, конвертируйте и отслеживайте эффективность.
                     </p>
                 </div>
-                
-                ok
+
+                <CreateEmploy />
             </div>
         </section>
+
+        <EmployeesTable />
     </>
 };
