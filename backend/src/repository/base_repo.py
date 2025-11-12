@@ -53,7 +53,7 @@ class BaseRepository(Generic[ModelType]):
             return Page(
                 items=[item.as_dict() for item in items],
                 page=1,
-                size=len(items),
+                size=len(items) if len(items) >= 1 else 1,
                 pages=1,
                 total=len(items)
             )

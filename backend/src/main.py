@@ -19,6 +19,7 @@ from routers.lead_status import router as lead_status_router
 from routers.lead_comment import router as lead_comment_router
 from routers.lead_files import router as lead_files_router
 from routers.target import router as target_router
+from routers.task import router as task_router
 from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
 from utils.cache import redis_cache
@@ -50,7 +51,7 @@ add_pagination(app)
 
 @app.get("/")
 async def health():
-    return {"status": "ok"}
+    return {"status": "123145"}
 
 
 app.add_middleware(
@@ -71,7 +72,7 @@ app.include_router(lead_comment_router)
 app.include_router(lead_status_router)
 app.include_router(lead_files_router)
 app.include_router(target_router)
-# app.include_router(task_router)r)
+app.include_router(task_router)
 app.include_router(user_router)
 # app.include_router(telegram_route
 

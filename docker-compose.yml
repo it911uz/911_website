@@ -1,6 +1,6 @@
 services:
   api:
-    build: ./backend
+    image: 'shukhratbekovb/it911-backend:latest'
     container_name: fastapi-app
     env_file:
       - .env
@@ -15,9 +15,7 @@ services:
     #   sh -c "alembic upgrade head && python main.py"
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: 'shukhratbekovb/it911-frontend:latest'
     container_name: nextjs-app
     depends_on:
       - api
@@ -34,6 +32,7 @@ services:
 
   postgres:
     image: 'postgres:17.6-alpine3.22'
+    container_name: postgres
     restart: always
     env_file:
       - .env

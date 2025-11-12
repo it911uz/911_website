@@ -64,3 +64,7 @@ frontend/.vercel/
 # 🗂️ Git configuration
 # ────────────────────────────────
 frontend/.gitignore
+
+nginx/logs/
+nginx/logs/error.log
+/nginx/logs
