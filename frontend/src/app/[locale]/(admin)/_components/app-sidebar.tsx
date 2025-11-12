@@ -11,8 +11,6 @@ import LogoImage from "@public/logo.svg"
 import {
   LayoutDashboard,
   LineChart,
-  Users,
-  ClipboardList,
   Megaphone,
   Settings,
   Briefcase,
@@ -44,14 +42,12 @@ export const menus = {
       url: Routers.admin.dashboard + "#admin",
       items: [
         {
-          title: "Задачки",
-          url: Routers.admin.tasks,
-          icon: ClipboardList,
+          title: "Роли",
+          url: Routers.admin.roles,
         },
         {
-          title: "Клиенты",
-          url: Routers.admin.clients,
-          icon: Users,
+          title: "Сотрудники",
+          url: Routers.admin.employees,
         },
       ],
     },
