@@ -1,4 +1,3 @@
-from models.click import Click
 # from models.base import Base
 # from models.company import Company, CompanyContact, CompanyComment, Subscription, Payment
 # from models.click import Click
