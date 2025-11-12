@@ -66,4 +66,5 @@ class LeadStatusManager(BaseManager[LeadStatus]):
         status.level = new_position
         print(status)
         await self.repo.update(status)
+        await redis_cache.delete_pattern(self._cache_key("list:*"))
         return None

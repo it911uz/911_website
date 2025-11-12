@@ -9,7 +9,7 @@ from filters.role_filter import RoleFilter
 
 from services.role_manager import RoleManager
 
-from schemas.role import RoleRead, RoleCreate, RoleUpdate
+from schemas.role import RoleRead, RoleCreate, RoleUpdate, AssignPermission
 
 router = APIRouter(
     prefix="/roles",
@@ -58,10 +58,12 @@ class RoleCBV:
     )
     async def update_role(
             self,
+            role_id: int,
             request: RoleUpdate,
     ):
         manager = RoleManager(db=self.db)
         response = await manager.update(
+            role_id,
             **request.model_dump()
         )
         return response
@@ -96,3 +98,15 @@ class RoleCBV:
             role_id
         )
         return response
+
+    @router.post(
+        "/assign-permissions",
+    )
+    async def assign_permissions(
+            self,
+            request: AssignPermission
+    ):
+        manager = RoleManager(db=self.db)
+        await manager.assign_permissions(
+            request
+        )
