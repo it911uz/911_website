@@ -11,12 +11,12 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from models.base import Base
+from src.models.base import Base
 
 
 target_metadata = Base.metadata
 
-from configs import DATABASE_URL
+from src.configs import DATABASE_URL
 
 
 def run_migrations_offline() -> None:
