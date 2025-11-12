@@ -18,7 +18,9 @@ async def init_permissions(session: AsyncSession):
     )).scalars().all()
 
     permissions = []
-
+    custom_permissions = [
+        "assign_permissions"
+    ]
     tables = Base.metadata.tables.keys()
     for table in tables:
         for action in actions:
@@ -28,6 +30,11 @@ async def init_permissions(session: AsyncSession):
                     codename=codename,
                     name=f"{action.capitalize()} {table}"
                 ))
+    for codename in custom_permissions:
+        if codename not in existing_permissions:
+            permissions.append(Permission(
+                codename=codename,
+            ))
     if permissions:
         session.add_all(permissions)
         await session.flush()

@@ -17,7 +17,7 @@ class RoleManager(BaseManager[Role]):
             self,
             request: AssignPermission
     ):
-        role: Role = self.repo.get(request.role_id)
+        role: Role = await self.repo.get(request.role_id)
         if not role:
             raise NotFound(f"Role with id {request.role_id} not found")
         permissions = await self.permission_repo.list_role_permissions(

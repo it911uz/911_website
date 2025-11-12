@@ -101,6 +101,7 @@ class RoleCBV:
 
     @router.post(
         "/assign-permissions",
+        dependencies=[Depends(has_permission("assign_roles"))]
     )
     async def assign_permissions(
             self,
