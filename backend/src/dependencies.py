@@ -24,12 +24,15 @@ async def get_db():
             inner = cause or orig
             if isinstance(inner, UniqueViolationError) or "UniqueViolationError" in str(inner):
                 details = "Запись с таким уникальным значением уже существует."
+                print(e)
                 raise Conflict(details)
             elif isinstance(inner, ForeignKeyViolationError) or "ForeignKeyViolationError" in str(inner):
                 details = "Связанная запись не найдена (ошибка внешнего ключа)."
+                print(e)
                 raise BadRequest(details)
             else:
                 details = f"Ошибка целостности данных в базе: {inner}"
+                print(e)
                 raise Internal(details)
         except DBAPIError as e:
             await session.rollback()
