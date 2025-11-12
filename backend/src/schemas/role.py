@@ -37,6 +37,6 @@ class RoleRead(RoleBase):
         "from_attributes": True
     }
 
-class AssignPermission(RoleBase):
+class AssignPermission(BaseModel):
     role_id: int
     permissions: list[int] = []
