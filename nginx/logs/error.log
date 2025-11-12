@@ -3527,3 +3527,15 @@
 2025/11/11 09:58:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
 2025/11/11 09:59:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
 2025/11/11 10:00:11 [emerg] 1#1: host not found in upstream "nextjs-app" in /etc/nginx/conf.d/it911.conf:27
+2025/11/12 07:33:07 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:11 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:14 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:18 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:23 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:28 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:35 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:33:45 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:34:01 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:34:30 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:35:25 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68
+2025/11/12 07:36:29 [emerg] 1#1: host not found in upstream "fastapi-app" in /etc/nginx/conf.d/it911.conf:68

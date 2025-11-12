@@ -36,3 +36,7 @@ class RoleRead(RoleBase):
     model_config = {
         "from_attributes": True
     }
+
+class AssignPermission(RoleBase):
+    role_id: int
+    permissions: list[int] = []
