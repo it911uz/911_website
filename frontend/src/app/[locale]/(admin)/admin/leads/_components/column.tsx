@@ -5,18 +5,25 @@ import { Grip, GripVertical } from "lucide-react";
 import type { ComponentProps, CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { Leads } from "./leads";
 import type { ColumnType } from "./columns";
 import { ColumnEdit } from "./column-edit";
 import { DeleteColumn } from "./delete-column";
 
-export const Column = ({
-    columnData: { columnId, hex, name, leads = [], canEdit },
-}: ComponentProps<"div"> & { columnData: ColumnType }) => {
-    const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit } }: ComponentProps<"div"> & { columnData: ColumnType }) => {
+    const { setNodeRef: setSortableRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: `column-${columnId}`,
     });
+
+    const { setNodeRef: setDroppableRef, isOver } = useDroppable({
+        id: `leads-container-${columnId}`,
+    });
+
+    const combinedRef = (node: HTMLElement | null) => {
+        setSortableRef(node);
+    };
 
     const style: CSSProperties = {
         transform: CSS.Transform.toString(transform),
@@ -24,39 +31,29 @@ export const Column = ({
     };
 
     return (
-        <div
-            ref={setNodeRef}
-            className={cn(
-                "bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md",
-                { "z-10 shadow-xl drop-shadow-2xl": isDragging }
-            )}
-            style={{ ...style, borderColor: hex }}
-            {...attributes}
-        >
+        <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, borderColor: hex }} {...attributes}>
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">
                     {name} ({leads.length})
                 </h3>
 
                 <div className="flex gap-2">
-                    {
-                        canEdit &&
+                    {canEdit && (
                         <div className="group relative">
                             <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
-
                             <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
                                 <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
-
                                 <DeleteColumn columnId={columnId} />
                             </div>
                         </div>
-                    }
-
+                    )}
                     <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                 </div>
             </div>
 
-            {leads.length > 0 ? <Leads leads={leads} /> : <ClientNoData />}
+            <div ref={setDroppableRef} className={cn("min-h-20", { "bg-blue-50/30": isOver })}>
+                {leads.length > 0 ? <Leads leads={leads} /> : <ClientNoData />}
+            </div>
         </div>
     );
 };

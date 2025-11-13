@@ -22,14 +22,14 @@ export const EditEmploy = ({ user }: Props) => {
     const { open, onOpenChange } = useOpen();
     const [pending, startTransition] = useTransition();
     const router = useRouter();
-    const { register, handleSubmit, formState: { errors }, reset, control } = useForm<EmploySchemaType>({
+    const { register, handleSubmit, formState: { errors }, reset, control } = useForm<Omit<EmploySchemaType, "password">>({
         resolver: zodResolver(employSchema),
         defaultValues: user
     });
 
     const session = useSession();
 
-    const onSubmit = (values: EmploySchemaType) => {
+    const onSubmit = (values: Omit<EmploySchemaType, "password">) => {
         startTransition(async () => {
 
             const response = await editUser({
@@ -90,16 +90,6 @@ export const EditEmploy = ({ user }: Props) => {
                 </Field>
 
                 <SelectRole control={control} />
-
-                <Field>
-                    <FieldLabel className="text-lg" required htmlFor="password">
-                        Пароль
-                    </FieldLabel>
-
-                    <Input id="password" type="password" sizes={"lg"} color="light" placeholder="Введите пароль" {...register("password")} />
-
-                    <ErrorMassage error={errors.password?.message} />
-                </Field>
 
                 <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>
             </form>

@@ -98,7 +98,7 @@ export const CreateEmploy = () => {
                         Пароль
                     </FieldLabel>
 
-                    <Input id="password" type="password" sizes={"lg"} color="light" placeholder="Введите пароль" {...register("password")} />
+                    <Input id="password" type="password" sizes={"lg"} color="light" placeholder="Введите пароль" {...register("password", { required: true })} />
 
                     <ErrorMassage error={errors.password?.message} />
                 </Field>

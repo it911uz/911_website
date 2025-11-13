@@ -2,6 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { getLeadComments } from "../leads/get-lead-comments.api"
 import { getLeadFiles } from "../leads/get-lead-files.api";
 import { getLeads } from "../leads/get-leads.api";
+import { getLeadStatuses } from "../leads/get-lead-statuses.api";
 
 export const leadsQueryKey = {
     comments: {
@@ -12,6 +13,9 @@ export const leadsQueryKey = {
     },
     leads: {
         getInfiniteLeads: "infinite-leads",
+    },
+    status: {
+        getLeadStatuses: "lead-statuses",
     }
 }
 
@@ -83,4 +87,17 @@ interface GetInfiniteLeadsProps {
     fromDate?: string;
     toDate?: string;
     statusIds?: number[]
+}
+
+export const useGetLeadStatuses = ({ token, enabled }: GetLeadStatusesProps) => {
+    return useQuery({
+        queryKey: [leadsQueryKey.status.getLeadStatuses],
+        queryFn: async () => await getLeadStatuses(token),
+        enabled,
+    })
+}
+
+interface GetLeadStatusesProps {
+    token?: string;
+    enabled?: boolean
 }
