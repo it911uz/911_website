@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     full_name: str = Field(max_length=512)
     username: str = Field(max_length=320)
     email: EmailStr
-    is_superuser: bool
+    phone_number: str | None = Field(default=None, max_length=25)
     role_id: int = Field(ge=1)
 
 
@@ -27,7 +27,7 @@ class UserUpdate(UserBase):
 
 class UserMinRead(UserBase):
     id: int
-
+    is_superuser: bool
     role: RoleMinRead
 
     model_config = {
@@ -37,7 +37,7 @@ class UserMinRead(UserBase):
 
 class UserRead(UserBase):
     id: int
-
+    is_superuser: bool
     role: RoleRead
 
     model_config = {

@@ -11,6 +11,7 @@ class User(Base, TimeStampMixin):
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     full_name = Column(String(512), nullable=False)
     username = Column(String(320), unique=True, nullable=False)
+    phone_number = Column(String(25), nullable=True)
     email = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
