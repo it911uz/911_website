@@ -30,7 +30,7 @@ export const LeadContent = async () => {
             })),
             canEdit: status.can_edit
         }
-    })
+    }).sort((a, b) => a.position - b.position)
 
     return (
         <>

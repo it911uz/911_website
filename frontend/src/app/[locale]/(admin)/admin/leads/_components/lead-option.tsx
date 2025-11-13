@@ -38,6 +38,7 @@ import { uploadLeadFile } from "@/api/leads/upload-lead-file.api";
 import { DeleteLeadFile } from "./delete-lead-file";
 import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
+import { SelectStatus } from "./select-status";
 
 export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -123,31 +124,35 @@ export const LeadOption = ({ lead }: Props) => {
                     <SheetTitle className="text-2xl font-semibold text-gray-800">
                         Задача: {lead.company_name}
                     </SheetTitle>
-                    <SheetDescription className="space-y-1 mt-2">
-                        {lead.phone && (
-                            <span className="flex items-center gap-2 text-gray-700">
-                                <Phone size={16} className="text-blue-600" />
-                                <a
-                                    href={`tel:${lead.phone}`}
-                                    className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition"
-                                >
-                                    {lead.phone}
-                                </a>
-                            </span>
-                        )}
+                    <div className="flex justify-between gap-5">
+                        <div className="space-y-3">
+                            {lead.phone && (
+                                <span className="flex items-center gap-2 text-gray-700">
+                                    <Phone size={16} className="text-blue-600" />
+                                    <a
+                                        href={`tel:${lead.phone}`}
+                                        className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition"
+                                    >
+                                        {lead.phone}
+                                    </a>
+                                </span>
+                            )}
 
-                        {lead.email && (
-                            <span className="flex items-center gap-2 text-gray-700 break-all">
-                                <Mail size={16} className="text-blue-600" />
-                                <a
-                                    href={`mailto:${lead.email}`}
-                                    className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition"
-                                >
-                                    {lead.email}
-                                </a>
-                            </span>
-                        )}
-                    </SheetDescription>
+                            {lead.email && (
+                                <span className="flex items-center gap-2 text-gray-700 break-all">
+                                    <Mail size={16} className="text-blue-600" />
+                                    <a
+                                        href={`mailto:${lead.email}`}
+                                        className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition"
+                                    >
+                                        {lead.email}
+                                    </a>
+                                </span>
+                            )}
+                        </div>
+
+                        <SelectStatus lead={lead} />
+                    </div>
                 </SheetHeader>
 
                 <form
