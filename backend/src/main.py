@@ -2,13 +2,12 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 from starlette import status
 
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from starlette.responses import JSONResponse
 
 from db.init_db import init_db
 from routers.auth import router as auth_router
@@ -18,6 +17,7 @@ from routers.lead import router as lead_router
 from routers.lead_status import router as lead_status_router
 from routers.lead_comment import router as lead_comment_router
 from routers.lead_files import router as lead_files_router
+from routers.permission import router as permission_router
 from routers.target import router as target_router
 from routers.task import router as task_router
 from routers.user import router as user_router
@@ -71,6 +71,7 @@ app.include_router(lead_router)
 app.include_router(lead_comment_router)
 app.include_router(lead_status_router)
 app.include_router(lead_files_router)
+app.include_router(permission_router)
 app.include_router(target_router)
 app.include_router(task_router)
 app.include_router(user_router)
