@@ -2,8 +2,42 @@
 
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import type { ComponentProps } from "react"
+
+const selectTriggerVariants = cva(
+    [
+        "group inline-flex items-center justify-between gap-2 rounded-xl",
+        "border border-gray-300 bg-white text-gray-800 font-medium shadow-sm",
+        "outline-none transition-all duration-200",
+        "focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:border-blue-500",
+        "hover:border-blue-400 hover:bg-blue-50/50 active:bg-blue-100",
+        "disabled:cursor-not-allowed disabled:opacity-60",
+        "data-[state=open]:border-blue-500 data-[state=open]:bg-blue-50 data-[state=open]:ring-2 data-[state=open]:ring-blue-500/40",
+    ],
+    {
+        variants: {
+            size: {
+                sm: "h-8 px-2 text-sm",
+                default: "h-10 px-3 text-sm",
+                lg: "h-12 px-4 text-base",
+            },
+            width: {
+                fit: "w-fit",
+                full: "w-full",
+            },
+        },
+        defaultVariants: {
+            size: "default",
+            width: "fit",
+        },
+    }
+)
+
+interface SelectTriggerProps
+    extends ComponentProps<typeof SelectPrimitive.Trigger>,
+    VariantProps<typeof selectTriggerVariants> { }
 
 function Select(props: ComponentProps<typeof SelectPrimitive.Root>) {
     return <SelectPrimitive.Root {...props} />
@@ -19,23 +53,19 @@ function SelectValue(props: ComponentProps<typeof SelectPrimitive.Value>) {
 
 function SelectTrigger({
     className,
-    size = "default",
+    size,
+    width,
     children,
     ...props
-}: ComponentProps<typeof SelectPrimitive.Trigger> & {
-    size?: "sm" | "default"
-}) {
+}: SelectTriggerProps) {
     return (
         <SelectPrimitive.Trigger
-            className={cn(
-                "flex w-fit items-center justify-between gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:border-blue-400 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-gray-50 data-[size=default]:h-9 data-[size=sm]:h-8",
-                className
-            )}
+            className={cn(selectTriggerVariants({ size, width }), className)}
             {...props}
         >
-            {children}
+            <span className="truncate">{children}</span>
             <SelectPrimitive.Icon asChild>
-                <ChevronDownIcon className="size-4 text-gray-500" />
+                <ChevronDownIcon className="size-4 text-gray-500 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
     )
@@ -52,7 +82,9 @@ function SelectContent({
         <SelectPrimitive.Portal>
             <SelectPrimitive.Content
                 className={cn(
-                    "z-50 min-w-32 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out",
+                    "z-50 min-w-(--radix-select-trigger-width) w-(--radix-select-trigger-width)",
+                    "overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg",
+                    "data-[state=open]:animate-in data-[state=closed]:animate-out",
                     position === "popper" &&
                     "data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1",
                     className

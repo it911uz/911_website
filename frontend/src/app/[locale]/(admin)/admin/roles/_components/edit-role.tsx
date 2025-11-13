@@ -45,7 +45,7 @@ export const EditRole = ({ role }: Props) => {
                 return;
             }
 
-            toast.success("Роль создана");
+            toast.success("Роль изменена");
             router.refresh();
             reset();
             onOpenChange(false);

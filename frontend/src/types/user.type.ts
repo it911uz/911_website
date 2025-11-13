@@ -8,8 +8,8 @@ export interface User {
     role: Role;
 }
 
-export interface Role {
+interface Role {
     name: string;
     id: number;
-    permissions: unknown[];
+    permissions: string[];
 }
