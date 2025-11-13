@@ -37,7 +37,7 @@ class Task(Base, TimeStampMixin):
     description = Column(String(1024))
     deadline = Column(DateTime)
     status_id = Column(Integer, ForeignKey('task_statuses.id', ondelete="SET NULL"), nullable=True)
-
+    
     tags = relationship("Tag", secondary=task_tags, back_populates="tasks", lazy="selectin")
     status = relationship("TaskStatus", back_populates="tasks", lazy="selectin")
     users = relationship("User", secondary=user_tasks, back_populates="tasks", lazy="selectin")

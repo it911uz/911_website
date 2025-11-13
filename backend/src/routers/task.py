@@ -51,19 +51,21 @@ class TaskRouterCBV:
 
 
     @router.get(
-        "/{task_id}"
+        "/{task_id}",
+        response_model=TaskResponse
     )
     async def get_task(
         self,
         task_id: int,
     ):
         manager = TaskManager(self.db)
-        response = await manager.get_task(task_id)
+        response = await manager.get(task_id)
         return response
 
 
     @router.put(
-        "/{task_id}"
+        "/{task_id}",
+        response_model=None
     )
     async def update_task(
         self,
@@ -75,26 +77,28 @@ class TaskRouterCBV:
 
 
     @router.patch(
-        "/{task_id}/status/"
+        "/{task_id}/status/",
+        response_model=None
     )
     async def update_task_status(
         self,
-            task_id: int,
-            request: TaskStatusChangeRequest,
+        task_id: int,
+        request: TaskStatusChangeRequest,
     ):
         manager = TaskManager(self.db)
         await manager.update_task_status(task_id, request)
 
 
     @router.delete(
-        "/{task_id}"
+        "/{task_id}",
+        response_model=None
     )
     async def delete_task(
         self,
         task_id: int,
     ):
         manager = TaskManager(self.db)
-        await manager.delete_task(task_id)
+        await manager.delete(task_id)
 
     @router.post(
         "/move"

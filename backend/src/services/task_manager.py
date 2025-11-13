@@ -105,7 +105,7 @@ class TaskManager(BaseManager[Task]):
             name=request.name,
             status_id=request.status_id,
             deadline=request.deadline,
-            description=request.description
+            description=request.description,
         )
         await self.repo.add_tags(task, request.tags)
         await self.repo.add_users(task, request.users)
