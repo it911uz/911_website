@@ -1,8 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi_pagination import Page
 from fastapi_utils.cbv import cbv
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from dependencies import get_db
 from schemas.company import CompanyRead
+from services.company_manager import CompanyManager
 
 router = APIRouter(
     prefix="/companies",
@@ -12,7 +15,7 @@ router = APIRouter(
 
 @cbv(router)
 class CompanyCBV:
-
+    db: AsyncSession = Depends(get_db)
     @router.get(
         "/",
         response_model=Page[CompanyRead]
