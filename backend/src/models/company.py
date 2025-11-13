@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Numeric, Date, Boolean
+from sqlalchemy.orm import relationship
 
 from models.base import Base
 from models.mixins import TimeStampMixin
@@ -13,6 +14,23 @@ class Company(Base, TimeStampMixin):
     phone_number = Column(String(25), nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
 
+    contacts = relationship(
+        "CompanyContact",
+        back_populates="company",
+        lazy="selectin"
+    )
+
+    subscriptions = relationship(
+        "Subscription",
+        back_populates="company",
+        lazy="selectin"
+    )
+
+    comments = relationship(
+        "CompanyComment",
+        back_populates="company",
+        lazy="selectin"
+    )
 
 class CompanyContact(Base):
     __tablename__ = 'company_contacts'
@@ -22,6 +40,12 @@ class CompanyContact(Base):
     phone_number = Column(String(25), nullable=False)
     email = Column(String(320), nullable=False)
     relation = Column(String(255), nullable=False)
+
+    company = relationship(
+        "Company",
+        back_populates="contacts",
+        lazy="selectin"
+    )
 
 
 class Subscription(Base, TimeStampMixin):
@@ -35,6 +59,18 @@ class Subscription(Base, TimeStampMixin):
     price = Column(Numeric(precision=20, scale=2), nullable=False)
     next_payment_due = Column(Date, nullable=True)
 
+    company = relationship(
+        "Company",
+        back_populates="subscriptions",
+        lazy="selectin"
+    )
+
+
+    payments = relationship(
+        "Payment",
+        back_populates="subscription",
+        lazy="selectin"
+    )
 
 class Payment(Base, TimeStampMixin):
     __tablename__ = 'payments'
@@ -43,9 +79,21 @@ class Payment(Base, TimeStampMixin):
     amount = Column(Numeric(precision=20, scale=2), nullable=False)
     status = Column(String(20), default="pending", nullable=False)
 
+    subscription = relationship(
+        "Subscription",
+        back_populates="payments",
+        lazy="selectin"
+    )
+
 
 class CompanyComment(Base, TimeStampMixin):
     __tablename__ = 'company_comments'
     id = Column(Integer, primary_key=True, autoincrement=True)
     company_id = Column(Integer, ForeignKey('companies.id', ondelete='CASCADE'))
     comment = Column(String(1024))
+
+    company = relationship(
+        "Company",
+        back_populates="comments",
+        lazy="selectin"
+    )

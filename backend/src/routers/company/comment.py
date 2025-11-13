@@ -4,34 +4,34 @@ from fastapi_utils.cbv import cbv
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies import get_db
-from schemas.company import CompanyRead, CompanyContactRead, CompanyContactCreate, CompanyContactUpdate
+from schemas.company import CompanyCommentRead, CompanyCommentCreate, CompanyCommentUpdate
 from services.company_manager import CompanyContactManager
 
 router = APIRouter(
-    prefix="/{company_id}/contacts",
+    prefix="/{company_id}/comments",
     tags=["company"],
 )
 
 
 @cbv(router)
-class CompanyContactCBV:
+class CompanyCommentCBV:
     db: AsyncSession = Depends(get_db)
 
     @router.get(
         "/",
-        response_model=Page[CompanyContactRead]
+        response_model=Page[CompanyCommentRead]
     )
-    async def get_company_contacts(
+    async def get_company_comments(
             self,
             company_id: int
     ):
         pass
 
     @router.get(
-        "/{company_contact_id}",
-        response_model=CompanyContactRead
+        "/{company_comment_id}",
+        response_model=CompanyCommentRead
     )
-    async def get_company_contact(
+    async def get_company_comment(
             self,
             company_id: int,
             company_contact_id: int
@@ -41,28 +41,28 @@ class CompanyContactCBV:
     @router.post(
         "/",
     )
-    async def create_company_contact(
+    async def create_company_comment(
             self,
             company_id: int,
-            request: CompanyContactCreate,
+            request: CompanyCommentCreate,
     ):
         pass
 
     @router.put(
-        "/{company_contact_id}",
+        "/{company_comment_id}",
     )
-    async def update_company_contact(
+    async def update_company_comment(
             self,
             company_id: int,
             company_contact_id: int,
-            request: CompanyContactUpdate,
+            request: CompanyCommentUpdate,
     ):
         pass
 
     @router.delete(
-        "/{company_contact_id}",
+        "/{company_comment_id}",
     )
-    async def delete_company_contact(
+    async def delete_company_comment(
             self,
             company_id: int,
             company_contact_id: int

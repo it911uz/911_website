@@ -12,6 +12,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from db.init_db import init_db
 from routers.auth import router as auth_router
 from routers.click import router as click_router
+from routers.company import router as company_router
 from routers.role import router as role_router
 from routers.lead import router as lead_router
 from routers.lead_status import router as lead_status_router
@@ -66,6 +67,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 app.include_router(auth_router)
 app.include_router(click_router)
+app.include_router(company_router)
 app.include_router(role_router)
 app.include_router(lead_router)
 app.include_router(lead_comment_router)
