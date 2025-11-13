@@ -4,6 +4,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, EmailStr
 
+from schemas.service import ServiceRead
+
 
 class CompanyCommentBase(BaseModel):
     comment: str = Field(max_length=1024)
@@ -51,7 +53,7 @@ class SubscriptionUpdate(SubscriptionBase):
 class SubscriptionRead(SubscriptionBase):
     id: int
 
-    # service
+    service: ServiceRead
 
     model_config = {
         "from_attributes": True
