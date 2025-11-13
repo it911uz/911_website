@@ -1,7 +1,8 @@
 import { CreateEmploy } from "./create-employ";
+import { EmployeesFilter } from "./employees-filter";
 import { EmployeesTable } from "./employees-table";
 
-export const EmployeesContent = () => {
+export const EmployeesContent = async () => {
     return <>
         <section
             data-slot="leads"
@@ -20,6 +21,8 @@ export const EmployeesContent = () => {
                 <CreateEmploy />
             </div>
         </section>
+
+        <EmployeesFilter />
 
         <EmployeesTable />
     </>

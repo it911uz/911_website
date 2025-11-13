@@ -14,6 +14,7 @@ import {
   Megaphone,
   Settings,
   Briefcase,
+  Building2,
 } from "lucide-react"
 import { Routers } from "@/configs/router.config"
 import { NavMain } from "./nav-main"
@@ -61,6 +62,11 @@ export const menus = {
           url: Routers.admin.target,
         }
       ],
+    },
+    {
+      title: "Компания",
+      url: Routers.admin.companies,
+      icon: Building2,
     },
   ],
   navSecondary: [

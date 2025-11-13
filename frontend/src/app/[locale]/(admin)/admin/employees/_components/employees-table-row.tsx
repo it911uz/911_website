@@ -23,7 +23,7 @@ export const EmployeesTableRow = ({ index, user }: Props) => {
         </TableCell>
 
         <TableCell>
-            <Minus />
+            {user.phone_number ? user.phone_number : <Minus />}
         </TableCell>
 
         <TableCell>
