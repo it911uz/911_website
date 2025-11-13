@@ -5,7 +5,7 @@ from fastapi_utils.cbv import cbv
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from dependencies import get_db
+from dependencies import get_db, has_permission
 from filters.company_filter import CompanyFilter
 from schemas.company import CompanyRead, CompanyCreate, CompanyUpdate
 from services.company_manager import CompanyManager
@@ -22,7 +22,8 @@ class CompanyCBV:
 
     @router.get(
         "/",
-        response_model=Page[CompanyRead]
+        response_model=Page[CompanyRead],
+        dependencies=[Depends(has_permission("view_companies"))]
     )
     async def get_companies(
             self,
@@ -39,7 +40,8 @@ class CompanyCBV:
 
     @router.get(
         "/{company_id}",
-        response_model=CompanyRead
+        response_model=CompanyRead,
+        dependencies=[Depends(has_permission("view_companies"))]
     )
     async def get_company(
             self,
@@ -54,7 +56,8 @@ class CompanyCBV:
     @router.post(
         "/",
         status_code=status.HTTP_201_CREATED,
-        response_model=CompanyRead
+        response_model=CompanyRead,
+        dependencies=[Depends(has_permission("create_companies"))]
     )
     async def create_company(
             self,
@@ -68,7 +71,8 @@ class CompanyCBV:
 
     @router.put(
         "/{company_id}",
-        status_code=status.HTTP_204_NO_CONTENT
+        status_code=status.HTTP_204_NO_CONTENT,
+        dependencies=[Depends(has_permission("update_companies"))]
     )
     async def update_company(
             self,
@@ -83,7 +87,8 @@ class CompanyCBV:
 
     @router.delete(
         "/{company_id}",
-        status_code=status.HTTP_204_NO_CONTENT
+        status_code=status.HTTP_204_NO_CONTENT,
+        dependencies=[Depends(has_permission("delete_companies"))]
     )
     async def delete_company(
             self,
