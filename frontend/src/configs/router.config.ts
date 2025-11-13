@@ -24,5 +24,6 @@ export const Routers = {
 		target: "/admin/target",
 		employees: "/admin/employees",
 		roles: "/admin/roles",
+		companies: "/admin/companies",
 	}
 } as const;

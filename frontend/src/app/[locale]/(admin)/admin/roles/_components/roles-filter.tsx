@@ -29,7 +29,7 @@ export const RolesFilter = () => {
             <Input value={query} onChange={(e) => setQuery({ query: e.target.value }, { startTransition })} type="search" placeholder="Поиск по названию" color="light" className="w-72" />
 
             <Select value={perPage.toString()} onValueChange={(value) => setQuery({ perPage: Number(value) }, { startTransition })}>
-                <SelectTrigger className="w-72">
+                <SelectTrigger size={"lg"} className="w-72">
                     <SelectValue placeholder="Выберите кол-во просмотров" />
                 </SelectTrigger>
                 <SelectContent>
