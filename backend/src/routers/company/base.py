@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends
-from fastapi_pagination import Page
+from fastapi_filter import FilterDepends
+from fastapi_pagination import Page, Params
 from fastapi_utils.cbv import cbv
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from dependencies import get_db
-from schemas.company import CompanyRead
+from filters.company_filter import CompanyFilter
+from schemas.company import CompanyRead, CompanyCreate, CompanyUpdate
 from services.company_manager import CompanyManager
 
 router = APIRouter(
@@ -16,14 +19,23 @@ router = APIRouter(
 @cbv(router)
 class CompanyCBV:
     db: AsyncSession = Depends(get_db)
+
     @router.get(
         "/",
         response_model=Page[CompanyRead]
     )
     async def get_companies(
-            self
+            self,
+            filters: CompanyFilter = FilterDepends(CompanyFilter),
+            params: Params = Depends(),
+
     ):
-        pass
+        manager = CompanyManager(db=self.db)
+        response = await manager.list(
+            filters=filters,
+            params=params,
+        )
+        return response
 
     @router.get(
         "/{company_id}",
@@ -33,30 +45,51 @@ class CompanyCBV:
             self,
             company_id: int
     ):
-        pass
+        manager = CompanyManager(db=self.db)
+        response = await manager.get(
+            company_id,
+        )
+        return response
 
     @router.post(
         "/",
+        status_code=status.HTTP_201_CREATED,
+        response_model=CompanyRead
     )
     async def create_company(
             self,
+            request: CompanyCreate,
     ):
-        pass
+        manager = CompanyManager(db=self.db)
+        response = await manager.create(
+            **request.model_dump()
+        )
+        return response
 
     @router.put(
         "/{company_id}",
+        status_code=status.HTTP_204_NO_CONTENT
     )
     async def update_company(
             self,
             company_id: int,
+            request: CompanyUpdate,
     ):
-        pass
+        manager = CompanyManager(db=self.db)
+        await manager.update(
+            company_id,
+            **request.model_dump()
+        )
 
     @router.delete(
         "/{company_id}",
+        status_code=status.HTTP_204_NO_CONTENT
     )
     async def delete_company(
             self,
             company_id: int
     ):
-        pass
+        manager = CompanyManager(db=self.db)
+        await manager.delete(
+            company_id,
+        )
