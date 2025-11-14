@@ -10,6 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
 from db.init_db import init_db
+from middlewares.logging import LoggingMiddleware
 from routers.auth import router as auth_router
 from routers.click import router as click_router
 from routers.company import router as company_router
@@ -54,6 +55,10 @@ add_pagination(app)
 async def health():
     return {"status": "123145"}
 
+
+app.add_middleware(
+    LoggingMiddleware
+)
 
 app.add_middleware(
     CORSMiddleware,
