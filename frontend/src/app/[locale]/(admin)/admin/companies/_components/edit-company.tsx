@@ -35,7 +35,9 @@ export const EditCompany = ({ company }: Props) => {
         useForm<CompanySchemaType>({
             resolver: zodResolver(companySchema),
             defaultValues: {
-                ...company,
+                name: company.name,
+                phone_number: company.phone_number,
+                info: company.info,
                 status: company.status as CompanyStatusType
             }
         });

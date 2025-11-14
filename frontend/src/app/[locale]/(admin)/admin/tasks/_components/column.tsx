@@ -1,26 +1,29 @@
 "use client";
 
 import { ClientNoData } from "@/components/widgets/client-no-data";
-import { EllipsisVertical, Grip } from "lucide-react";
+import { Grip, GripVertical } from "lucide-react";
 import type { ComponentProps, CSSProperties } from "react";
-import { ColumnEdit } from "./column-edit";
-import { DeleteColumn } from "./delete-column";
 import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Issues } from "./issues";
+import { Tasks } from "./tasks";
+import type { ColumnType } from "./columns";
+import { ColumnEdit } from "./column-edit";
+import { DeleteColumn } from "./delete-column";
 
-export const Column = ({
-    columnData: { columnId, hex = "#000", name, issues = [] },
-    className,
-    ...props
-}: ComponentProps<"div"> & {
-    columnData: ColumnType;
-}) => {
-    const { setNodeRef, attributes, listeners, transform, transition, isDragging } =
-        useSortable({
-            id: columnId,
-        });
+export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit } }: ComponentProps<"div"> & { columnData: ColumnType }) => {
+    const { setNodeRef: setSortableRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+        id: `column-${columnId}`,
+    });
+
+    const { setNodeRef: setDroppableRef, isOver } = useDroppable({
+        id: `leads-container-${columnId}`,
+    });
+
+    const combinedRef = (node: HTMLElement | null) => {
+        setSortableRef(node);
+    };
 
     const style: CSSProperties = {
         transform: CSS.Transform.toString(transform),
@@ -28,68 +31,29 @@ export const Column = ({
     };
 
     return (
-        <div
-            ref={setNodeRef}
-            data-column-id={columnId}
-            className={cn(
-                "bg-white border border-dashed rounded-xl px-4 py-6 space-y-6 w-[430px]",
-                { "z-2 shadow-xl drop-shadow-2xl": isDragging }
-            )}
-            style={{ ...style, borderColor: hex }}
-            {...props}
-            {...attributes}
-        >
+        <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, borderColor: hex }} {...attributes}>
             <div className="flex justify-between items-center">
-                <h3>
-                    {name} ({issues.length})
+                <h3 className="text-lg font-semibold">
+                    {name} ({leads.length})
                 </h3>
 
-                <div className={cn("flex gap-1.5")}>
-                    <div className="relative group">
-                        <EllipsisVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
-                        <div className="absolute top-1/2 -right-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white opacity-0 group-hover:opacity-100 transition-opacity shadow-md rounded-md p-2 space-y-2">
-                            <ColumnEdit />
-                            <DeleteColumn />
+                <div className="flex gap-2">
+                    {canEdit && (
+                        <div className="group relative">
+                            <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
+                            <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
+                                <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
+                                <DeleteColumn columnId={columnId} />
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                 </div>
             </div>
 
-            {issues.length > 0 ? <Issues issues={issues} /> : <ClientNoData />}
+            <div ref={setDroppableRef} className={cn("min-h-20", { "bg-blue-50/30": isOver })}>
+                {leads.length > 0 ? <Tasks leads={leads} /> : <ClientNoData />}
+            </div>
         </div>
     );
 };
-
-export interface ColumnType {
-    columnId: number;
-    hex: string;
-    issues: TaskType[];
-    name: string;
-    position: number;
-}
-
-export interface TaskType {
-    id: number;
-    position: number;
-    created_at: Date;
-    updated_at: Date;
-    deadline: Date;
-    name: string;
-    message: string;
-    tags: Tag[];
-    status: number;
-    comments: string;
-    files: string[] | File[];
-    executors: Executor[];
-}
-
-interface Tag {
-    id: number;
-    name: string;
-}
-
-interface Executor {
-    id: number;
-    full_name: string;
-}

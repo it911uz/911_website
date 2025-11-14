@@ -42,8 +42,8 @@ export const NavMain = ({ items }: Props) => {
                         </AccordionItem>
 
                     </> : <>
-                        <SidebarMenu className="p-2 text-lg">
-                            <SidebarMenuItem>
+                        <SidebarMenu className="px-4 text-lg">
+                            <SidebarMenuItem className="px-0.5">
                                 <Link href={item.url ?? "#!"} className="inline-flex items-center gap-2 hover:text-orange-500">
                                     <Icon />
                                     {item.title}

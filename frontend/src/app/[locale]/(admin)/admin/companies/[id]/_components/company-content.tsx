@@ -1,4 +1,4 @@
-import { getCompany } from "@/api/companies/get-company.pai";
+import { getCompany } from "@/api/companies/get-company.api";
 import { auth } from "@/auth";
 import { CompanyTabs } from "./company-tabs";
 

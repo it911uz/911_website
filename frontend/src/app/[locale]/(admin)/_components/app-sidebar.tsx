@@ -10,10 +10,10 @@ import Image from "next/image"
 import LogoImage from "@public/logo.svg"
 import {
   LayoutDashboard,
-  LineChart,
+  TrendingUp,
   Megaphone,
-  Settings,
-  Briefcase,
+  CheckSquare,
+  ShieldCheck,
   Building2,
 } from "lucide-react"
 import { Routers } from "@/configs/router.config"
@@ -29,7 +29,7 @@ export const menus = {
     },
     {
       title: "Отдел продаж",
-      icon: LineChart,
+      icon: TrendingUp,
       items: [
         {
           title: "Лиды",
@@ -38,19 +38,9 @@ export const menus = {
       ],
     },
     {
-      title: "Администрирование",
-      icon: Briefcase,
-      url: Routers.admin.dashboard + "#admin",
-      items: [
-        {
-          title: "Роли",
-          url: Routers.admin.roles,
-        },
-        {
-          title: "Сотрудники",
-          url: Routers.admin.employees,
-        },
-      ],
+      title: "Задачи",
+      url: Routers.admin.tasks,
+      icon: CheckSquare,
     },
     {
       title: "Маркетинг",
@@ -68,18 +58,25 @@ export const menus = {
       url: Routers.admin.companies,
       icon: Building2,
     },
-  ],
-  navSecondary: [
     {
-      title: "Настройки",
-      url: "#",
-      icon: Settings,
+      title: "Администрирование",
+      icon: ShieldCheck,
+      url: Routers.admin.dashboard + "#admin",
+      items: [
+        {
+          title: "Роли",
+          url: Routers.admin.roles,
+        },
+        {
+          title: "Сотрудники",
+          url: Routers.admin.employees,
+        },
+      ],
     },
   ],
 }
 
 export const AppSidebar = async () => {
-
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader>
