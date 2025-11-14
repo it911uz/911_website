@@ -42,7 +42,7 @@ class CompanyBaseManager(BaseManager[ModelType]):
         if cached:
             return cached
         result = await self.repo.list_all(self.company_id, filters=filters)
-        await redis_cache.set(key, result)
+        await redis_cache.set(key, [c.as_dict() for c in result])
         return result
 
 
