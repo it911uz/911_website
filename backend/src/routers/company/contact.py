@@ -35,7 +35,7 @@ class CompanyContactCBV:
             company_id=company_id,
             model=CompanyContact
         )
-        response = await manager.list_all(company_id=company_id, filters=filters)
+        response = await manager.list_all(filters=filters)
         return response
 
     @router.get(

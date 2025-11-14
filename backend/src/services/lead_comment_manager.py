@@ -37,7 +37,7 @@ class LeadCommentManager(BaseManager[LeadComment]):
     async def _check_lead(self, lead_id: int | None):
         if lead_id is None:
             raise BadRequest('Lead ID is required')
-        lead = self.lead_repo.get(lead_id)
+        lead = await self.lead_repo.get(lead_id)
 
         if not lead:
             raise NotFound('Lead not found')
