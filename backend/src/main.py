@@ -10,6 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
 from db.init_db import init_db
+from middlewares.logging import LoggingMiddleware
 from routers.auth import router as auth_router
 from routers.click import router as click_router
 from routers.company import router as company_router
@@ -21,6 +22,8 @@ from routers.lead_files import router as lead_files_router
 from routers.permission import router as permission_router
 from routers.target import router as target_router
 from routers.task import router as task_router
+from routers.task_status import router as task_status_router
+from routers.tag import router as tag_router
 from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
 from utils.cache import redis_cache
@@ -56,6 +59,10 @@ async def health():
 
 
 app.add_middleware(
+    LoggingMiddleware
+)
+
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://app.it911.uz", "https://it911.uz", "http://localhost:3000", "http://nextjs-app:3000", "http://app.it911.uz", "http://it911.uz"],
     allow_credentials=True,
@@ -76,6 +83,8 @@ app.include_router(lead_files_router)
 app.include_router(permission_router)
 app.include_router(target_router)
 app.include_router(task_router)
+app.include_router(task_status_router)
+app.include_router(tag_router)
 app.include_router(user_router)
 # app.include_router(telegram_route
 
