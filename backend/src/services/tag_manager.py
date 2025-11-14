@@ -1,6 +1,6 @@
 from exceptions import NotFound
-from schemas.tag import TagRequest, TagResponse
-from repository.tag import TagRepository
+from schemas.tag import TagRequest
+from repository.tag_repo import TagRepository
 from models.tag import Tag
 from services.base_manager import BaseManager
 from sqlalchemy.ext.asyncio import AsyncSession
