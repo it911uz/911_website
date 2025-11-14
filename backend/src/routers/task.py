@@ -1,10 +1,16 @@
 from fastapi import APIRouter, Depends, Query
+from fastapi_filter import FilterDepends
+from fastapi_filter import FilterDepends
+from fastapi_pagination import Page, Params
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from filters.task_filter import TaskFilter
 from dependencies import get_current_user, get_db
 # from models.user import User
-from schemas.task import TaskRequest, TaskStatusRequest, TaskStatusChangeRequest
+from schemas.task import TaskMove, TaskRequest, TaskResponse, TaskStatusRequest, TaskStatusChangeRequest
 from services.task_manager import TaskStatusManager, TaskManager
+from fastapi_utils.cbv import cbv
+
 
 router = APIRouter(
     prefix="/tasks",
@@ -12,132 +18,94 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/"
-)
-async def create_task(
+@cbv(router)
+class TaskRouterCBV:
+    db: AsyncSession = Depends(get_db)
+
+    @router.post(
+        "/",
+        response_model=TaskResponse
+    )
+    async def create_task(
+        self,
         request: TaskRequest,
         # user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    response = await manager.create_task(request)
-    return response
+    ):
+        manager = TaskManager(self.db)
+        response = await manager.create_task(request)
+        return response
 
 
-@router.get(
-    "/"
-)
-async def get_tasks(
-        tags: list[int] = Query(default=None),
-        users: list[int] = Query(default=None),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    response = await manager.list_tasks(tags, users)
-    return response
+    @router.get(  
+        "/",
+        response_model = Page[TaskResponse]
+    )
+    async def get_tasks(
+        self,
+        filters: TaskFilter = FilterDepends(TaskFilter),
+    ):
+        manager = TaskManager(db=self.db)
+        response = await manager.list(filters=filters)
+        return response
 
 
-@router.get(
-    "/task_id"
-)
-async def get_task(
+
+    @router.get(
+        "/{task_id}",
+        response_model=TaskResponse
+    )
+    async def get_task(
+        self,
         task_id: int,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    response = await manager.get_task(task_id)
-    return response
+    ):
+        manager = TaskManager(self.db)
+        response = await manager.get(task_id)
+        return response
 
 
-@router.put(
-    "/{task_id}"
-)
-async def update_task(
+    @router.put(
+        "/{task_id}",
+        response_model=None
+    )
+    async def update_task(
+        self,
         task_id: int,
         request: TaskRequest,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    await manager.update_task(task_id, request)
+    ):
+        manager = TaskManager(self.db)
+        await manager.update_task(task_id, request)
 
 
-@router.patch(
-    "/{task_id}/status/"
-)
-async def update_task_status(
+    @router.patch(
+        "/{task_id}/status/",
+        response_model=None
+    )
+    async def update_task_status(
+        self,
         task_id: int,
         request: TaskStatusChangeRequest,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    await manager.update_task_status(task_id, request)
+    ):
+        manager = TaskManager(self.db)
+        await manager.update_task_status(task_id, request)
 
 
-@router.delete(
-    "/{task_id}"
-)
-async def delete_task(
+    @router.delete(
+        "/{task_id}",
+        response_model=None
+    )
+    async def delete_task(
+        self,
         task_id: int,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskManager(db)
-    await manager.delete_task(task_id)
+    ):
+        manager = TaskManager(self.db)
+        await manager.delete(task_id)
 
-
-@router.post(
-    "/status/"
-)
-async def create_status(
-        request: TaskStatusRequest,
-        # user: User = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskStatusManager(db)
-    return await manager.create_status(request)
-
-
-@router.get(
-    "/status"
-)
-async def get_statuses(
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskStatusManager(db)
-    response = await manager.list_statuses()
-    return response
-
-
-@router.get(
-    "/status/{status_id}"
-)
-async def get_status(
-        status_id: int,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskStatusManager(db)
-    response = await manager.get_status(status_id)
-    return response
-
-
-@router.put(
-    "/status/{status_id}"
-)
-async def update_status(
-        status_id: int,
-        request: TaskStatusRequest,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskStatusManager(db)
-    await manager.update_status(status_id, request)
-
-
-@router.delete(
-    "/status/{status_id}"
-)
-async def delete_status(
-        status_id: int,
-        db: AsyncSession = Depends(get_db)
-):
-    manager = TaskStatusManager(db)
-    await manager.delete_status(status_id)
+    @router.post(
+        "/move"
+    )
+    async def move_task(
+        self,
+        request: TaskMove
+    ):
+        manager = TaskManager(self.db)
+        await manager.move_task(request)

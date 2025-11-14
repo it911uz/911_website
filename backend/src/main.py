@@ -22,6 +22,8 @@ from routers.lead_files import router as lead_files_router
 from routers.permission import router as permission_router
 from routers.target import router as target_router
 from routers.task import router as task_router
+from routers.task_status import router as task_status_router
+from routers.tag import router as tag_router
 from routers.user import router as user_router
 from schemas.exceptions import ExceptionResponse
 from utils.cache import redis_cache
@@ -81,6 +83,8 @@ app.include_router(lead_files_router)
 app.include_router(permission_router)
 app.include_router(target_router)
 app.include_router(task_router)
+app.include_router(task_status_router)
+app.include_router(tag_router)
 app.include_router(user_router)
 # app.include_router(telegram_route
 
