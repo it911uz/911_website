@@ -4,8 +4,7 @@ from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_utils.cbv import cbv
 
-
-from dependencies import get_db
+from dependencies import get_db, has_permission
 from schemas.task import TaskStatusRequest, TaskStatusResponse
 from services.task_manager import TaskStatusManager
 
@@ -14,11 +13,16 @@ router = APIRouter(
     prefix="/task-statuses"
 )
 
+
 @cbv(router)
 class TaskStatusCBV:
     db: AsyncSession = Depends(get_db)
 
-    @router.get("/", response_model=Page[TaskStatusResponse])
+    @router.get(
+        "/",
+        response_model=Page[TaskStatusResponse],
+        dependencies=[Depends(has_permission("view_task_statuses"))]
+    )
     async def get_task_statuses(
             self,
     ):
@@ -26,9 +30,9 @@ class TaskStatusCBV:
         response = await manager.list()
         return response
 
-
     @router.get(
-        "/{status_id}"
+        "/{status_id}",
+        dependencies=[Depends(has_permission("view_task_statuses"))]
     )
     async def get_status(
             self,
@@ -39,9 +43,9 @@ class TaskStatusCBV:
         response = await manager.get_status(status_id)
         return response
 
-
     @router.put(
-        "/{status_id}"
+        "/{status_id}",
+        dependencies=[Depends(has_permission("update_task_statuses"))]
     )
     async def update_status(
             self,
@@ -51,9 +55,9 @@ class TaskStatusCBV:
         manager = TaskStatusManager(self.db)
         await manager.update_status(status_id, request)
 
-
     @router.delete(
-        "/{status_id}"
+        "/{status_id}",
+        dependencies=[Depends(has_permission("delete_task_statuses"))]
     )
     async def delete_status(
             self,
@@ -63,9 +67,9 @@ class TaskStatusCBV:
         manager = TaskStatusManager(db)
         await manager.delete_status(status_id)
 
-
     @router.post(
-    "/"
+        "/",
+        dependencies=[Depends(has_permission("create_task_statuses"))]
     )
     async def create_status(
             self,

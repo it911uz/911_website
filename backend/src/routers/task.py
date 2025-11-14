@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from fastapi_filter import FilterDepends
-from fastapi_filter import FilterDepends
-from fastapi_pagination import Page, Params
+from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from filters.task_filter import TaskFilter
-from dependencies import get_current_user, get_db
-# from models.user import User
-from schemas.task import TaskMove, TaskRequest, TaskResponse, TaskStatusRequest, TaskStatusChangeRequest
-from services.task_manager import TaskStatusManager, TaskManager
+from dependencies import get_db, has_permission
+from schemas.task import TaskMove, TaskRequest, TaskResponse, TaskStatusChangeRequest
+from services.task_manager import  TaskManager
 from fastapi_utils.cbv import cbv
 
 
@@ -24,12 +22,13 @@ class TaskRouterCBV:
 
     @router.post(
         "/",
-        response_model=TaskResponse
+        response_model=TaskResponse,
+        dependencies=[Depends(has_permission("create_tasks"))]
     )
     async def create_task(
         self,
         request: TaskRequest,
-        # user: User = Depends(get_current_user),
+
     ):
         manager = TaskManager(self.db)
         response = await manager.create_task(request)
@@ -38,7 +37,8 @@ class TaskRouterCBV:
 
     @router.get(  
         "/",
-        response_model = Page[TaskResponse]
+        response_model = Page[TaskResponse],
+        dependencies=[Depends(has_permission("view_tasks"))]
     )
     async def get_tasks(
         self,
@@ -52,7 +52,8 @@ class TaskRouterCBV:
 
     @router.get(
         "/{task_id}",
-        response_model=TaskResponse
+        response_model=TaskResponse,
+        dependencies=[Depends(has_permission("view_tasks"))]
     )
     async def get_task(
         self,
@@ -65,7 +66,8 @@ class TaskRouterCBV:
 
     @router.put(
         "/{task_id}",
-        response_model=None
+        response_model=None,
+        dependencies=[Depends(has_permission("update_tasks"))]
     )
     async def update_task(
         self,
@@ -78,7 +80,8 @@ class TaskRouterCBV:
 
     @router.patch(
         "/{task_id}/status/",
-        response_model=None
+        response_model=None,
+        dependencies=[Depends(has_permission("update_tasks"))]
     )
     async def update_task_status(
         self,
@@ -91,7 +94,8 @@ class TaskRouterCBV:
 
     @router.delete(
         "/{task_id}",
-        response_model=None
+        response_model=None,
+        dependencies=[Depends(has_permission("delete_tasks"))]
     )
     async def delete_task(
         self,
@@ -101,7 +105,8 @@ class TaskRouterCBV:
         await manager.delete(task_id)
 
     @router.post(
-        "/move"
+        "/move",
+        dependencies=[Depends(has_permission("update_tasks"))]
     )
     async def move_task(
         self,

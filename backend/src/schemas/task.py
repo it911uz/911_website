@@ -2,9 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from schemas.user import UserResponse
+from schemas.user import UserMinRead
 from schemas.tag import TagResponse
-from schemas.user import UserResponse
 
 class TaskMove(BaseModel):
     task_id: int
@@ -48,7 +47,7 @@ class TaskResponse(BaseModel):
     description: str = Field(max_length=1024)
     deadline: datetime
     status_id: int
-    users: list[UserResponse] = []
+    users: list[UserMinRead] = []
     tags: list[TagResponse] = []
 
     model_config = {
