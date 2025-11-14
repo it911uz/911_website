@@ -35,7 +35,7 @@ export const CreateRole = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail);
+                toast.error(response.data.detail || "Произошла ошибка")
                 return;
             }
 

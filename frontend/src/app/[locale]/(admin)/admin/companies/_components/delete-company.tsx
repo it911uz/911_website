@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteCompany } from "@/api/companies/delete-company.api";
 import { deleteLeadStatus } from "@/api/leads/delete-lead-status.api";
 import { deleteTarget } from "@/api/target/delete-target.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -10,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export const DeleteTarget = ({ id }: Props) => {
+export const DeleteCompany = ({ id }: Props) => {
     const { open, onOpenChange } = useOpen();
 
     const [pending, startTransition] = useTransition();
@@ -19,13 +20,13 @@ export const DeleteTarget = ({ id }: Props) => {
 
     const handleRemove = () => {
         startTransition(async () => {
-            const response = await deleteTarget({
+            const response = await deleteCompany({
                 id,
                 token: session.data?.user.accessToken
             })
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toast.error(response.data.detail || "Произошла ошибка");
                 return;
             }
 
@@ -40,10 +41,10 @@ export const DeleteTarget = ({ id }: Props) => {
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                    Удаление таргета
+                    Удаление компании
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                    Вы действительно хотите удалить таргет?
+                    Вы действительно хотите удалить компанию
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -55,5 +56,5 @@ export const DeleteTarget = ({ id }: Props) => {
 }
 
 interface Props {
-    id: string
+    id: number
 }

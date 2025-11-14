@@ -7,9 +7,9 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
-import { companySchema, type CompanySchemaType } from "@/schemas/company.schema";
+import { companySchema, type CompanySchemaType, type CompanyStatusType } from "@/schemas/company.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,9 +22,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "@/i18n/navigation";
-import { createCompany } from "@/api/companies/create-company.api";
+import { updateCompany } from "@/api/companies/update-company.api";
+import type { Company } from "@/types/company.type";
 
-export const CreateCompany = () => {
+export const EditCompany = ({ company }: Props) => {
     const { open, onOpenChange } = useOpen();
     const session = useSession();
     const [pending, startTransition] = useTransition();
@@ -33,13 +34,18 @@ export const CreateCompany = () => {
     const { register, handleSubmit, formState: { errors }, reset, control } =
         useForm<CompanySchemaType>({
             resolver: zodResolver(companySchema),
+            defaultValues: {
+                ...company,
+                status: company.status as CompanyStatusType
+            }
         });
 
     const onSubmit = (values: CompanySchemaType) => {
         startTransition(async () => {
-            const response = await createCompany({
+            const response = await updateCompany({
                 body: values,
-                token: session.data?.user.accessToken
+                token: session.data?.user.accessToken,
+                id: company.id
             });
 
             if (!response.ok) {
@@ -47,7 +53,7 @@ export const CreateCompany = () => {
                 return;
             }
 
-            toast.success("Компания создана");
+            toast.success("Компания изменена");
             router.refresh();
             reset();
             onOpenChange(false);
@@ -56,19 +62,11 @@ export const CreateCompany = () => {
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <Button
-                className="text-lg"
-                onClick={() => onOpenChange(true)}
-                size={"md"}
-                variant={"black"}
-            >
-                <Plus />
-                <span>Добавить</span>
-            </Button>
+            <PenLine className="hover:text-red-500 text-2xl cursor-pointer" onClick={() => onOpenChange(true)} />
 
             <SheetContent className="w-2/5">
                 <SheetHeader>
-                    <SheetTitle>Добавить компанию</SheetTitle>
+                    <SheetTitle>Редактирование компанию</SheetTitle>
                 </SheetHeader>
 
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -153,3 +151,7 @@ export const CreateCompany = () => {
         </Sheet>
     );
 };
+
+interface Props {
+    company: Company;
+}
