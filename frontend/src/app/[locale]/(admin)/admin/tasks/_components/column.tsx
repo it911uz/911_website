@@ -12,7 +12,7 @@ import type { ColumnType } from "./columns";
 import { ColumnEdit } from "./column-edit";
 import { DeleteColumn } from "./delete-column";
 
-export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit } }: ComponentProps<"div"> & { columnData: ColumnType }) => {
+export const Column = ({ columnData: { columnId, name, leads = [], } }: ComponentProps<"div"> & { columnData: ColumnType }) => {
     const { setNodeRef: setSortableRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: `column-${columnId}`,
     });
@@ -31,22 +31,21 @@ export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit 
     };
 
     return (
-        <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, borderColor: hex }} {...attributes}>
+        <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style }} {...attributes}>
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">
                     {name} ({leads.length})
                 </h3>
 
                 <div className="flex gap-2">
-                    {canEdit && (
-                        <div className="group relative">
-                            <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
-                            <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
-                                <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
-                                <DeleteColumn columnId={columnId} />
-                            </div>
+                    <div className="group relative">
+                        <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
+                        <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
+                            <ColumnEdit columnsData={{ columnId, name, }} />
+                            <DeleteColumn columnId={columnId} />
                         </div>
-                    )}
+                    </div>
+
                     <Grip {...listeners} className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                 </div>
             </div>

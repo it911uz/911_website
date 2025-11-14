@@ -24,10 +24,6 @@ export const ColumnEdit = ({ columnsData }: Props) => {
     const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
         resolver: zodResolver(columnSchema),
-        defaultValues: {
-            hex: columnsData.hex,
-            name: columnsData.name,
-        },
     });
 
     const onSubmit = (values: ColumnSchemaType) => {

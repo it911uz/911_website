@@ -151,7 +151,6 @@ export const LeadOption = ({ lead }: Props) => {
                             )}
                         </div>
 
-                        <SelectStatus lead={lead} />
                     </div>
                 </SheetHeader>
 
