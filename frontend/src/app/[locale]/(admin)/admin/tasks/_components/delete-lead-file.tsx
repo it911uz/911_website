@@ -1,25 +1,27 @@
 "use client";
 
-import { deleteLeadStatus } from "@/api/leads/delete-lead-status.api";
+import { leadsQueryKey } from "@/api/hooks/use-leads.api";
+import { deleteLeadFile } from "@/api/leads/delete-lead-file.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export const DeleteColumn = ({columnId}:Props) => {
+export const DeleteLeadFile = ({ id, leadId }: Props) => {
     const { open, onOpenChange } = useOpen();
-
     const [pending, startTransition] = useTransition();
-    const router = useRouter();
+    const queryClient = useQueryClient();
     const session = useSession();
 
     const handleRemove = () => {
         startTransition(async () => {
-            const response = await deleteLeadStatus({
-                id: columnId,
+            const response = await deleteLeadFile({
+                id,
+                lead_id: leadId,
                 token: session.data?.user.accessToken
             });
 
@@ -28,8 +30,10 @@ export const DeleteColumn = ({columnId}:Props) => {
                 return;
             }
 
-            toast.success("Колонка удалена");
-            window.location.reload();
+            toast.success("Файл удален");
+            queryClient.invalidateQueries({
+                queryKey: leadsQueryKey.files.getFiles(leadId),
+            });
             onOpenChange(false);
         })
     }
@@ -39,10 +43,10 @@ export const DeleteColumn = ({columnId}:Props) => {
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                    Удаление колонки
+                    Удаление файла
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                    Вы действительно хотите удалить колонку и все ее задачи?
+                    Вы действительно хотите удалить файл?
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -54,5 +58,6 @@ export const DeleteColumn = ({columnId}:Props) => {
 }
 
 interface Props {
-    columnId: number
+    id: string;
+    leadId: number;
 }

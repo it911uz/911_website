@@ -37,6 +37,7 @@ export const leadSchema = z.object({
 		.string()
 		.trim()
 		.nonempty("Обязательное поле")
+		.min(10, "Минимум 10 символов")
 		.max(1000, "Максимум 1000 символов"),
 });
 

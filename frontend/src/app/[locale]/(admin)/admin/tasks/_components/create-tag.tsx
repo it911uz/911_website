@@ -1,60 +1,64 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ErrorMassage } from "@/components/ui/error-message";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
-import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { useTransition } from "react";
-import { createLeadStatus } from "@/api/leads/create-lead-status.api";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { tagSchema, type TagSchemaType } from "@/schemas/tag.schema";
+import { createTag } from "@/api/tags/create-tag.api";
+import { useSession } from "next-auth/react";
+import { useRouter } from "@/i18n/navigation";
 
-export const CreateColumn = () => {
+export const CreateTag = () => {
     const { open, onOpenChange } = useOpen();
-    const session = useSession();
     const [pending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<ColumnSchemaType>({
-        resolver: zodResolver(columnSchema)
+    const session = useSession();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<TagSchemaType>({
+        resolver: zodResolver(tagSchema)
     });
+    const router = useRouter();
 
-    const onSubmit = (values: ColumnSchemaType) => {
+    const onSubmit = (values: TagSchemaType) => {
         startTransition(async () => {
-            const response = await createLeadStatus({
+            const response = await createTag({
                 body: values,
                 token: session.data?.user.accessToken
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toast.error(response.data.detail || "Произошла ошибка")
                 return;
             }
 
-            toast.success("Колонка создана");
-            window.location.reload();
+            toast.success("Тег создан");
             reset();
+            router.refresh();
             onOpenChange(false);
         })
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-
         <Button className="text-lg" onClick={() => onOpenChange(true)} size={"md"} variant={"black"}>
             <Plus />
-            <span>Добавить колонку</span>
+
+            <span>
+                Добавить тег
+            </span>
         </Button>
 
-        <SheetContent className="w-md">
+        <SheetContent className="w-1/5">
             <SheetHeader>
-                <SheetTitle>Добавить колонку</SheetTitle>
+                <SheetTitle>Создание тега</SheetTitle>
             </SheetHeader>
 
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                 <Field>
                     <FieldLabel className="text-lg" required htmlFor="name">
                         Название
@@ -70,15 +74,13 @@ export const CreateColumn = () => {
                         Цвет
                     </FieldLabel>
 
-                    <Input color="light" defaultValue={"#000"} id="hex" type="color" sizes={"lg"} {...register("hex")} />
+                    <Input id="hex" type="color" sizes={"lg"} color="light" placeholder="Введите цвет" {...register("hex")} />
 
                     <ErrorMassage error={errors.hex?.message} />
                 </Field>
 
-                <Button loading={pending} variant={"black"} size={"lg"}>
-                    Сохранить
-                </Button>
+                <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>
             </form>
         </SheetContent>
     </Sheet>
-}
+};

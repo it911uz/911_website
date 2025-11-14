@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import { CompanyTabTrigger } from "./company-tab-trigger";
 import { searchParamsCache } from "@/lib/search-params.util";
 import { ContactsContent } from "./conatcts/contacts-content";
+import { CommentsContent } from "./comments/comments-content";
 
 export const CompanyTabs = async ({ companyId }: Props) => {
     const tab = await searchParamsCache.get("tab");
@@ -18,13 +19,13 @@ export const CompanyTabs = async ({ companyId }: Props) => {
             </TabsList>
 
             <TabsContent value="contacts">
-                <ContactsContent />
+                <ContactsContent companyId={companyId} />
             </TabsContent>
             <TabsContent value="subscriptions">
                 <div>Подписки</div>
             </TabsContent>
             <TabsContent value="comments">
-                <div>Комментарии</div>
+                <CommentsContent companyId={companyId} />
             </TabsContent>
         </Tabs>
     </section>

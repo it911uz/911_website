@@ -1,8 +1,26 @@
-import { Columns } from "./columns"
+import { Columns, type ColumnType } from "./columns"
 import { CreateColumn } from "./create-column"
 import { CreateTask } from "./create-task"
+import { auth } from "@/auth"
+import { CreateTag } from "./create-tag"
+import { getTasksStatuses } from "@/api/tasks/get-task-statuses.api"
 
-export const TasksContent = () => {
+export const TasksContent = async () => {
+    const session = await auth();
+
+    const taskStatuses = await getTasksStatuses({
+        token: session?.user.accessToken,
+    });
+
+    const columnsData: ColumnType[] = taskStatuses.data.items?.map((status, index) => {
+        return {
+            columnId: status.id,
+            name: status.name,
+            leads: [],
+            position: index + 1
+        }
+    })
+
     return (
         <>
             <section
@@ -22,12 +40,14 @@ export const TasksContent = () => {
                     <div className="space-x-5">
                         <CreateColumn />
 
+                        <CreateTag />
+
                         <CreateTask />
                     </div>
                 </div>
             </section>
 
-            <Columns />
+            <Columns columnsData={columnsData} />
         </>
     )
 }
