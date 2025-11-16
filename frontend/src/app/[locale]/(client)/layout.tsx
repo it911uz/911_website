@@ -79,7 +79,15 @@ export const metadata: Metadata = {
 		icon: "/favicon/favicon.ico",
 		shortcut: "/favicon/favicon-96x96.png",
 		apple: "/favicon/apple-touch-icon.png"
-	}
+	},
+	alternates: {
+		canonical: "https://it911.uz",
+		languages: {
+			"ru-RU": "https://it911.uz/ru",
+			"uz-UZ": "https://it911.uz/uz",
+			"en-US": "https://it911.uz/en",
+		},
+	},
 };
 
 
