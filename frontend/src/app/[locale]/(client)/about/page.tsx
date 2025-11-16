@@ -1,67 +1,97 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Header } from "./_components/header";
 import type { Metadata } from "next";
-import { SectionHistory } from "./_components/history";
 import { searchParamsCache } from "@/lib/search-params.util";
+import { AboutContent } from "./_components/about-content";
 
 const Page = async ({ params, searchParams }: PageProps<"/[locale]/about">) => {
     const { locale } = await params;
     setRequestLocale(locale as Locale);
     await searchParamsCache.parse(searchParams);
 
-    return <>
-        <Header />
-
-        <SectionHistory />
-    </>
+    return <AboutContent />
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {
-
-
     return {
-        title: "О нас — Веб-сайты, CRM-системы и Боты",
+        metadataBase: new URL("https://it911.uz/about"),
+
+        title:
+            "О нас / Biz haqimizda / About Us — IT 911 Solutions: Создание сайтов, CRM, Ботов и Автоматизация",
+
+        description:
+            "IT 911 Solutions — команда специалистов по созданию сайтов, CRM-систем и телеграм-ботов. Более 5 лет помогаем бизнесу автоматизировать процессы и масштабироваться с современными IT-решениями.  IT 911 Solutions — saytlar, CRM tizimlari va Telegram botlarini ishlab chiqadigan mutaxassislar jamoasi. Biz 5 yildan beri biznes jarayonlarini avtomatlashtirish va rivojlantirishga yordam beramiz. IT 911 Solutions is a team of experts in website development, CRM systems, and Telegram bots. Over 5 years of helping businesses automate and grow with advanced digital solutions.",
 
         keywords: [
-            "IT 911",
-            "IT-компания",
-            "разработка сайтов",
-            "создание CRM-систем",
-            "телеграм-боты",
-            "автоматизация бизнеса",
-            "цифровые решения",
-            "Узбекистан",
-            "digital-технологии",
+            "IT 911", "О компании IT 911", "разработка сайтов", "создание CRM", "телеграм-боты",
+            "автоматизация бизнеса", "IT услуги", "команда разработчиков", "история компании",
+            "IT компания Узбекистан", "разработка под ключ",
+            "IT 911", "kompaniya haqida", "veb-sayt yaratish", "CRM ishlab chiqish",
+            "Telegram bot yaratish", "biznes avtomatlashtirish", "IT xizmatlar",
+            "O‘zbekiston IT kompaniyasi", "tayyor yechimlar", "raqamli yechimlar",
+            "IT 911 Solutions", "about company", "web development", "CRM development",
+            "telegram bot development", "business automation", "IT services",
+            "software team", "digital solutions Uzbekistan",
         ],
 
-        category: "IT-услуги, О компании",
+        alternates: {
+            canonical: "https://it911.uz",
+        },
+
+        category: "IT-компания, О компании",
 
         openGraph: {
-            title: "IT 911: О нас — Веб-сайты, CRM-системы и Боты",
-            siteName: 'IT 911',
-            type: 'website',
+            title: "О нас / Biz haqimizda / About Us — IT 911 Solutions",
+            description:
+                "RU: Узнайте больше о IT 911 Solutions — команде разработчиков сайтов, CRM системы и телеграм-ботов. " +
+                "UZ: IT 911 Solutions haqida ko‘proq ma’lumot — saytlar, CRM va botlar ishlab chiquvchi jamoa. " +
+                "EN: Learn more about IT 911 Solutions — a team building websites, CRM systems and Telegram bots.",
+            url: "https://it911.uz",
+            type: "website",
+            siteName: "IT 911 Solutions",
+            images: [
+                {
+                    url: "/favicon/favicon-96x96.png",
+                    width: 1200,
+                    height: 630,
+                    alt: "IT 911 Solutions — About Page",
+                },
+            ],
         },
 
         twitter: {
-            card: 'summary_large_image',
-            title: "О нас — Веб-сайты, CRM-системы и Боты",
+            card: "summary_large_image",
+            title: "О нас / Biz haqimizda / About Us — IT 911 Solutions",
+            description:
+                "RU: Кто мы? Команда IT 911 создаёт сайты, CRM и ботов. " +
+                "UZ: Biz kimmiz? IT 911 — saytlar, CRM va botlar yaratadigan jamoa. " +
+                "EN: Who are we? IT 911 builds websites, CRM systems and bots.",
+            images: ["/favicon/favicon-96x96.png"],
+            site: "@it911_uz",
+            creator: "@it911_uz",
         },
 
         robots: {
-            follow: true,
             index: true,
+            follow: true,
             googleBot: {
-                follow: true,
                 index: true,
-                'max-snippet': -1,
-                'max-image-preview': 'large',
+                follow: true,
+                "max-snippet": -1,
+                "max-image-preview": "large",
+                "max-video-preview": -1,
             },
         },
-        pinterest: {
-            richPin: true,
+
+        authors: [{ name: "IT 911 Solutions", url: "https://it911.uz/" }],
+        publisher: "IT 911 Solutions",
+
+        other: {
+            "page-type": "about",
+            "content-language": "ru, uz, en",
         },
     };
 };
+
 
 export default Page;
