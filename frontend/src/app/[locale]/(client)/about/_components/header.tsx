@@ -25,7 +25,7 @@ export const Header = async () => {
                     }
                 </h1>
 
-                <Wrapper className="gap-10 grid-cols-1 md:grid-cols-2 mt-16 md:mt-24">
+                <Wrapper column={1} className="gap-10 md:grid-cols-2 mt-16 md:mt-24">
                     <div className="space-y-10 md:space-y-16">
                         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
                             {

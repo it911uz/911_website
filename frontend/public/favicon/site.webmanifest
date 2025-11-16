@@ -1,21 +1,47 @@
 {
-  "name": "IT 911",
+  "name": "IT 911 Solutions — Создание сайтов, CRM и Telegram-ботов",
   "short_name": "IT 911",
+  "description": "RU: Разработка сайтов, CRM и Telegram-ботов. UZ: Saytlar, CRM va bot yaratish. EN: Web, CRM and bot development.",
+  "lang": "ru",
+  "dir": "ltr",
+
+  "start_url": "/?source=pwa",
+  "scope": "/",
+
+  "display": "standalone",
+  "orientation": "portrait",
+
+  "theme_color": "#0E1217",
+  "background_color": "#ffffff",
+
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
+      "src": "/favicon/favicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "/favicon/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon/favicon-96x96.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+
+  "categories": [
+    "business",
+    "productivity",
+    "utilities",
+    "technology",
+    "development"
+  ],
+
+  "prefer_related_applications": false
 }
