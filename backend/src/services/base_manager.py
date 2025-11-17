@@ -19,27 +19,27 @@ class BaseManager(Generic[ModelType]):
         return f"{self.model.__name__.lower()}:{suffix}"
 
     async def get(self, obj_id) -> ModelType:
-        key = self._cache_key(f"id:{obj_id}")
-        cached = await redis_cache.get(key)
-        if cached:
-            return self.model(**cached)
+        # key = self._cache_key(f"id:{obj_id}")
+        # cached = await redis_cache.get(key)
+        # if cached:
+        #     return self.model(**cached)
 
         obj = await self.repo.get(obj_id)
         if not obj:
             raise NotFound(f"{self.model.__name__} not found")
 
-        await redis_cache.set(key, obj.as_dict())
+        # await redis_cache.set(key, obj.as_dict())
         return obj
 
     async def list(self, filters=None, params: Params = None):
-        pagination = f"{params.page}:{params.size}" if params.size else "all"
-        key = self._cache_key(f"list:{hash(str(filters))}:{pagination}")
+        # pagination = f"{params.page}:{params.size}" if params.size else "all"
+        # key = self._cache_key(f"list:{hash(str(filters))}:{pagination}")
 
-        cached = await redis_cache.get(key)
-        if cached:
-            return cached
+        # cached = await redis_cache.get(key)
+        # if cached:
+        #     return cached
         result = await self.repo.list(filters=filters, params=params)
-        await redis_cache.set(key, result.model_dump())
+        # await redis_cache.set(key, result.model_dump())
         return result
 
     async def create(self, **kwargs):
