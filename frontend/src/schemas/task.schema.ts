@@ -21,3 +21,22 @@ export const taskSchema = z.object({
 });
 
 export type TaskSchemaType = z.infer<typeof taskSchema>;
+
+export const taskStatusSchema = z.object({
+    name: z
+        .string()
+        .trim()
+        .nonempty("Обязательное поле")
+        .min(3, "Минимум 3 символа")
+        .max(250, "Максимум 50 символов"),
+
+    hex: z
+        .string()
+        .trim()
+        .min(3, "Минимум 3 символа")
+        .max(50, "Максимум 50 символов")
+        .nonempty("Обязательное поле"),
+    is_completed: z.boolean(),
+});
+
+export type TaskStatusSchemaType = z.infer<typeof taskStatusSchema>;

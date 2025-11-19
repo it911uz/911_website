@@ -12,7 +12,7 @@ export const TasksContent = async () => {
         token: session?.user.accessToken,
     });
 
-    const columnsData: ColumnType[] = taskStatuses.data.items?.map((status, index) => {
+    const columnsData: ColumnType[] = taskStatuses.data?.map((status, index) => {
         return {
             columnId: status.id,
             name: status.name,

@@ -249,7 +249,7 @@ export const LeadOption = ({ lead }: Props) => {
                     collapsible
                     className="mt-10 w-full space-y-3 mb-10"
                 >
-                    {data?.data.items?.map((message) => (
+                    {data?.data?.map((message) => (
                         <AccordionItem
                             key={message.id}
                             value={message.id.toString()}

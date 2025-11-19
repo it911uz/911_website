@@ -49,7 +49,6 @@ export const LeadOption = ({ lead }: Props) => {
     const { data } = useLeadComments({
         leadId: lead.id,
         token: session.data?.user?.accessToken,
-        enabled: open,
     });
 
     const { data: files } = useLeadFiles({
@@ -71,7 +70,7 @@ export const LeadOption = ({ lead }: Props) => {
         });
 
         if (!response.ok) {
-            toast.error("Произошла ошибка");
+            toast.error(response.data.detail || "Произошла ошибка");
             return;
         }
 
@@ -250,7 +249,7 @@ export const LeadOption = ({ lead }: Props) => {
                     collapsible
                     className="mt-10 w-full space-y-3 mb-10"
                 >
-                    {data?.data.items?.map((message) => (
+                    {data?.data?.map((message) => (
                         <AccordionItem
                             key={message.id}
                             value={message.id.toString()}

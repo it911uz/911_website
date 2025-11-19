@@ -1,6 +1,14 @@
 export interface TaskStatus {
     name: string;
+    hex: string;
     is_completed: boolean;
+    id: number;
+    order: number;
+}
+
+export interface Tag {
+    name: string;
+    hex: string;
     id: number;
 }
 

@@ -31,7 +31,7 @@ export const CreateColumn = () => {
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toast.error(response.data.detail || "Произошла ошибка");
                 return;
             }
 

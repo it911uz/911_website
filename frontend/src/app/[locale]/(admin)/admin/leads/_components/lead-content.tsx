@@ -17,20 +17,20 @@ export const LeadContent = async () => {
         statusIds: array ? array.map((id) => id) : undefined,
     });
 
-    const columnsData: ColumnType[] = leadStatuses.data.items?.map(status => {
+    const columnsData: ColumnType[] = leadStatuses.data.map(status => {
         return {
             columnId: status.id,
             hex: status.hex,
             name: status.name,
             position: status.level,
-            leads: [...leads.data.items ?? []].filter(lead => lead.status_id === status.id).map((lead, index) => ({
+            leads: [...leads.data ?? []].filter(lead => lead.status_id === status.id).map((lead, index) => ({
                 ...lead,
                 status: status.id,
                 position: index + 1,
             })),
             canEdit: status.can_edit
         }
-    }).sort((a, b) => a.position - b.position)
+    }).sort((a, b) => a.position - b.position);
 
     return (
         <>
