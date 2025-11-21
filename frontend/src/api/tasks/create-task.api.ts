@@ -10,7 +10,12 @@ export const createTask = async ({ body, token }: Params) => {
 
 interface Params {
     body: {
-
-    }
+        name: string;
+        description: string;
+        deadline: string;
+        status_id: number;
+        tag_ids: number[];
+        user_ids: number[];
+    };
     token?: string
 }

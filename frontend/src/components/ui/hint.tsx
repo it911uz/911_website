@@ -14,7 +14,7 @@ export const Hint = ({ children, className, ...props }: ComponentProps<"div">) =
             className={cn(`inline-flex items-center gap-5 text-sm font-medium transition-all duration-300`)}
             {...props}
         >
-            {pending ? <Loader className="h-4 w-4 animate-spin" /> : children}
+            {pending ? <Loader className="h-4 w-4 animate-spin inline-block ml-auto" /> : children}
         </div>
     );
 };

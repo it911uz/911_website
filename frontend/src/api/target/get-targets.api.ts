@@ -3,7 +3,7 @@ import { createSearchParams } from "@/lib/utils";
 import type { BaseApiParams, ResponseWithPagination } from "@/types/share.type";
 import type { Target } from "@/types/target.type";
 
-export const getTarget = async ({ token, isActive, page, perPage, query }: Params) => {
+export const getTargets = async ({ token, isActive, page, perPage, query }: Params) => {
     const searchParams = createSearchParams({
         name__ilike: query,
         is_active: isActive,
@@ -11,7 +11,7 @@ export const getTarget = async ({ token, isActive, page, perPage, query }: Param
         size: perPage
     });
 
-    return await http.get<ResponseWithPagination<Target[]>>(`target/`, {
+    return await http.get<ResponseWithPagination<Target[]>>("targets/", {
         token,
         searchParams
     });

@@ -6,30 +6,41 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
-import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PenLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { ColumnType } from "./columns";
 import { useTransition } from "react";
-import { editLeadStatus } from "@/api/leads/edit-lead-status.api";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "@/i18n/navigation";
+import { taskStatusSchema, type TaskStatusSchemaType } from "@/schemas/task.schema";
+import { editTaskStatus } from "@/api/tasks/edit-task-status.api";
+import { useQueryClient } from "@tanstack/react-query";
+import { tasksQueryKey } from "@/api/hooks/use-tasks.api";
 
-export const ColumnEdit = ({ columnsData }: Props) => {
+export const ColumnEdit = ({ columnData }: Props) => {
     const { open, onOpenChange } = useOpen();
     const [pending, startTransition] = useTransition();
     const session = useSession();
     const router = useRouter();
-    const { register, handleSubmit, formState: { errors } } = useForm<ColumnSchemaType>({
-        resolver: zodResolver(columnSchema),
+    const queryClient = useQueryClient();
+
+    const { register, handleSubmit, formState: { errors } } = useForm<TaskStatusSchemaType>({
+        resolver: zodResolver(taskStatusSchema),
+        defaultValues: {
+            hex: columnData.hex,
+            name: columnData.name,
+            is_completed: columnData.isCompleted
+        }
     });
 
-    const onSubmit = (values: ColumnSchemaType) => {
+
+    const onSubmit = (values: TaskStatusSchemaType) => {
         startTransition(async () => {
-            const response = await editLeadStatus({
-                id: columnsData.columnId,
+
+            const response = await editTaskStatus({
+                id: columnData.columnId,
                 body: values,
                 token: session.data?.user.accessToken
             });
@@ -40,7 +51,8 @@ export const ColumnEdit = ({ columnsData }: Props) => {
             }
 
             toast.success("Колонка обновлена");
-            router.refresh();
+             router.refresh();
+            queryClient.invalidateQueries({ queryKey: [tasksQueryKey.status.getTasksStatuses] });
             onOpenChange(false);
         })
     }
@@ -74,6 +86,18 @@ export const ColumnEdit = ({ columnsData }: Props) => {
                     <ErrorMassage error={errors.hex?.message} />
                 </Field>
 
+                <Field>
+                    <FieldLabel className="text-lg" required htmlFor="checkbox">
+                        Завершенные
+                    </FieldLabel>
+
+                    <div>
+                        <Input id="checkbox" type="checkbox" {...register("is_completed")} />
+                    </div>
+
+                    <ErrorMassage error={errors.is_completed?.message} />
+                </Field>
+
                 <Button loading={pending} variant={"black"} size={"lg"}>
                     Сохранить
                 </Button>
@@ -83,5 +107,5 @@ export const ColumnEdit = ({ columnsData }: Props) => {
 }
 
 interface Props {
-    columnsData: Omit<ColumnType, "leads" | "position">;
+    columnData: Omit<ColumnType, "tasks" | "position">;
 }

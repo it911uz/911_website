@@ -4,17 +4,14 @@ import { CreateColumn } from "./create-column"
 import { CreateLead } from "./create-lead"
 import { auth } from "@/auth"
 import { getLeads } from "@/api/leads/get-leads.api"
-import { searchParamsCache } from "@/lib/search-params.util"
 
 export const LeadContent = async () => {
     const session = await auth();
-    const { array } = searchParamsCache.all();
 
     const leadStatuses = await getLeadStatuses(session?.user.accessToken);
 
     const leads = await getLeads({
         token: session?.user.accessToken,
-        statusIds: array ? array.map((id) => id) : undefined,
     });
 
     const columnsData: ColumnType[] = leadStatuses.data.map(status => {
@@ -36,21 +33,21 @@ export const LeadContent = async () => {
         <>
             <section
                 data-slot="leads"
-                className="px-4 py-10 lg:px-8 "
+                className="px-4 py-10 lg:px-8"
             >
-                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                    <div>
-                        <h2 className="text-3xl font-bold ">
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="max-w-xl">
+                        <h2 className="text-3xl font-bold tracking-tight">
                             Лиды
                         </h2>
-                        <p className="text-gray-01 mt-1">
+
+                        <p className="text-gray-500 mt-1">
                             Управляйте своими лидами, конвертируйте и отслеживайте эффективность.
                         </p>
                     </div>
 
-                    <div className="space-x-5">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         <CreateColumn />
-
                         <CreateLead />
                     </div>
                 </div>

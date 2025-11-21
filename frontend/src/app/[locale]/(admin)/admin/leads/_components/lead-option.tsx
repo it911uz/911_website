@@ -39,6 +39,7 @@ import { DeleteLeadFile } from "./delete-lead-file";
 import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { SelectStatus } from "./select-status";
+import { DeleteLead } from "./delete-lead";
 
 export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -150,7 +151,11 @@ export const LeadOption = ({ lead }: Props) => {
                             )}
                         </div>
 
-                        <SelectStatus lead={lead} />
+                        <div className="flex gap-5 items-center">
+                            <SelectStatus lead={lead} />
+
+                            <DeleteLead leadId={lead.id} />
+                        </div>
                     </div>
                 </SheetHeader>
 

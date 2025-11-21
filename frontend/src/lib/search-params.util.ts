@@ -41,6 +41,10 @@ export const searchParamsParsers = {
         shallow: false,
         history: "push",
     }),
+    users: parseAsArrayOf(parseAsInteger).withOptions({
+        shallow: false,
+        history: "push",
+    }),
     tab: parseAsString.withOptions({
         shallow: false,
         history: "replace",
@@ -67,6 +71,11 @@ export const searchParamsParsers = {
         clearOnDefault: true,
     }),
     targetId: parseAsString.withOptions({
+        shallow: false,
+        history: "replace",
+        clearOnDefault: true,
+    }),
+    status: parseAsString.withOptions({
         shallow: false,
         history: "replace",
         clearOnDefault: true,

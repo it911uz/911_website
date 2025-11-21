@@ -2,7 +2,7 @@ import { http } from "@/lib/https.util";
 import type { ActionResponse } from "@/types/share.type";
 
 export const deleteTarget = async ({ id, token }: Params) => {
-    return http.delete<ActionResponse<unknown>>(`target/${id}`, {
+    return http.delete<ActionResponse<unknown>>(`targets/${id}`, {
         token,
     })
 }
