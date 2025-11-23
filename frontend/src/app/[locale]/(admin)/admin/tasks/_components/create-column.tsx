@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { taskStatusSchema, type TaskStatusSchemaType } from "@/schemas/task.schema";
 import { createTaskStatus } from "@/api/tasks/create-task-status.api";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
@@ -33,7 +34,7 @@ export const CreateColumn = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

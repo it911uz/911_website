@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Routers } from "@/configs/router.config";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -25,7 +26,7 @@ export const DeleteTask = ({ taskId }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

@@ -17,6 +17,7 @@ import { createRole } from "@/api/roles/create-role.api";
 import { useSession } from "next-auth/react";
 import type { Role } from "@/types/roles.type";
 import { editRole } from "@/api/roles/edit-role.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const EditRole = ({ role }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -41,7 +42,7 @@ export const EditRole = ({ role }: Props) => {
             })
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

@@ -17,6 +17,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useParams } from "next/navigation";
 import type { CompanyContact } from "@/types/company.type";
 import { updateCompanyContact } from "@/api/companies/update-company-contact.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const EditContact = ({ contact }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -42,7 +43,7 @@ export const EditContact = ({ contact }: Props) => {
             });
 
             if (response.error) {
-                toast.error(response.data.detail || "Что-то пошло не так");
+                toastErrorResponse(response.data)
                 return;
             }
 

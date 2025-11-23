@@ -12,6 +12,7 @@ import { useRouter } from "@/i18n/navigation";
 import type { Task } from "@/types/tasks.type";
 import { editTaskStatusPosition } from "@/api/tasks/edit-task-status-position.api";
 import { editTaskPosition } from "@/api/tasks/edit-task-position.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const Columns = ({ columnsData = [] }: Props) => {
     const [pending, startTransition] = useTransition();
@@ -90,7 +91,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 })
 
                 if (!response.ok) {
-                    toast.error(response.data.detail || "Не удалось переместить колонку");
+                    toastErrorResponse(response.data)
                     return;
                 }
 
@@ -152,7 +153,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 if (!response.ok) {
                     console.log(response);
 
-                    toast.error("Не удалось переместить таск");
+                    toastErrorResponse(response.data)
                     return;
                 }
 
@@ -184,7 +185,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error("Не удалось обновить позицию таска");
+                toastErrorResponse(response.data)
                 return;
             }
 

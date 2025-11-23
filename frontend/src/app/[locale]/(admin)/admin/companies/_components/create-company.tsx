@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "@/i18n/navigation";
 import { createCompany } from "@/api/companies/create-company.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateCompany = () => {
     const { open, onOpenChange } = useOpen();
@@ -43,7 +44,7 @@ export const CreateCompany = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -63,7 +64,7 @@ export const CreateCompany = () => {
                 variant={"black"}
             >
                 <Plus />
-                <span>Добавить</span>
+                <span>Создать</span>
             </Button>
 
             <SheetContent className="w-2/5">
@@ -103,23 +104,6 @@ export const CreateCompany = () => {
                     </Field>
 
                     <Controller
-                        name="info"
-                        control={control}
-                        render={({ field }) => (
-                            <Field>
-                                <FieldLabel className="text-lg" required htmlFor="info">
-                                    Описание компании
-                                </FieldLabel>
-                                <CustomSunEditor
-                                    defaultValue={field.value}
-                                    onChange={field.onChange}
-                                />
-                                <ErrorMassage error={errors.info?.message} />
-                            </Field>
-                        )}
-                    />
-
-                    <Controller
                         name="status"
                         control={control}
                         render={({ field }) => (
@@ -141,6 +125,23 @@ export const CreateCompany = () => {
                                     </SelectContent>
                                 </Select>
                                 <ErrorMassage error={errors.status?.message} />
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="info"
+                        control={control}
+                        render={({ field }) => (
+                            <Field>
+                                <FieldLabel className="text-lg" required htmlFor="info">
+                                    Описание компании
+                                </FieldLabel>
+                                <CustomSunEditor
+                                    defaultValue={field.value}
+                                    onChange={field.onChange}
+                                />
+                                <ErrorMassage error={errors.info?.message} />
                             </Field>
                         )}
                     />

@@ -18,6 +18,7 @@ import { taskStatusSchema, type TaskStatusSchemaType } from "@/schemas/task.sche
 import { editTaskStatus } from "@/api/tasks/edit-task-status.api";
 import { useQueryClient } from "@tanstack/react-query";
 import { tasksQueryKey } from "@/api/hooks/use-tasks.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const ColumnEdit = ({ columnData }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -46,7 +47,7 @@ export const ColumnEdit = ({ columnData }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

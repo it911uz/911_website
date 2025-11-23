@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import { employSchema, type EmploySchemaType } from "@/schemas/employ.schema";
 import { SelectRole } from "./select-role";
 import { createUser } from "@/api/users/create-user.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateEmploy = () => {
     const { open, onOpenChange } = useOpen();
@@ -35,7 +36,7 @@ export const CreateEmploy = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -51,7 +52,7 @@ export const CreateEmploy = () => {
             <Plus />
 
             <span>
-                Добавить
+                Создать
             </span>
         </Button>
 

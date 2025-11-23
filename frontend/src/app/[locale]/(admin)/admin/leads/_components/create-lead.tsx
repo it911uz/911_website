@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { createLead } from "@/api/leads/create-lead.api";
 import { toast } from "sonner";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateLead = () => {
     const { open, onOpenChange } = useOpen();
@@ -30,7 +31,7 @@ export const CreateLead = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка");
+                toastErrorResponse(response.data)
                 return
             }
 
@@ -42,11 +43,16 @@ export const CreateLead = () => {
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-        <Button className="text-lg" onClick={() => onOpenChange(true)} size={"md"} variant={"black"}>
+        <Button
+            className="text-lg"
+            onClick={() => onOpenChange(true)}
+            size="md"
+            variant="black"
+        >
             <Plus />
 
             <span>
-                Добавить лид
+                Создать
             </span>
         </Button>
 

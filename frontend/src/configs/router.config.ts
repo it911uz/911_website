@@ -27,5 +27,6 @@ export const Routers = {
 		companies: "/admin/companies",
 		companiesById: (id: number) => `/admin/companies/${id}`,
 		tasksById: (id: number) => `/admin/tasks/${id}`,
+		services: "/admin/services",
 	}
 } as const;

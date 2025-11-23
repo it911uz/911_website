@@ -4,6 +4,7 @@ import { deleteLeadStatus } from "@/api/leads/delete-lead-status.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
@@ -24,7 +25,7 @@ export const DeleteColumn = ({ columnId, hasTasks }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

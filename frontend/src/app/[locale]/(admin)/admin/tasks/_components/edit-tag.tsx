@@ -16,6 +16,7 @@ import type { Tag } from "@/types/tasks.type";
 import { tagSchema, type TagSchemaType } from "@/schemas/tag.schema";
 import { editTag } from "@/api/tags/edit-tag";
 import { deleteTag } from "@/api/tags/delete-tag";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const EditTag = ({ tag }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -36,7 +37,7 @@ export const EditTag = ({ tag }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -54,7 +55,7 @@ export const EditTag = ({ tag }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

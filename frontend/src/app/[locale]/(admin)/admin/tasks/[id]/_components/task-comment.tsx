@@ -8,6 +8,7 @@ import { ErrorMassage } from "@/components/ui/error-message";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { taskCommentSchema, type TaskCommentSchemaType } from "@/schemas/task.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -33,7 +34,7 @@ export const TaskComment = () => {
         });
 
         if (!response.ok) {
-            toast.error(response.data.detail || "Произошла ошибка");
+            toastErrorResponse(response.data)
             return;
         }
 

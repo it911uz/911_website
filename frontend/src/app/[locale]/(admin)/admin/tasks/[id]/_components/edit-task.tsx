@@ -21,6 +21,7 @@ import { SelectUsers } from "./select-users";
 import type { Task } from "@/types/tasks.type";
 import { editTask } from "@/api/tasks/edit-task.api";
 import dayjs from "dayjs";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const EditTask = ({ task }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -56,7 +57,7 @@ export const EditTask = ({ task }: Props) => {
             })
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

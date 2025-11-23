@@ -80,6 +80,11 @@ export const searchParamsParsers = {
         history: "replace",
         clearOnDefault: true,
     }),
+    type: parseAsString.withOptions({
+        shallow: false,
+        history: "replace",
+        clearOnDefault: true,
+    }),
 };
 
 export const serialize = createSerializer(searchParamsParsers);

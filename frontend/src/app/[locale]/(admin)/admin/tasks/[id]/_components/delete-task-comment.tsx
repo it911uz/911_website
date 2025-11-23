@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Routers } from "@/configs/router.config";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { cn } from "@/lib/utils";
 import type { TaskComment } from "@/types/tasks.type";
 import dayjs from "dayjs";
@@ -31,7 +32,7 @@ export const DeleteTaskComment = ({ comment }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

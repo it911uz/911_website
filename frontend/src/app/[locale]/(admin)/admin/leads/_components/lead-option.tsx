@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
@@ -40,6 +39,7 @@ import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { SelectStatus } from "./select-status";
 import { DeleteLead } from "./delete-lead";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -71,7 +71,7 @@ export const LeadOption = ({ lead }: Props) => {
         });
 
         if (!response.ok) {
-            toast.error(response.data.detail || "Произошла ошибка");
+            toastErrorResponse(response.data)
             return;
         }
 

@@ -15,6 +15,7 @@ import { createTarget } from "@/api/target/create-target.api";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateTarget = () => {
     const { open, onOpenChange } = useOpen();
@@ -33,7 +34,7 @@ export const CreateTarget = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -44,11 +45,16 @@ export const CreateTarget = () => {
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-        <Button size={"md"} variant={"black"} onClick={() => onOpenChange(true)}>
+        <Button
+            className="text-lg"
+            onClick={() => onOpenChange(true)}
+            size="md"
+            variant="black"
+        >
             <Plus />
 
             <span>
-                Добавить
+                Создать
             </span>
         </Button>
 

@@ -19,6 +19,7 @@ import { SelectStatus } from "./select-status";
 import { SelectTags } from "./select-tags";
 import { SelectUsers } from "./select-users";
 import { createTask } from "@/api/tasks/create-task.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateTask = () => {
     const { open, onOpenChange } = useOpen();
@@ -44,7 +45,7 @@ export const CreateTask = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
