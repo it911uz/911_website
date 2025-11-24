@@ -2,7 +2,7 @@ import { http } from "@/lib/https.util";
 import type { ActionResponse } from "@/types/share.type";
 
 export const createTarget = async ({ token, body }: Params) => {
-    return await http.post<ActionResponse<unknown>>(`target/`, {
+    return await http.post<ActionResponse<unknown>>(`targets/`, {
         token,
         json: body
     });

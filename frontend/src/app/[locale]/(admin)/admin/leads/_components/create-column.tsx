@@ -14,6 +14,7 @@ import { useTransition } from "react";
 import { createLeadStatus } from "@/api/leads/create-lead-status.api";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
@@ -31,7 +32,7 @@ export const CreateColumn = () => {
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { createCompanyContact } from "@/api/companies/create-company-contact.api";
 import { useParams } from "next/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateCompany = () => {
     const { open, onOpenChange } = useOpen();
@@ -39,7 +40,7 @@ export const CreateCompany = () => {
             });
 
             if (response.error) {
-                toast.error(response.data.detail || "Что-то пошло не так");
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -59,7 +60,7 @@ export const CreateCompany = () => {
                 variant="black"
             >
                 <Plus />
-                <span>Добавить контакт</span>
+                <span>Добавить</span>
             </Button>
 
             <SheetContent className="w-2/5">

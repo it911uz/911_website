@@ -19,6 +19,6 @@ export const getCompanies = async ({ token, status, query, perPage, page }: Para
 
 interface Params extends BaseApiParams {
     token?: string;
-    status?: string;
     query?: string;
+    status?: string | null;
 }

@@ -69,3 +69,56 @@ export const companyContactSchema = z.object({
 });
 
 export type CompanyContactSchemaType = z.infer<typeof companyContactSchema>;
+
+export const companyCommentSchema = z.object({
+    comment: z.string().trim().nonempty("Обязательное поле").min(3, "Минимум 3 символа").max(1024, "Максимум 1024 символа"),
+});
+
+export type CompanyCommentSchemaType = z.infer<typeof companyCommentSchema>;
+
+export const PAYMENT_TYPES = [
+    { label: "Одноразово", value: "one_time" },
+    { label: "Ежемесячно", value: "monthly" },
+    { label: "Ежегодно", value: "annually" },
+] as const;
+
+export const PAYMENT_TYPE_VALUES = PAYMENT_TYPES.map(t => t.value) as [
+    string,
+    ...string[]
+];
+
+export type PaymentType = typeof PAYMENT_TYPE_VALUES[number];
+
+export const companySubscriptionSchema = z.object({
+    service_id: z.number()
+        .int("Цена должна быть целым числом")
+        .gt(0, "Цена должна быть больше 0"),
+
+    payment_type: z.enum(PAYMENT_TYPE_VALUES, {
+        message: "Некорректный тип оплаты",
+    }).optional(),
+
+    next_payment_due: z.string()
+        .nonempty("Обязательное поле")
+        .refine(val => !Number.isNaN(Date.parse(val)), "Неверный формат даты").optional(),
+
+    price: z.number()
+        .int("Цена должна быть целым числом")
+        .gt(0, "Цена должна быть больше 0"),
+
+    start_date: z.string()
+        .nonempty("Обязательное поле")
+        .refine(val => !Number.isNaN(Date.parse(val)), "Неверный формат даты"),
+
+    end_date: z.string()
+        .refine(val => !Number.isNaN(Date.parse(val)), "Неверный формат даты")
+        .optional()
+}).refine((data) => {
+    if (!data.end_date) return true;
+    return new Date(data.end_date) >= new Date(data.start_date);
+}, {
+    message: "end_date не может быть раньше start_date",
+    path: ["end_date"]
+});
+
+export type CompanySubscriptionSchemaType = z.infer<typeof companySubscriptionSchema>;

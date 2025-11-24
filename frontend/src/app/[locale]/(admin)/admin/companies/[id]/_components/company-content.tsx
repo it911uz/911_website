@@ -52,9 +52,6 @@ export const CompanyContent = async ({ companyId }: Props) => {
                         </div>
                     </div>
 
-                    <div className="text-gray-400 text-lg font-semibold">
-                        ok
-                    </div>
                 </div>
             </section>
 

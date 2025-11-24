@@ -1,7 +1,7 @@
 import { http } from "@/lib/https.util"
 import { createSearchParams } from "@/lib/utils"
 import type { Lead } from "@/types/leads.type"
-import type { BaseApiParams, ResponseWithPagination } from "@/types/share.type"
+import type { ActionResponse, BaseApiParams, ResponseWithPagination } from "@/types/share.type"
 
 export const getLeads = async ({ token, fromDate, toDate, orderBy, targetId, page, perPage, statusIds }: Params) => {
 
@@ -17,7 +17,7 @@ export const getLeads = async ({ token, fromDate, toDate, orderBy, targetId, pag
         }
     )
 
-    return await http.get<ResponseWithPagination<Lead[]>>("leads/", {
+    return await http.get<ActionResponse<Lead[]>>("leads/", {
         token,
         searchParams,
     })

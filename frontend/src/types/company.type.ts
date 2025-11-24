@@ -1,3 +1,5 @@
+import type { Service } from "./service.type";
+
 export interface Company {
     name: string;
     info: string;
@@ -9,10 +11,10 @@ export interface Company {
 
 
 export interface CompanyComment {
-    comment: string;
-    id: number;
     created_at: Date;
     updated_at: Date;
+    comment: string;
+    id: number;
 }
 
 export interface CompanyContact {
@@ -20,5 +22,22 @@ export interface CompanyContact {
     phone_number: string;
     email: string;
     relation: string;
+    id: number;
+}
+
+export interface CompanySubscription {
+    service_id: number;
+    start_date: Date;
+    end_date: Date;
+    payment_type: string;
+    price: number;
+    next_payment_due: Date;
+    id: number;
+    service: Service;
+}
+
+export interface CompanyPayment {
+    amount: string;
+    status: string;
     id: number;
 }

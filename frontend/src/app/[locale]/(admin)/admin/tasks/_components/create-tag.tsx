@@ -15,6 +15,7 @@ import { tagSchema, type TagSchemaType } from "@/schemas/tag.schema";
 import { createTag } from "@/api/tags/create-tag.api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateTag = () => {
     const { open, onOpenChange } = useOpen();
@@ -33,7 +34,7 @@ export const CreateTag = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

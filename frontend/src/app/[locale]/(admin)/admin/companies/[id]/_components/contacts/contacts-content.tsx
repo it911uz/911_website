@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { getCompanyContacts } from "@/api/companies/get-company-contacts.api";
 import { ClientNoData } from "@/components/widgets/client-no-data";
 import { EditContact } from "./edit-contact";
+import { DeleteContact } from "./delete-contact";
 
 export const ContactsContent = async ({ companyId }: Props) => {
     const session = await auth();
@@ -46,6 +47,8 @@ export const ContactsContent = async ({ companyId }: Props) => {
                                         <TableCell>
                                             <div className="flex gap-5 justify-end">
                                                 <EditContact contact={contact} />
+
+                                                <DeleteContact contactId={contact.id} />
                                             </div>
                                         </TableCell>
                                     </TableRow>

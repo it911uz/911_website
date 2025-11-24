@@ -1,39 +1,36 @@
 "use client";
 
-import { leadsQueryKey } from "@/api/hooks/use-leads.api";
-import { deleteLeadFile } from "@/api/leads/delete-lead-file.api";
+import { deleteService } from "@/api/services/delete-service.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export const DeleteLeadFile = ({ id, leadId }: Props) => {
+export const DeleteService = ({ serviceId }: Props) => {
     const { open, onOpenChange } = useOpen();
+
     const [pending, startTransition] = useTransition();
-    const queryClient = useQueryClient();
+    const router = useRouter();
     const session = useSession();
 
     const handleRemove = () => {
         startTransition(async () => {
-            const response = await deleteLeadFile({
-                id,
-                lead_id: leadId,
+            const response = await deleteService({
+                id: serviceId,
                 token: session.data?.user.accessToken
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 
-            toast.success("Файл удален");
-            queryClient.invalidateQueries({
-                queryKey: leadsQueryKey.files.getFiles(leadId),
-            });
+            toast.success("Услуга удалена");
+            router.refresh();
             onOpenChange(false);
         })
     }
@@ -43,10 +40,10 @@ export const DeleteLeadFile = ({ id, leadId }: Props) => {
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
-                    Удаление файла
+                    Удаление
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                    Вы действительно хотите удалить файл?
+                    Вы действительно хотите удалить услугу?
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -58,6 +55,5 @@ export const DeleteLeadFile = ({ id, leadId }: Props) => {
 }
 
 interface Props {
-    id: string;
-    leadId: number;
+    serviceId: number
 }

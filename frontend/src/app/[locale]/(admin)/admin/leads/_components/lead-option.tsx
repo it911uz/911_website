@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
@@ -39,6 +38,8 @@ import { DeleteLeadFile } from "./delete-lead-file";
 import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { SelectStatus } from "./select-status";
+import { DeleteLead } from "./delete-lead";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -49,7 +50,6 @@ export const LeadOption = ({ lead }: Props) => {
     const { data } = useLeadComments({
         leadId: lead.id,
         token: session.data?.user?.accessToken,
-        enabled: open,
     });
 
     const { data: files } = useLeadFiles({
@@ -71,7 +71,7 @@ export const LeadOption = ({ lead }: Props) => {
         });
 
         if (!response.ok) {
-            toast.error("Произошла ошибка");
+            toastErrorResponse(response.data)
             return;
         }
 
@@ -151,7 +151,11 @@ export const LeadOption = ({ lead }: Props) => {
                             )}
                         </div>
 
-                        <SelectStatus lead={lead} />
+                        <div className="flex gap-5 items-center">
+                            <SelectStatus lead={lead} />
+
+                            <DeleteLead leadId={lead.id} />
+                        </div>
                     </div>
                 </SheetHeader>
 
@@ -250,7 +254,7 @@ export const LeadOption = ({ lead }: Props) => {
                     collapsible
                     className="mt-10 w-full space-y-3 mb-10"
                 >
-                    {data?.data.items?.map((message) => (
+                    {data?.data?.map((message) => (
                         <AccordionItem
                             key={message.id}
                             value={message.id.toString()}

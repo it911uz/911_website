@@ -1,3 +1,5 @@
+import type { File } from "./files.type";
+
 export interface Lead {
     created_at: Date;
     updated_at: Date;
@@ -8,9 +10,10 @@ export interface Lead {
     company_info: string;
     target_id: null;
     id: number;
-    status_id: number | null;
+    status_id: number;
     comments: Comment[];
-    status: Status | null;
+    status: LeadStatus;
+    files: File[];
 }
 
 export interface Comment {
@@ -19,17 +22,18 @@ export interface Comment {
     comment: string;
     id: number;
     lead_id: number;
-    user_id: number | null;
-    user: User | null;
+    user_id: number;
+    user: User;
 }
 
 export interface User {
     full_name: string;
     username: string;
     email: string;
-    is_superuser: boolean;
+    phone_number: null;
     role_id: number;
     id: number;
+    is_superuser: boolean;
     role: Role;
 }
 
@@ -38,7 +42,7 @@ export interface Role {
     id: number;
 }
 
-export interface Status {
+export interface LeadStatus {
     name: string;
     hex: string;
     id: number;

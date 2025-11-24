@@ -8,7 +8,7 @@ export const getRoles = async ({ page, perPage, token, query }: Params) => {
     const searchParams = createSearchParams({
         page,
         size: perPage,
-        name__ilike: query
+        q: query
     });
 
     return await http.get<ResponseWithPagination<Role[]>>("roles/", {

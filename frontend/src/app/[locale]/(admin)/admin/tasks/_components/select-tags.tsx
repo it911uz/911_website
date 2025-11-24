@@ -12,7 +12,7 @@ export const SelectTags = ({ onValueChange, defaultValue }: Props) => {
     });
 
     return <MultiSelect
-        items={data?.data.items?.map(item => ({ value: item.id.toString(), label: item.name })) ?? []}
+        items={data?.data?.map(item => ({ value: item.id.toString(), label: item.name })) ?? []}
         placeholder="Выберите статусы"
         onValueChange={onValueChange}
         defaultValue={defaultValue}

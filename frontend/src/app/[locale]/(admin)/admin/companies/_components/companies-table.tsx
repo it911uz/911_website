@@ -9,12 +9,13 @@ import { ClientNoData } from "@/components/widgets/client-no-data";
 export const CompaniesTable = async () => {
 
     const session = await auth();
-    const { page, query, perPage } = await searchParamsCache.all();
+    const { page, query, perPage, status } = await searchParamsCache.all();
     const { data } = await getCompanies({
         token: session?.user.accessToken,
         page: page,
         perPage: perPage,
-        query
+        query,
+        status
     });
 
     return <section

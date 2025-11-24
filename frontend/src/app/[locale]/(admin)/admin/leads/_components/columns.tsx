@@ -12,6 +12,7 @@ import { useRouter } from "@/i18n/navigation";
 import { editLeadPosition } from "@/api/leads/edit-lead-position";
 import type { Lead } from "@/types/leads.type";
 import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const Columns = ({ columnsData = [] }: Props) => {
     const [pending, startTransition] = useTransition();
@@ -90,7 +91,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 })
 
                 if (!response.ok) {
-                    toast.error("Не удалось переместить колонку");
+                    toastErrorResponse(response.data)
                     return;
                 }
 
@@ -150,7 +151,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 });
 
                 if (!response.ok) {
-                    toast.error("Не удалось переместить лид");
+                    toastErrorResponse(response.data)
                     return;
                 }
 
@@ -182,7 +183,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error("Не удалось обновить позицию лида");
+                toastErrorResponse(response.data)
                 return;
             }
 

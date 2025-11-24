@@ -6,6 +6,7 @@ import type { Company } from "@/types/company.type";
 import { Eye } from "lucide-react";
 import { EditCompany } from "./edit-company";
 import { DeleteCompany } from "./delete-company";
+import { SwitchStatus } from "./switch-status";
 
 export const CompaniesTableRow = ({ index, company }: Props) => {
     return (
@@ -23,7 +24,7 @@ export const CompaniesTableRow = ({ index, company }: Props) => {
             </TableCell>
 
             <TableCell>
-                {company.status}
+                <SwitchStatus companyData={company} />
             </TableCell>
 
             <TableCell >

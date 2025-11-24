@@ -30,7 +30,7 @@ export const MultiSelect = ({ items, onValueChange, placeholder, defaultValue }:
     return (
         <Select>
             <SelectTrigger size="lg" className="w-72">
-                <SelectValue>
+                <SelectValue placeholder={placeholder}>
                     {values.length
                         ? `${values.length} выбрано`
                         : placeholder || "Выберите"}
