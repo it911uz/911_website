@@ -27,7 +27,6 @@ async def get_db():
                 print(e)
                 raise Internal(details)
         except DBAPIError as e:
-            print(e)
             await session.rollback()
             raise BadRequest("Неверный формат данных (ошибка типа или диапазона).")
         finally:
