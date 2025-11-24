@@ -21,7 +21,7 @@ interface Role {
 
 export interface UserDetail {
     id: number;
-    phone_number: null;
+    phone_number: null | string;
     hashed_password: string;
     role_id: number;
     updated_at: Date;
