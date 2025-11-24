@@ -96,7 +96,7 @@ export const companySubscriptionSchema = z.object({
 
     payment_type: z.enum(PAYMENT_TYPE_VALUES, {
         message: "Некорректный тип оплаты",
-    }),
+    }).optional(),
 
     next_payment_due: z.string()
         .nonempty("Обязательное поле")

@@ -35,3 +35,9 @@ export interface CompanySubscription {
     id: number;
     service: Service;
 }
+
+export interface CompanyPayment {
+    amount: string;
+    status: string;
+    id: number;
+}

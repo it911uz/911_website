@@ -129,7 +129,7 @@ export const CreateSubscription = () => {
                                     <FieldLabel className="text-lg" required>
                                         Тип оплаты
                                     </FieldLabel>
-                                    <Select value={field.value} onValueChange={field.onChange}>
+                                    <Select value={selectedService?.is_subscription ? field.value : "one_time"} onValueChange={field.onChange}>
                                         <SelectTrigger size={"lg"}>
                                             <SelectValue placeholder="Выберите тип оплаты" />
                                         </SelectTrigger>
