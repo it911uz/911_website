@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 from starlette.middleware.cors import CORSMiddleware
 
+from core.init_db import init_db
+
 from auth.router import router as auth_router
 from clicks.router import router as click_router
 from company.routers import router as company_router
@@ -19,6 +21,7 @@ from user.router import router as user_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    await init_db()
     print("Сервер Запущен")
     yield
     print("Работа Завершилась")

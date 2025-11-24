@@ -112,7 +112,7 @@ async def create_superuser(session: AsyncSession):
         await repo.create(
             full_name="Admin",
             username="admin",
-            hashed_password=PasswordService().hash_password("1234"),
+            hashed_password=PasswordService().hash_password("Dilshod@1234"),
             is_superuser=True,
             role_id=2,
             email="admin@it911.uz",
