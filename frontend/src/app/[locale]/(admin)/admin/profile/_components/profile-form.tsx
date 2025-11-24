@@ -2,8 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import type { UserDetail } from "@/types/user.type";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,32 +15,51 @@ import {
 } from "@/components/ui/card";
 import { Mail, User, Phone, Briefcase, KeyRound } from "lucide-react";
 import { ErrorMassage } from "@/components/ui/error-message";
-
-const profileSchema = z.object({
-    full_name: z.string().min(2),
-    username: z.string().min(3),
-    email: z.string().email(),
-    phone_number: z.string().nullable().optional(),
-    role: z.any(),
-    is_superuser: z.boolean(),
-});
-
-
+import { type EmploySchemaType } from "@/schemas/employ.schema";
+import { useTransition } from "react";
+import { editUser } from "@/api/users/edit-user.api";
+import { useSession } from "next-auth/react";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
 export const ProfileForm = ({ user }: Props) => {
-
+    const [pending, startTransition] = useTransition();
+    const router = useRouter();
+    const session = useSession();
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting }
-    } = useForm<ProfileFormValues>({
-        resolver: zodResolver(profileSchema),
-        defaultValues: user,
+        formState: { errors }
+    } = useForm<EmploySchemaType>({
+        defaultValues: {
+            email: user.email,
+            full_name: user.full_name,
+            username: user.username,
+        },
     });
 
-    const onSubmit = (data: ProfileFormValues) => {
-        console.log("Данные профиля для отправки:", data);
-    };
+    const onSubmit = (values: Omit<EmploySchemaType, "password">) => {
+        startTransition(async () => {
+
+            const response = await editUser({
+                id: user.id,
+                body: {
+                    ...values,
+                    role_id: user.role_id
+                },
+                token: session.data?.user.accessToken
+            })
+
+            if (!response.ok) {
+                toastErrorResponse(response.data)
+                return;
+            }
+
+            toast.success("Сотрудник изменен");
+            router.refresh();
+        })
+    }
 
     return (
         <Card className="w-full max-w-4xl ">
@@ -137,19 +154,17 @@ export const ProfileForm = ({ user }: Props) => {
                 <CardFooter className="flex justify-end pt-6 border-t mt-6">
                     <Button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={pending}
                         variant={"black"}
                         size={"lg"}
                     >
-                        {isSubmitting ? "Сохранение..." : "Сохранить"}
+                        {pending ? "Сохранение..." : "Сохранить"}
                     </Button>
                 </CardFooter>
             </form>
         </Card>
     );
 };
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface Props {
     user: UserDetail;
