@@ -2,7 +2,6 @@ from asyncpg import UniqueViolationError, ForeignKeyViolationError
 
 from sqlalchemy.exc import IntegrityError, DBAPIError
 
-
 from core.exceptions import Conflict, BadRequest, Internal
 from core.session import async_session
 

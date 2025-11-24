@@ -12,7 +12,7 @@ until pg_isready -h "$host" -U "$user" > /dev/null 2>&1; do
 done
 
 echo "✅ Postgres is ready, running migrations..."
-alembic -c src/alembic.ini upgrade head
+alembic -c alembic.ini upgrade head
 
 echo "🚀 Starting FastAPI app..."
-python src/main.py
+python main.py
