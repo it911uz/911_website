@@ -1,0 +1,135 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from auth.services import PasswordService
+from core.models import Base
+from core.session import async_session
+from lead.models import LeadStatus
+from role.models import Permission, Role
+from user.models import User
+from user.repository import UserRepository
+
+
+async def init_permissions(session: AsyncSession):
+    actions = ["create", "view", "update", "delete"]
+
+    existing_permissions = (await session.execute(
+        select(Permission.codename)
+    )).scalars().all()
+
+    permissions = []
+    custom_permissions = [
+        "assign_permissions"
+    ]
+    tables = Base.metadata.tables.keys()
+    for table in tables:
+        for action in actions:
+            codename = f"{action}_{table}"
+            if codename not in existing_permissions:
+                permissions.append(Permission(
+                    codename=codename,
+                    name=f"{action.capitalize()} {table}"
+                ))
+    for codename in custom_permissions:
+        if codename not in existing_permissions:
+            permissions.append(Permission(
+                codename=codename,
+                name=codename
+            ))
+    if permissions:
+        session.add_all(permissions)
+        await session.flush()
+    return permissions
+
+
+async def create_status(session: AsyncSession):
+    # Получаем существующие ID статусов
+    result = await session.execute(select(LeadStatus.id))
+    existing_ids = set(result.scalars().all())
+
+    statuses = {
+        1: "Новый",
+        2: "В процессе",
+        3: "Обработанный"
+    }
+
+    # Создаём только те статусы, которых нет
+    new_statuses = [
+        LeadStatus(
+            id=status_id,
+            name=status_name,
+            hex="#000000",
+            level=status_id,
+            can_edit=False,
+            can_delete=False
+        )
+        for status_id, status_name in statuses.items()
+        if status_id not in existing_ids
+    ]
+
+    # Добавляем новые записи, если есть
+    if new_statuses:
+        session.add_all(new_statuses)
+        await session.commit()  # commit вместо flush, чтобы реально сохранить изменения
+
+    return new_statuses
+
+
+async def create_default_roles(session: AsyncSession):
+    existing_roles = (await session.execute(
+        select(Role.name)
+    )).scalars().all()
+
+    default_roles = [
+        {
+            "id": 1,
+            "name": "Новый Пользователь"
+        },
+        {
+            "id": 2,
+            "name": "Супер Пользователь"
+        },
+    ]
+    new_roles = []
+    for role in default_roles:
+        if role["name"] not in existing_roles:
+            new_roles.append(Role(
+                id=role["id"],
+                name=role["name"],
+            ))
+    if new_roles:
+        session.add_all(new_roles)
+        await session.flush()
+    return new_roles
+
+
+async def create_superuser(session: AsyncSession):
+    existing_superusers = (await session.execute(
+        select(User.username).where(User.username == "admin")
+    )).scalar_one_or_none()
+    if not existing_superusers:
+        repo = UserRepository(session)
+        await repo.create(
+            full_name="Admin",
+            username="admin",
+            hashed_password=PasswordService().hash_password("1234"),
+            is_superuser=True,
+            role_id=2,
+            email="admin@it911.uz",
+        )
+
+
+async def init_db():
+    async with async_session() as session:
+        permissions = await init_permissions(session)
+        print(f"{len(permissions)} permissions were created")
+        statuses = await create_status(session)
+        print(f"{len(statuses)} lead status were created")
+        roles = await create_default_roles(session)
+        print(f"{len(roles)} default roles were created")
+        await create_superuser(session)
+        await session.commit()
+
+
+
+
