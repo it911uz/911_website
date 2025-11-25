@@ -1,6 +1,5 @@
 services:
   api:
-    # image: 'shukhratbekovb/it911-backend:latest'
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -14,27 +13,10 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    # command: >
-    #   sh -c "alembic upgrade head && python main.py"
 
-  # frontend:
-  #   image: 'shukhratbekovb/it911-frontend:latest'
-  #   container_name: nextjs-app
-  #   depends_on:
-  #     - api
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #     - .env
-
-  #   # если хочешь live-обновления при разработке:
-  #   # volumes:
-  #   #   - ./frontend:/app
-  #   #   - /app/node_modules
-  #   restart: always
 
   postgres:
-    image: 'postgres:17.6-alpine3.22'
+    image: 'postgres:17'
     
     container_name: postgres
     restart: always
@@ -54,22 +36,7 @@ services:
     volumes:
       - redis_data:/data
     command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginx-proxy
-  #   restart: always
-  #   depends_on:
-  #     - api
-  #     - frontend
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-  #     - ./nginx/conf.d:/etc/nginx/conf.d:ro
-  #     - /etc/letsencrypt:/etc/letsencrypt:ro
-  #     - ./nginx/logs:/var/log/nginx
-  
+
 volumes:
   db_data:
   redis_data:

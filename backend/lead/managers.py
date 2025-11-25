@@ -5,25 +5,27 @@ from fastapi_filter.contrib.sqlalchemy import Filter
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.exceptions import NotFound, Forbidden
-from core.manager import BaseManager
+from core.manager import BaseManager, CacheMixin
 from core.repository import ModelType
 from core.services import S3Service
 
 from lead.models import LeadStatus
 from lead.repository import LeadRepository, LeadCommentRepository, LeadStatusRepository, LeadFileRepository
-from lead.schemas import LeadMove, LeadFileRead
+from lead.schemas import LeadMove, LeadFileRead, LeadRead
 
 from target.repository import TargetCompanyRepository
 
 from user.repository import UserRepository
 
 
-class LeadManager(BaseManager):
+class LeadManager(CacheMixin, BaseManager):
     repo_class = LeadRepository
     fk_fields = {
         "status_id": LeadStatusRepository,
         "target_id": TargetCompanyRepository
     }
+    cache_entity = "lead"
+    read_schema = LeadRead
 
     def __init__(
             self,

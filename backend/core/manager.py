@@ -1,10 +1,12 @@
 from typing import Any
 
-from fastapi_pagination import Params
+from fastapi_pagination import Params, Page
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.exceptions import NotFound, Conflict
 from core.repository import BaseRepository, ModelType
+from core.services import RedisService
 
 
 class FKValidationMixin:
@@ -61,6 +63,56 @@ class UniqueCheckMixin:
 
             if field_value is not None:
                 await self._check_unique(repo, field, field_value, obj_id)
+
+
+class CacheMixin:
+    cache_entity: str
+    cache: RedisService = RedisService()
+    read_schema: type[BaseModel]
+
+    async def get(self, obj_id, **kwargs):
+        key = self.cache.key(self.cache_entity, obj_id)
+        data = await self.cache.get(key)
+        if data:
+            return data
+        obj = self.read_schema.model_validate(await super().get(obj_id))
+        await self.cache.set(key, obj.model_dump())
+        return obj
+
+    async def list(
+            self,
+            filters=None, params: Params = None
+    ):
+        key = self.cache.key(
+            self.cache_entity,
+            filters=filters,
+            params=params
+        )
+        data = await self.cache.get(key)
+        if data:
+            return data
+        data = await super().list(filters, params)
+        if not isinstance(data, Page):
+            data = [
+                self.read_schema.model_validate(obj).model_dump() for obj in data
+            ]
+        else:
+            data = data.model_dump()
+            print(data)
+        await self.cache.set(key, data)
+        return data
+
+    async def create(self, **kwargs):
+        await self.cache.delete(self.cache_entity)
+        return await super().create(**kwargs)
+
+    async def update(self, obj_id, **kwargs):
+        await self.cache.delete(self.cache_entity)
+        return await super().update(obj_id, **kwargs)
+
+    async def delete(self, obj_id):
+        await self.cache.delete(self.cache_entity)
+        return await super().delete(obj_id)
 
 
 class BaseManager(FKValidationMixin, UniqueCheckMixin):
