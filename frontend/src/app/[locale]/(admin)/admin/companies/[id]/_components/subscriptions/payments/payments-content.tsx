@@ -1,9 +1,14 @@
-import { getCompanyPayment } from "@/api/companies/get-company-payment.ai";
+import { getCompanyPayment } from "@/api/companies/get-company-payments.api";
 import { PaymentsSheet } from "./payments-sheet";
+import { auth } from "@/auth";
 
 export const PaymentsContent = async ({ companyId, subscriptionId }: Props) => {
-    const { data } = await getCompanyPayment({ companyId, subscriptionId });
-    return <PaymentsSheet paymentsData={data} />
+    const session = await auth();
+
+    const { data } = await getCompanyPayment({ companyId, subscriptionId, token: session?.user.accessToken });
+
+
+    return <PaymentsSheet paymentsData={data} subscriptionId={subscriptionId} />
 };
 
 interface Props {

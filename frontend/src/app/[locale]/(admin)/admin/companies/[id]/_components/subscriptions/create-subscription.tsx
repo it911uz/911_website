@@ -176,8 +176,8 @@ export const CreateSubscription = () => {
 
                     {selectedService?.is_subscription && ["monthly", "annually"].includes(watchPaymentType || "") && (
                         <Field>
-                            <FieldLabel className="text-lg">
-                                Дата окончания (опционально)
+                            <FieldLabel required className="text-lg">
+                                Дата окончания
                             </FieldLabel>
                             <Input
                                 type="date"
