@@ -64,10 +64,10 @@ export const CreateEmploy = () => {
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                 <Field>
                     <FieldLabel className="text-lg" required htmlFor="name">
-                        Название
+                        ФИО
                     </FieldLabel>
 
-                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("full_name")} />
+                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите ФИО" {...register("full_name")} />
 
                     <ErrorMassage error={errors.full_name?.message} />
                 </Field>

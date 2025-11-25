@@ -4,10 +4,11 @@ import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow, Ta
 import { ClientNoData } from "@/components/widgets/client-no-data";
 import { searchParamsCache } from "@/lib/search-params.util";
 import { toMoney } from "@/lib/utils";
-import { PAYMENT_TYPE_VALUES, PAYMENT_TYPES, type PaymentType } from "@/schemas/company.schema";
+import {  PAYMENT_TYPES, type PaymentType } from "@/schemas/company.schema";
 import dayjs from "dayjs";
 import { EditSubscription } from "./edit-subscription";
 import { DeleteSubscription } from "./delete-subscription";
+import { PaymentsContent } from "./payments/payments-content";
 
 export const SubscriptionTable = async ({ companyId }: Props) => {
 
@@ -107,6 +108,8 @@ export const SubscriptionTable = async ({ companyId }: Props) => {
                                         <EditSubscription subscription={subscription} />
 
                                         <DeleteSubscription id={subscription.id} />
+
+                                        <PaymentsContent subscriptionId={subscription.id} companyId={companyId} />
                                     </div>
                                 </TableCell>
                             </TableRow>
