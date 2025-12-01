@@ -1,6 +1,6 @@
 services:
   api:
-    image: 'shukhratbekovb/it911-backend:latest'
+    image: 'shukhratbekovb/it911-backend:main'
     container_name: fastapi-app
     env_file:
       - .env
@@ -13,7 +13,7 @@ services:
       - ./backend:/app
 
   frontend:
-    image: 'shukhratbekovb/it911-frontend:latest'
+    image: 'shukhratbekovb/it911-frontend:main'
     container_name: nextjs-app
     depends_on:
       - api
