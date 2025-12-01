@@ -5,38 +5,41 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
-import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMassage } from "@/components/ui/error-message";
 import { useTransition } from "react";
-import { createLeadStatus } from "@/api/leads/create-lead-status.api";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { taskStatusSchema, type TaskStatusSchemaType } from "@/schemas/task.schema";
+import { createTaskStatus } from "@/api/tasks/create-task-status.api";
+import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateColumn = () => {
     const { open, onOpenChange } = useOpen();
     const session = useSession();
     const [pending, startTransition] = useTransition();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<ColumnSchemaType>({
-        resolver: zodResolver(columnSchema)
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<TaskStatusSchemaType>({
+        resolver: zodResolver(taskStatusSchema)
     });
+    const router = useRouter();
 
-    const onSubmit = (values: ColumnSchemaType) => {
+    const onSubmit = (values: TaskStatusSchemaType) => {
         startTransition(async () => {
-            const response = await createLeadStatus({
+            const response = await createTaskStatus({
                 body: values,
                 token: session.data?.user.accessToken
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 
             toast.success("Колонка создана");
-            window.location.reload();
+            router.refresh();
             reset();
             onOpenChange(false);
         })
@@ -73,6 +76,18 @@ export const CreateColumn = () => {
                     <Input color="light" defaultValue={"#000"} id="hex" type="color" sizes={"lg"} {...register("hex")} />
 
                     <ErrorMassage error={errors.hex?.message} />
+                </Field>
+
+                <Field>
+                    <FieldLabel className="text-lg" required htmlFor="checkbox">
+                        Завершенные
+                    </FieldLabel>
+
+                    <div>
+                        <Input color="light" id="checkbox" type="checkbox" {...register("is_completed")} />
+                    </div>
+
+                    <ErrorMassage error={errors.is_completed?.message} />
                 </Field>
 
                 <Button loading={pending} variant={"black"} size={"lg"}>

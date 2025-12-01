@@ -1,3 +1,4 @@
+import { CompaniesFilter } from "./companies-filter";
 import { CompaniesTable } from "./companies-table";
 import { CreateCompany } from "./create-company";
 
@@ -20,6 +21,8 @@ export const CompaniesContent = async () => {
                 <CreateCompany />
             </div>
         </section>
+
+        <CompaniesFilter />
 
         <CompaniesTable />
     </>

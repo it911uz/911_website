@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+      - test
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      TAG: ${{ github.ref_name }}
 
     steps:
       - name: Checkout repo
@@ -21,24 +25,32 @@ jobs:
 
       - name: Build and push backend image
         run: |
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/it911-backend:latest ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/it911-backend:latest
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/it911-backend:$TAG ./backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/it911-backend:$TAG
 
       - name: Build and push frontend image
         run: |
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/it911-frontend:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/it911-frontend:latest
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/it911-frontend:$TAG ./frontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/it911-frontend:$TAG
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ github.ref_name == 'main' && secrets.SERVER_HOST || secrets.SERVER_HOST_TEST }}
+          username: ${{ github.ref_name == 'main' && secrets.SERVER_USER || secrets.SERVER_USER_TEST }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /opt/it911
+
+            # выбираем docker-compose файл
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              COMPOSE_FILE="docker-compose.yml"
+            else
+              COMPOSE_FILE="docker-compose.test.yml"
+            fi
+
             git pull
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d --build
-            # docker system prune -af
+            docker-compose -f $COMPOSE_FILE down
+            docker-compose -f $COMPOSE_FILE pull
+            docker-compose -f $COMPOSE_FILE up -d --build
+            

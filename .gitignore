@@ -52,8 +52,8 @@ frontend/.pnpm-debug.log*
 # 🔐 Environment files
 # (keep example but ignore real envs)
 # ────────────────────────────────
-!frontend/.env.example
-.env*
+frontend/.env.*
+# .env.*
 
 # ────────────────────────────────
 # ▲ Vercel deployment

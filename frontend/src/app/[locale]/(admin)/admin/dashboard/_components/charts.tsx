@@ -23,7 +23,14 @@ export const Charts = () => {
                 type: "line",
                 data: [20, 29, 37, 36, 44, 45, 50, 58],
             },
+
+
+
+
         ],
+
+
+        
         options: {
             chart: {
                 height: 350,

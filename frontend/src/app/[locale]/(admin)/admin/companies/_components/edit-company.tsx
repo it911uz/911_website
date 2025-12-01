@@ -24,6 +24,7 @@ import {
 import { useRouter } from "@/i18n/navigation";
 import { updateCompany } from "@/api/companies/update-company.api";
 import type { Company } from "@/types/company.type";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const EditCompany = ({ company }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -51,7 +52,7 @@ export const EditCompany = ({ company }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

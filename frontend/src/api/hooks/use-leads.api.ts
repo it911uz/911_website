@@ -1,7 +1,6 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { getLeadComments } from "../leads/get-lead-comments.api"
 import { getLeadFiles } from "../leads/get-lead-files.api";
-import { getLeads } from "../leads/get-leads.api";
 import { getLeadStatuses } from "../leads/get-lead-statuses.api";
 
 export const leadsQueryKey = {
@@ -10,9 +9,6 @@ export const leadsQueryKey = {
     },
     files: {
         getFiles: (leadId: number) => ['lead-files', leadId],
-    },
-    leads: {
-        getInfiniteLeads: "infinite-leads",
     },
     status: {
         getLeadStatuses: "lead-statuses",
@@ -45,48 +41,6 @@ interface LeadFilesProps {
     enabled?: boolean;
     token?: string;
     leadId: number;
-}
-
-export const useGetInfiniteLeads = ({ fromDate, toDate, targetId, orderBy, token, statusIds }: GetInfiniteLeadsProps) => {
-    return useInfiniteQuery({
-        queryKey: [leadsQueryKey.leads.getInfiniteLeads, { fromDate, toDate, targetId, orderBy, token, statusIds }],
-        queryFn: async ({ pageParam = 1 }) => {
-            return await getLeads({
-                page: pageParam,
-                fromDate,
-                toDate,
-                targetId,
-                orderBy,
-                token,
-                statusIds
-            })
-        },
-        getNextPageParam: (lastPage) => {
-            if (lastPage?.data.size < lastPage?.data.total) {
-                return lastPage.data.page + 1
-            }
-            return undefined;
-        },
-        initialData: () => {
-            return {
-                pages: [],
-                pageParams: [],
-            };
-        },
-        refetchOnWindowFocus: false,
-        initialPageParam: 1,
-        maxPages: 20,
-        enabled: false,
-    });
-}
-
-interface GetInfiniteLeadsProps {
-    token?: string;
-    targetId?: string;
-    orderBy?: string;
-    fromDate?: string;
-    toDate?: string;
-    statusIds?: number[]
 }
 
 export const useGetLeadStatuses = ({ token, enabled }: GetLeadStatusesProps) => {

@@ -16,6 +16,7 @@ import { editLeadStatus } from "@/api/leads/edit-lead-status.api";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const ColumnEdit = ({ columnsData }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -39,7 +40,7 @@ export const ColumnEdit = ({ columnsData }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 

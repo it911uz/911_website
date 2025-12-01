@@ -15,6 +15,7 @@ import { roleSchema, type RoleSchemaType } from "@/schemas/role.schema";
 import { useRouter } from "@/i18n/navigation";
 import { createRole } from "@/api/roles/create-role.api";
 import { useSession } from "next-auth/react";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateRole = () => {
     const { open, onOpenChange } = useOpen();
@@ -35,7 +36,7 @@ export const CreateRole = () => {
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Произошла ошибка")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -51,7 +52,7 @@ export const CreateRole = () => {
             <Plus />
 
             <span>
-                Создать роль
+                Создать
             </span>
         </Button>
 

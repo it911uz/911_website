@@ -4,12 +4,13 @@ import { deleteLeadStatus } from "@/api/leads/delete-lead-status.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export const DeleteColumn = ({columnId}:Props) => {
+export const DeleteColumn = ({ columnId, hasTasks }: Props) => {
     const { open, onOpenChange } = useOpen();
 
     const [pending, startTransition] = useTransition();
@@ -24,17 +25,17 @@ export const DeleteColumn = ({columnId}:Props) => {
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 
             toast.success("Колонка удалена");
-            window.location.reload();
+            router.refresh();
             onOpenChange(false);
         })
     }
 
-    return <AlertDialog open={open} onOpenChange={onOpenChange}>
+    return hasTasks ? <AlertDialog open={open} onOpenChange={onOpenChange}>
         <Trash2 className="hover:text-red-500 text-2xl cursor-pointer" onClick={() => onOpenChange(true)} />
         <AlertDialogContent>
             <AlertDialogHeader>
@@ -50,9 +51,10 @@ export const DeleteColumn = ({columnId}:Props) => {
                 <AlertDialogAction onClick={handleRemove} loading={pending} colors={"red"}>Удалить</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
-    </AlertDialog>
+    </AlertDialog> : null
 }
 
 interface Props {
-    columnId: number
+    columnId: number;
+    hasTasks: boolean;
 }

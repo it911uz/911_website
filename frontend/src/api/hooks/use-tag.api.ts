@@ -1,21 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
 import { getTags } from "../tags/get-tags.api"
-import type { BaseApiParams } from "@/types/share.type"
 
 export const tagsQueryKey = {
     getTags: "get-all-tags",
 }
 
-export const useGetTags = ({ enabled, token, perPage, page }: GetTagsProps) => {
+export const useGetTags = ({ enabled, token, }: GetTagsProps) => {
     return useQuery({
-        queryKey: [tagsQueryKey.getTags, { perPage, page }],
-        queryFn: async () => await getTags({ token, perPage, page }),
+        queryKey: [tagsQueryKey.getTags],
+        queryFn: async () => await getTags({ token, }),
         enabled,
     });
 }
 
-interface GetTagsProps extends BaseApiParams {
-    token?: string
+interface GetTagsProps {
+    token?: string;
     enabled?: boolean
 }
-

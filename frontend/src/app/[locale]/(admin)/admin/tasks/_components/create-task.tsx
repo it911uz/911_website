@@ -18,6 +18,8 @@ import { useRouter } from "@/i18n/navigation";
 import { SelectStatus } from "./select-status";
 import { SelectTags } from "./select-tags";
 import { SelectUsers } from "./select-users";
+import { createTask } from "@/api/tasks/create-task.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const CreateTask = () => {
     const { open, onOpenChange } = useOpen();
@@ -30,7 +32,22 @@ export const CreateTask = () => {
 
     const onSubmit = (values: TaskSchemaType) => {
         startTransition(async () => {
+            const response = await createTask({
+                body: {
+                    deadline: values.deadline,
+                    description: values.description,
+                    name: values.name,
+                    status_id: values.status_id,
+                    tag_ids: values.tags,
+                    user_ids: values.users
+                },
+                token: session.data?.user.accessToken
+            });
 
+            if (!response.ok) {
+                toastErrorResponse(response.data)
+                return;
+            }
 
             toast.success("Таск создан");
             router.refresh();
@@ -48,7 +65,7 @@ export const CreateTask = () => {
             </span>
         </Button>
 
-        <SheetContent className="w-2/5">
+        <SheetContent className="w-3/5">
             <SheetHeader>
                 <SheetTitle>Создание таска</SheetTitle>
             </SheetHeader>
@@ -82,7 +99,9 @@ export const CreateTask = () => {
                             Статус
                         </FieldLabel>
 
-                        <SelectStatus onValueChange={field.onChange} />
+                        <SelectStatus onValueChange={(v) => field.onChange(Number(v))} />
+
+                        <ErrorMassage error={errors.status_id?.message} />
                     </Field>}
                 />
 
@@ -95,9 +114,11 @@ export const CreateTask = () => {
                         </FieldLabel>
 
                         <SelectTags
-                            defaultValue={field.value?.map(item => item.toString())}
-                            onValueChange={field.onChange}
+                            defaultValue={field.value?.map(String)}
+                            onValueChange={(arr) => field.onChange(arr.map(Number))}
                         />
+
+                        <ErrorMassage error={errors.tags?.message} />
                     </Field>}
                 />
 
@@ -110,8 +131,8 @@ export const CreateTask = () => {
                         </FieldLabel>
 
                         <SelectUsers
-                            defaultValue={field.value?.map(item => item.toString())}
-                            onValueChange={field.onChange}
+                            defaultValue={field.value?.map(String)}
+                            onValueChange={(arr) => field.onChange(arr.map(Number))}
                         />
                     </Field>}
                 />

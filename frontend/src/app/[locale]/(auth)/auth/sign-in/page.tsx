@@ -1,11 +1,7 @@
 import { FormContent } from "./_components/form-content";
 
-const Page = () => {
-  return (
-    <>
-      <FormContent />
-    </>
-  )
+const Page = async () => {
+  return <FormContent />
 }
 
 

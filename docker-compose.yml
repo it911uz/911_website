@@ -11,8 +11,6 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    # command: >
-    #   sh -c "alembic upgrade head && python main.py"
 
   frontend:
     image: 'shukhratbekovb/it911-frontend:latest'
@@ -23,15 +21,10 @@ services:
       - "3000:3000"
     env_file:
       - .env
-
-    # если хочешь live-обновления при разработке:
-    # volumes:
-    #   - ./frontend:/app
-    #   - /app/node_modules
     restart: always
 
   postgres:
-    image: 'postgres:17.6-alpine3.22'
+    image: 'postgres:17'
     container_name: postgres
     restart: always
     env_file:

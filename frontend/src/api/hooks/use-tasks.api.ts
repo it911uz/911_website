@@ -1,4 +1,3 @@
-import type { BaseApiParams } from "@/types/share.type";
 import { useQuery } from "@tanstack/react-query";
 import { getTasksStatuses } from "../tasks/get-task-statuses.api";
 
@@ -8,15 +7,15 @@ export const tasksQueryKey = {
     },
 }
 
-export const useGetTasksStatuses = ({ token, enabled, perPage, page }: GetLeadStatusesProps) => {
+export const useGetTasksStatuses = ({ token, enabled }: GetLeadStatusesProps) => {
     return useQuery({
         queryKey: [tasksQueryKey.status.getTasksStatuses],
-        queryFn: async () => await getTasksStatuses({ token, perPage, page }),
+        queryFn: async () => await getTasksStatuses({ token }),
         enabled,
     })
 }
 
-interface GetLeadStatusesProps extends BaseApiParams {
+interface GetLeadStatusesProps {
     token?: string;
     enabled?: boolean
 }

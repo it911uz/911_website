@@ -1,4 +1,4 @@
-import { getTarget } from "@/api/target/get-target.api"
+import { getTargets } from "@/api/target/get-targets.api"
 import { Table, TableBody, TableHeader, TableHeaderCell, TableWrapper } from "@/components/ui/table"
 import { searchParamsCache } from "@/lib/search-params.util";
 import { TargetTableRow } from "./target-table-row";
@@ -11,7 +11,7 @@ export const TargetTable = async () => {
 
     const session = await auth();
 
-    const { data } = await getTarget({
+    const { data } = await getTargets({
         page: page,
         perPage: perPage,
         isActive: isActive,

@@ -1,7 +1,7 @@
 import { http } from "@/lib/https.util";
 import { createSearchParams } from "@/lib/utils";
-import type { BaseApiParams, ResponseWithPagination } from "@/types/share.type";
-import type { Tag } from "@/types/tag.type";
+import type { ActionResponse, BaseApiParams } from "@/types/share.type";
+import type { Tag } from "@/types/tasks.type";
 
 export const getTags = async ({ token, page, perPage }: Params) => {
 
@@ -10,7 +10,7 @@ export const getTags = async ({ token, page, perPage }: Params) => {
         size: perPage
     });
 
-    return await http.get<ResponseWithPagination<Tag[]>>("tags/", {
+    return await http.get<ActionResponse<Tag[]>>("tags/", {
         token,
         searchParams
     });

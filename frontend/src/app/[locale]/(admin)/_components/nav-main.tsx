@@ -1,4 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Hint } from "@/components/ui/hint"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { Link } from "@/i18n/navigation"
 
@@ -15,7 +16,6 @@ export const NavMain = ({ items }: Props) => {
             >
                 {
                     (item.items?.length ?? 0) > 0 ? <>
-
                         <AccordionItem value={index.toString()}>
                             <AccordionTrigger className="text-md gap-2.5">
                                 <div className="flex gap-2">
@@ -31,8 +31,10 @@ export const NavMain = ({ items }: Props) => {
                                     {item.items?.map((subItem) => {
                                         return <SidebarMenuItem className="py-0.5" key={subItem.title}>
                                             <SidebarMenuButton>
-                                                <Link href={subItem.url} className="hover:text-orange-500 text-md">
-                                                    {subItem.title}
+                                                <Link href={subItem.url} className="hover:text-orange-500 text-md inline-flex items-center gap-2">
+                                                    <span>{subItem.title}</span>
+
+                                                    <Hint />
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
@@ -40,13 +42,14 @@ export const NavMain = ({ items }: Props) => {
                                 </SidebarMenu>
                             </AccordionContent>
                         </AccordionItem>
-
                     </> : <>
                         <SidebarMenu className="px-4 text-lg">
                             <SidebarMenuItem className="px-0.5">
                                 <Link href={item.url ?? "#!"} className="inline-flex items-center gap-2 hover:text-orange-500">
                                     <Icon />
-                                    {item.title}
+                                    <span>{item.title}</span>
+
+                                    <Hint />
                                 </Link>
                             </SidebarMenuItem>
                         </SidebarMenu>

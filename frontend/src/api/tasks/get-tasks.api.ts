@@ -1,18 +1,20 @@
 import { http } from "@/lib/https.util";
 import { createSearchParams } from "@/lib/utils";
-import type { BaseApiParams, ResponseWithPagination } from "@/types/share.type";
-import type { TaskStatus } from "@/types/tasks.type";
+import type { ActionResponse, BaseApiParams } from "@/types/share.type";
+import type { Task } from "@/types/tasks.type";
 
-export const getTasks = async ({ token, page, perPage, query, deadline }: Params) => {
+export const getTasks = async ({ token, page, perPage, query, status, users, tags }: Params) => {
 
     const searchParams = createSearchParams({
         page,
         size: perPage,
-        name__ilike: query,
-        deadline__gte: deadline
+        q: query,
+        status_id__in: status,
+        users__id__in: users,
+        tags__id__in: tags
     });
 
-    return await http.get<ResponseWithPagination<TaskStatus[]>>("tasks/", {
+    return await http.get<ActionResponse<Task[]>>("tasks/", {
         token,
         searchParams,
     });
@@ -21,5 +23,7 @@ export const getTasks = async ({ token, page, perPage, query, deadline }: Params
 interface Params extends BaseApiParams {
     token?: string;
     query?: string;
-    deadline?: string;
+    status?: number[];
+    users?: number[];
+    tags?: number[];
 }

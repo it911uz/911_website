@@ -8,6 +8,7 @@ import type { LeadType } from "./columns";
 import { editLeadPosition } from "@/api/leads/edit-lead-position";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const SelectStatus = ({ lead }: Props) => {
     const session = useSession();
@@ -29,7 +30,7 @@ export const SelectStatus = ({ lead }: Props) => {
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -44,7 +45,7 @@ export const SelectStatus = ({ lead }: Props) => {
         </SelectTrigger>
         <SelectContent>
             {
-                data?.data.items.map((item) => (
+                data?.data.map((item) => (
                     <SelectItem key={item.id} value={item.id.toString()}>
                         {item.name}
                     </SelectItem>

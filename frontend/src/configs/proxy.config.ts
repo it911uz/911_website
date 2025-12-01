@@ -9,7 +9,6 @@ import { Env } from "./env.config";
 import { defaultLocale, locales } from "./i18n.config";
 import { Routers } from "./router.config";
 import { getMe } from "@/api/auth/get-me.api";
-import { WebOrigin } from "@/const/web-origin.const";
 
 export const intlMiddleware = createMiddleware({
 	locales,
@@ -37,9 +36,8 @@ function shouldRefreshToken(jwt: JWT | null): boolean {
 	const now = Date.now();
 	const remaining = jwt.expiresAt - now;
 
-	const threshold = 5 * 60 * 1000; // Обновляем токен, если осталось меньше 5 минут (300000 мс)
+	const threshold = 5 * 60 * 1000;
 
-	console.log("Текущее время:", new Date(now).toISOString());
 	console.log("Время истечения токена:", new Date(jwt.expiresAt).toISOString());
 	console.log("Осталось до истечения:", Math.round(remaining / 60000), "минут");
 
@@ -53,7 +51,6 @@ async function mySignOut(request: NextRequest) {
 		path: "/",
 		secure: true,
 		httpOnly: true,
-		// domain: request.nextUrl.hostname,
 	});
 	return res;
 }
@@ -116,7 +113,6 @@ async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
 	res.cookies.set({
 		name: SESSION_TOKEN_NAME,
 		value: encodedSession,
-		// domain: request.nextUrl.hostname,
 		path: "/",
 		httpOnly: true,
 		secure: true,
@@ -126,60 +122,12 @@ async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
 	return res;
 }
 
-const checkWebOrigin = (request: NextRequest): NextResponse | null => {
-	const origin = request.headers.get("origin") || request.nextUrl.origin;
-	const pathname = request.nextUrl.pathname;
-
-	const adminPages = [
-		Routers.admin.dashboard,
-		Routers.admin.tasks,
-		Routers.admin.leads,
-		Routers.admin.clients,
-		Routers.auth.signUp,
-		Routers.auth.forgotPassword,
-		Routers.auth.newPassword,
-		Routers.auth.signIn,
-	];
-
-	const clientPages = [
-		Routers.home,
-		Routers.contacts,
-		Routers.news,
-		Routers.brands,
-		Routers.about,
-	];
-
-	// Проверяем источник и допустимые маршруты
-	if (origin === WebOrigin.admin) {
-		const isAdminPath = adminPages.some((p) => pathname.startsWith(p));
-		if (!isAdminPath) {
-			console.warn(`[OriginCheck] ❌ Клиентская страница (${pathname}) запрошена с admin-домена.`);
-			return NextResponse.redirect(new URL(Routers.admin.dashboard, WebOrigin.admin));
-		}
-	} else if (origin === WebOrigin.client) {
-		const isClientPath = clientPages.some((p) => pathname.startsWith(p));
-		if (!isClientPath) {
-			console.warn(`[OriginCheck] ❌ Админ-страница (${pathname}) запрошена с client-домена.`);
-			return NextResponse.redirect(new URL(Routers.home, WebOrigin.client));
-		}
-	} else {
-		console.warn(`[OriginCheck] ⚠️ Неизвестный источник: ${origin}`);
-	}
-
-	return null;
-};
-
-
 export const proxyMiddleware = async (
 	request: NextRequest,
 ): Promise<NextResponse<unknown>> => {
 	const pathname = request.nextUrl.pathname;
 	const pathWithoutLocale = removeLocaleFromPath(pathname);
 	const isPrivateRoute = isProtectedRoute(pathWithoutLocale);
-
-	// Проверяем источник и домен
-	const originCheck = checkWebOrigin(request);
-	if (originCheck) return originCheck;
 
 	// Получаем JWT
 	const jwt = await getToken({

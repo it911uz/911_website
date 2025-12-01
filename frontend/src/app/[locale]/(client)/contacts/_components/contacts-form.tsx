@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { searchParamsParsers } from "@/lib/search-params.util";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const ContactsForm = () => {
     const t = useTranslations("ContactsPage.Form");
@@ -34,7 +35,7 @@ export const ContactsForm = () => {
             });
 
             if (!response.ok) {
-                toast.error("Произошла ошибка");
+                toastErrorResponse(response.data)
                 return;
             }
 

@@ -1,18 +1,13 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Header } from "./_components/header";
-import { SectionPromo } from "./_components/content";
 import type { Metadata } from "next";
+import { ComingSoon } from "@/components/ui/coming-soon";
 
 const Page = async ({ params }: PageProps<"/[locale]/promotion">) => {
     const { locale } = await params;
     setRequestLocale(locale as Locale);
 
-    return <>
-        <Header />
-
-        <SectionPromo />
-    </>
+    return <ComingSoon />
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {

@@ -9,23 +9,24 @@ import { Column } from "./column";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
-import { editLeadPosition } from "@/api/leads/edit-lead-position";
-import type { Lead } from "@/types/leads.type";
-import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.api";
+import type { Task } from "@/types/tasks.type";
+import { editTaskStatusPosition } from "@/api/tasks/edit-task-status-position.api";
+import { editTaskPosition } from "@/api/tasks/edit-task-position.api";
+import { toastErrorResponse } from "@/lib/toast-error-response.util";
 
 export const Columns = ({ columnsData = [] }: Props) => {
     const [pending, startTransition] = useTransition();
-    const [activeItem, setActiveItem] = useState<{ type: "column" | "lead"; data: any } | null>(null);
+    const [activeItem, setActiveItem] = useState<{ type: "column" | "task"; data: any } | null>(null);
     const session = useSession();
     const router = useRouter();
     const [optimisticColumns, setOptimisticColumns] = useOptimistic<ColumnType[]>(columnsData);
 
     const findColumnContainer = (id: string): ColumnType | null => {
-        const isLead = id.startsWith("lead-");
-        const isContainer = id.startsWith("leads-container-");
+        const isLead = id.startsWith("task-");
+        const isContainer = id.startsWith("tasks-container-");
         const numericId = Number(id.replace(/\D+/g, ""));
         if (isLead) {
-            return optimisticColumns.find((col) => col.leads.some((lead) => lead.id === numericId)) ?? null;
+            return optimisticColumns.find((col) => col.tasks.some((lead) => lead.id === numericId)) ?? null;
         }
         if (isContainer) {
             return optimisticColumns.find((col) => col.columnId === numericId) ?? null;
@@ -44,11 +45,11 @@ export const Columns = ({ columnsData = [] }: Props) => {
             return;
         }
 
-        if (id.startsWith("lead-")) {
-            const numericId = Number(id.replace("lead-", ""));
+        if (id.startsWith("task-")) {
+            const numericId = Number(id.replace("task-", ""));
             const activeCol = findColumnContainer(id);
-            const activeLead = activeCol?.leads.find((i) => i.id === numericId);
-            if (activeLead) setActiveItem({ type: "lead", data: activeLead });
+            const activeLead = activeCol?.tasks.find((i) => i.id === numericId);
+            if (activeLead) setActiveItem({ type: "task", data: activeLead });
         }
     };
 
@@ -63,7 +64,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
         const activeNumeric = Number(activeId.replace(/\D+/g, ""));
         let overNumeric = Number(overId.replace(/\D+/g, ""));
 
-        if (activeId.startsWith("column-") && (overId.startsWith("lead-") || overId.startsWith("leads-container-"))) {
+        if (activeId.startsWith("column-") && (overId.startsWith("task-") || overId.startsWith("tasks-container-"))) {
             const overCol = findColumnContainer(overId);
             if (overCol) overNumeric = overCol.columnId;
         }
@@ -81,7 +82,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 const column = body.find((item) => item.columnId === activeNumeric);
                 if (!column) return;
 
-                const response = await editLeadStatusPosition({
+                const response = await editTaskStatusPosition({
                     token: session.data?.user?.accessToken,
                     body: {
                         status_id: column.columnId,
@@ -90,11 +91,11 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 })
 
                 if (!response.ok) {
-                    toast.error(response.data.detail || "Не удалось изменить порядок колонок")
+                    toastErrorResponse(response.data)
                     return;
                 }
 
-                toast.success("Колонка успешно перемещена")
+                toast.success("Колонка перемещена");
                 setOptimisticColumns(body);
                 router.refresh();
             });
@@ -110,15 +111,15 @@ export const Columns = ({ columnsData = [] }: Props) => {
         const activeNumericId = Number(activeId.replace(/\D+/g, ""));
         const overNumericId = Number(overId.replace(/\D+/g, ""));
 
-        const oldIndex = activeCol.leads.findIndex((i) => i.id === activeNumericId);
-        const newIndex = overCol.leads.findIndex((i) => i.id === overNumericId);
+        const oldIndex = activeCol.tasks.findIndex((i) => i.id === activeNumericId);
+        const newIndex = overCol.tasks.findIndex((i) => i.id === overNumericId);
 
         if (activeCol.columnId !== overCol.columnId) {
-            const activeLead = activeCol.leads[oldIndex];
+            const activeLead = activeCol.tasks[oldIndex];
             if (!activeLead) return;
 
-            const updatedSource = activeCol.leads.filter((i) => i.id !== activeNumericId);
-            const updatedTarget = [...overCol.leads];
+            const updatedSource = activeCol.tasks.filter((i) => i.id !== activeNumericId);
+            const updatedTarget = [...overCol.tasks];
             const insertAt = newIndex >= 0 ? newIndex : updatedTarget.length;
 
             updatedTarget.splice(insertAt, 0, {
@@ -141,49 +142,50 @@ export const Columns = ({ columnsData = [] }: Props) => {
             startTransition(async () => {
                 setOptimisticColumns(newColumns);
 
-                const response = await editLeadPosition({
+                const response = await editTaskPosition({
                     token: session.data?.user.accessToken,
                     body: {
-                        lead_id: activeLead.id,
+                        task_id: activeLead.id,
                         status_id: overCol.columnId,
                     },
                 });
 
                 if (!response.ok) {
-                    toast.error(response.data.detail || "Не удалось переместить задачу")
+                    console.log(response);
+
+                    toastErrorResponse(response.data)
                     return;
                 }
 
-                toast.success("Задача перемещена")
+                toast.success("Таск перемещен");
                 router.refresh();
             });
 
             return;
         }
 
-        const newLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
+        const newLeads = arrayMove(activeCol.tasks, oldIndex, newIndex);
 
-        const newColumns = optimisticColumns.map((column) => {
-            if (column.columnId === activeCol.columnId) {
-                return { ...column, leads: newLeads };
-            }
-            return column;
-        })
-
+        setOptimisticColumns((columns) =>
+            columns.map((column) => {
+                if (column.columnId === activeCol.columnId) {
+                    return { ...column, leads: newLeads };
+                }
+                return column;
+            })
+        );
 
         startTransition(async () => {
-            setOptimisticColumns(newColumns);
-
-            const response = await editLeadPosition({
+            const response = await editTaskPosition({
                 token: session.data?.user.accessToken,
                 body: {
-                    lead_id: activeCol.leads[oldIndex]?.id || 0,
+                    task_id: activeCol.tasks[oldIndex]?.id || 0,
                     status_id: activeCol.columnId,
                 },
             });
 
             if (!response.ok) {
-                toast.error(response.data.detail || "Не удалось обновить позицию задачи")
+                toastErrorResponse(response.data)
                 return;
             }
 
@@ -198,7 +200,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
                     <div className={cn("grid overflow-x-auto gap-5")} style={{ gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)` }}>
                         <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
                             {optimisticColumns.map((column) => (
-                                <SortableContext key={column.columnId} id={`column-${column.columnId}`} items={column.leads.map((i) => `lead-${i.id}`)}>
+                                <SortableContext key={column.columnId} id={`column-${column.columnId}`} items={column.tasks.map((i) => `task-${i.id}`)}>
                                     <Column key={column.columnId} columnData={column} />
                                 </SortableContext>
                             ))}
@@ -212,9 +214,9 @@ export const Columns = ({ columnsData = [] }: Props) => {
                             <Column columnData={activeItem.data} />
                         </div>
                     )}
-                    {activeItem?.type === "lead" && (
+                    {activeItem?.type === "task" && (
                         <div className="opacity-80 scale-[1.02]">
-                            <TaskCard lead={activeItem.data} />
+                            <TaskCard task={activeItem.data} />
                         </div>
                     )}
                 </DragOverlay>
@@ -227,7 +229,7 @@ interface Props {
     columnsData: ColumnType[];
 }
 
-export interface LeadType extends Pick<Lead, "full_name" | "company_name" | "company_info" | "phone" | "email" | "id" | "created_at"> {
+export interface LeadType extends Omit<Task, "status" | "status_id"> {
     status: number;
     position: number;
 }
@@ -236,5 +238,7 @@ export interface ColumnType {
     columnId: number;
     name: string;
     position: number;
-    leads: LeadType[];
+    isCompleted: boolean;
+    tasks: LeadType[];
+    hex: string;
 }

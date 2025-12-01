@@ -15,6 +15,8 @@ import {
   CheckSquare,
   ShieldCheck,
   Building2,
+  Wrench,
+  Users,
 } from "lucide-react"
 import { Routers } from "@/configs/router.config"
 import { NavMain } from "./nav-main"
@@ -23,7 +25,7 @@ import { NavUser } from "./nav-user"
 export const menus = {
   navMain: [
     {
-      title: "Дашбоард",
+      title: "Дашборд",
       url: Routers.admin.dashboard,
       icon: LayoutDashboard,
     },
@@ -70,9 +72,15 @@ export const menus = {
         {
           title: "Сотрудники",
           url: Routers.admin.employees,
+          icon: Users
         },
       ],
     },
+    {
+      title: "Услуги",
+      url: Routers.admin.services,
+      icon: Wrench,
+    }
   ],
 }
 
@@ -82,7 +90,7 @@ export const AppSidebar = async () => {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="p-5">
-            <Image className="w-full h-full" src={LogoImage} alt="Logo" priority />
+            <Image className="w-full h-full" src={LogoImage} alt="Logo" />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
