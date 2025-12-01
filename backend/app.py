@@ -9,6 +9,7 @@ from core.init_db import init_db
 from auth.router import router as auth_router
 from clicks.router import router as click_router
 from company.routers import router as company_router
+from dashboard.router import router as dashboard_router
 from lead.routers import router as lead_router, lead_status_router
 from role.routers.role import router as role_router
 from role.routers.permission import router as permission_router
@@ -34,6 +35,7 @@ add_pagination(app)
 app.include_router(auth_router)
 app.include_router(click_router)
 app.include_router(company_router)
+app.include_router(dashboard_router)
 app.include_router(lead_router)
 app.include_router(lead_status_router)
 app.include_router(role_router)
