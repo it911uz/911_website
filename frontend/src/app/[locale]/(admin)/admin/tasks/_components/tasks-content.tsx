@@ -11,7 +11,7 @@ import { TaskFilter } from "./task-filter"
 export const TasksContent = async () => {
     const session = await auth();
 
-    const {query, users, array} = searchParamsCache.all();
+    const { query, users, array } = searchParamsCache.all();
 
     const taskStatuses = await getTasksStatuses({
         token: session?.user.accessToken,
