@@ -71,6 +71,7 @@
     "react-hook-form": "^7.67.0",
     "react-responsive": "^10.0.1",
     "react-scroll-parallax": "^3.5.0",
+    "react-select": "^5.10.2",
     "simple-parallax-js": "^6.3.3",
     "sonner": "^2.0.7",
     "suneditor": "^2.47.8",

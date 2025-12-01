@@ -14,8 +14,6 @@ export const LeadContent = async () => {
         token: session?.user.accessToken,
     });
 
-    console.log(leads);
-
     const columnsData: ColumnType[] = leadStatuses.data.map(status => {
         return {
             columnId: status.id,

@@ -56,43 +56,71 @@ export const EditEmploy = ({ user }: Props) => {
 
         <SheetContent className="w-2/5">
             <SheetHeader>
-                <SheetTitle>Изменить сотрудника</SheetTitle>
+                <SheetTitle>Редактирование сотрудника</SheetTitle>
             </SheetHeader>
 
             <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                 <Field>
-                    <FieldLabel className="text-lg" required htmlFor="name">
+                    <FieldLabel className="text-lg" required>
                         ФИО
                     </FieldLabel>
-
-                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите ФИО" {...register("full_name")} />
-
+                    <Input
+                        color="light"
+                        type="text"
+                        sizes="lg"
+                        placeholder="Введите ФИО"
+                        {...register("full_name")}
+                    />
                     <ErrorMassage error={errors.full_name?.message} />
                 </Field>
 
                 <Field>
-                    <FieldLabel className="text-lg" required htmlFor="username">
+                    <FieldLabel className="text-lg" required>
                         Имя пользователя
                     </FieldLabel>
-
-                    <Input id="username" type="text" sizes={"lg"} color="light" placeholder="Введите имя пользователя" {...register("username")} />
-
+                    <Input
+                        color="light"
+                        type="text"
+                        sizes="lg"
+                        placeholder="Введите имя пользователя"
+                        {...register("username")}
+                    />
                     <ErrorMassage error={errors.username?.message} />
                 </Field>
 
                 <Field>
-                    <FieldLabel className="text-lg" required htmlFor="email">
+                    <FieldLabel className="text-lg" required>
                         Почта
                     </FieldLabel>
-
-                    <Input id="email" type="email" sizes={"lg"} color="light" placeholder="Введите почту" {...register("email")} />
-
+                    <Input
+                        color="light"
+                        type="email"
+                        sizes="lg"
+                        placeholder="Введите почту"
+                        {...register("email")}
+                    />
                     <ErrorMassage error={errors.email?.message} />
                 </Field>
 
                 <SelectRole control={control} />
 
-                <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>
+                <Field>
+                    <FieldLabel className="text-lg" required>
+                        Телефон
+                    </FieldLabel>
+                    <Input
+                        color="light"
+                        type="text"
+                        sizes="lg"
+                        placeholder="+998901234567"
+                        {...register("phone_number")}
+                    />
+                    <ErrorMassage error={errors.phone_number?.message} />
+                </Field>
+
+                <Button loading={pending} type="submit" size="lg" variant="black">
+                    Создать
+                </Button>
             </form>
         </SheetContent>
     </Sheet>
