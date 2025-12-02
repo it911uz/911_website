@@ -3,6 +3,7 @@ import { createSearchParams } from "@/lib/utils";
 import type { PaymentType } from "@/schemas/company.schema";
 import type { CompanySubscription } from "@/types/company.type";
 import type { ActionResponse } from "@/types/share.type";
+import dayjs from "dayjs";
 
 export const getCompanySubscriptions = async ({
     token, companyId, serviceId, paymentType, fromDate, toDate,
@@ -10,9 +11,9 @@ export const getCompanySubscriptions = async ({
 
     const searchParams = createSearchParams({
         service_id__in: serviceId,
-        payment_type_in: paymentType,
-        start_date_lte: fromDate,
-        start_date_gte: toDate,
+        payment_type: paymentType,
+        start_date__gte: fromDate ? dayjs(fromDate).format("YYYY-MM-DD") : null,
+        end_date__lte: toDate ? dayjs(toDate).format("YYYY-MM-DD") : null,
     })
     return await http.get<ActionResponse<CompanySubscription[]>>(`companies/${companyId}/subscriptions/`, {
         token,
