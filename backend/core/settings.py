@@ -4,7 +4,7 @@ import pytz
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 TIMEZONE = pytz.timezone('Asia/Tashkent')
 
