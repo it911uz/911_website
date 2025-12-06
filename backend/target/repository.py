@@ -2,6 +2,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select, func, String, literal
 
 from clicks.models import Click
+from core.exceptions import NotFound
 from core.repository import BaseRepository, ModelType
 from lead.models import Lead
 from target.models import TargetCompany
@@ -48,3 +49,12 @@ class TargetCompanyRepository(BaseRepository):
         stmt = filters.sort(stmt)
 
         return await paginate(self.db, stmt)
+
+    async def get_obj(self, obj_id: int):
+        stmt = select(TargetCompany).where(TargetCompany.id == obj_id)
+        result = await self.db.execute(stmt)
+        obj = result.scalar_one_or_none()
+        if not obj:
+            raise NotFound(f"Target {obj_id} not found")
+        return obj
+
