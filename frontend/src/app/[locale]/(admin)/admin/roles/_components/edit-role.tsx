@@ -28,7 +28,7 @@ export const EditRole = ({ role }: Props) => {
         resolver: zodResolver(roleSchema),
         defaultValues: {
             name: role.name,
-            permissions: role.permissions
+            permissions: role.permissions.map(permission => permission.id.toString())
         }
     });
 
@@ -89,7 +89,7 @@ export const EditRole = ({ role }: Props) => {
     return <Sheet open={open} onOpenChange={onOpenChange}>
         <PenLine className="hover:text-red-500 text-2xl cursor-pointer" onClick={() => onOpenChange(true)} />
 
-        <SheetContent className="w-1/5">
+        <SheetContent className="w-2/5">
             <SheetHeader>
                 <SheetTitle>Создание роли</SheetTitle>
             </SheetHeader>
@@ -105,15 +105,18 @@ export const EditRole = ({ role }: Props) => {
                     <ErrorMassage error={errors.name?.message} />
                 </Field>
 
-                <Controller control={control} name="permissions" render={({ field }) => (
-                    <Field>
-                        <FieldLabel className="text-lg" required htmlFor="permissions">
-                            Права
-                        </FieldLabel>
+                <Controller
+                    control={control}
+                    name="permissions"
+                    render={({ field }) => (
+                        <Field>
+                            <FieldLabel className="text-lg" required htmlFor="permissions">
+                                Права
+                            </FieldLabel>
 
-                        <SelectPermissions onValueChange={field.onChange} defaultValue={field.value} />
-                    </Field>
-                )}
+                            <SelectPermissions onValueChange={field.onChange} defaultValue={field.value} />
+                        </Field>
+                    )}
                 />
 
                 <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>

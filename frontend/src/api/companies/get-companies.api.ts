@@ -7,7 +7,7 @@ export const getCompanies = async ({ token, status, query, perPage, page }: Para
     const searchParams = createSearchParams({
         page,
         size: perPage,
-        status,
+        status__in: status,
         q: query,
     });
 

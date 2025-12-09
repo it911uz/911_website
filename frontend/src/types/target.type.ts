@@ -1,6 +1,6 @@
 export interface Target {
-    created_at: Date;
-    updated_at: Date;
+    created_at: Date | null;
+    updated_at: Date | null;
     name: string;
     id: string;
     url: string;
@@ -8,3 +8,4 @@ export interface Target {
     clicks_count: number;
     leads_count: number;
 }
+

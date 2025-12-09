@@ -153,7 +153,7 @@ class BaseManager(FKValidationMixin, UniqueCheckMixin):
     async def update(self, obj_id, **kwargs):
         await self.validate_fk(self.db, kwargs)
         await self.check_unique(self.repo, kwargs, obj_id)
-        obj = await self.get(obj_id)
+        obj = await self.repo.get(obj_id)
         for k, v in kwargs.items():
             setattr(obj, k, v)
         await self.repo.update(obj)
@@ -161,6 +161,6 @@ class BaseManager(FKValidationMixin, UniqueCheckMixin):
         # await self._notify("on_update", obj)
 
     async def delete(self, obj_id):
-        obj = await self.get(obj_id)
+        obj = await self.repo.get(obj_id)
         await self.repo.delete(obj)
         # await self._notify("on_delete", obj)

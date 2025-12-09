@@ -48,8 +48,8 @@ export const TargetTable = async () => {
 
                 <TableBody>
                     {
-                        data.items.map((ite, index) => (
-                            <TargetTableRow key={ite.id} leadsCount={ite.leads_count} name={ite.name} isActive={ite.is_active} index={index + 1} id={ite.id} />
+                        data.items.map((target, index) => (
+                            <TargetTableRow key={target.id} target={target} index={index + 1} />
                         ))
                     }
                 </TableBody>

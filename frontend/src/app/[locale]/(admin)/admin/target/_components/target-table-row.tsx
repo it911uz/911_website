@@ -1,38 +1,42 @@
 import { TableCell, TableRow } from "@/components/ui/table"
 import { DeleteTarget } from "./delete-target";
+import { UpdateTarget } from "./update-target";
+import type { Target } from "@/types/target.type";
 
-export const TargetTableRow = ({ leadsCount, name, isActive, index, id }: Props) => {
+export const TargetTableRow = ({ index, target }: Props) => {
     return <TableRow>
         <TableCell>
             {index}
         </TableCell>
 
         <TableCell>
-            {id}
+            {target.id}
         </TableCell>
 
         <TableCell>
-            {name}
+            {target.name}
         </TableCell>
 
         <TableCell>
-            {leadsCount}
+            {target.leads_count}
         </TableCell>
 
         <TableCell>
-            {isActive ? 'Да' : 'Нет'}
+            {target.is_active ? 'Да' : 'Нет'}
         </TableCell>
 
         <TableCell>
-            <DeleteTarget id={id} />
+            <div className="flex gap-5">
+                <UpdateTarget target={target} />
+
+                <DeleteTarget id={target.id} />
+            </div>
+
         </TableCell>
     </TableRow>
 }
 
 interface Props {
     index: number;
-    name: string,
-    leadsCount: number;
-    isActive: boolean;
-    id: string
+    target: Target;
 }

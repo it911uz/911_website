@@ -10,12 +10,6 @@ export const LeadContent = async () => {
 
     const leadStatuses = await getLeadStatuses(session?.user.accessToken);
 
-    console.log("user", session?.user.accessToken);
-
-    console.log(leadStatuses);
-    
-    
-
     const leads = await getLeads({
         token: session?.user.accessToken,
     });
