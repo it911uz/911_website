@@ -2,6 +2,7 @@ import { Env } from "@/configs/env.config";
 import type { JWTType } from "@/types/jwt.type";
 
 export const login = async ({ body }: Props) => {
+    console.log("API URL:", Env.PUBLIC_API_URL);
     const response = await fetch(Env.PUBLIC_API_URL + "/auth/token", {
         method: "POST",
         body
