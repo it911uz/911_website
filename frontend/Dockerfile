@@ -9,14 +9,12 @@ RUN corepack enable pnpm && pnpm i
 FROM base AS builder
 WORKDIR /app
 
-# принимаем аргумент от CI/CD
 ARG ENV_FILE=.env.production
 ENV ENV_FILE=${ENV_FILE}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# копируем нужный env перед билдом
 RUN cp ${ENV_FILE} .env.production
 
 RUN corepack enable pnpm && pnpm run build
@@ -32,7 +30,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+RUN mkdir -p .next/cache && \
+    mkdir -p .next/server && \
+    chown -R node:node /app
+
 USER node
+
 EXPOSE 3000
 
 CMD ["node", "server.js"]
