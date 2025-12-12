@@ -113,7 +113,11 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 });
             }
 
+            console.log(formData);
+
             const response = await login({ body: formData });
+
+            console.log(response);
 
             if (!response.ok) {
                 console.error("PATH: auth CredentialsProvider. Invalid credentials", {
