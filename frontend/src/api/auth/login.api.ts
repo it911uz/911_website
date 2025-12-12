@@ -8,7 +8,7 @@ export const login = async ({ body }: Props) => {
         method: "POST",
         body
     });
-
+    
     return {
         ok: response.ok,
         data: await response.json() as Pick<JWTType, "access_token" | "refresh_token" | "token_type">,

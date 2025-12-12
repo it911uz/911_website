@@ -138,6 +138,9 @@ export const proxyMiddleware = async (
 		salt: SESSION_TOKEN_NAME,
 	});
 
+	console.log(jwt);
+	
+
 	// Обработка защищённых маршрутов
 	if (isPrivateRoute) {
 		if (!jwt) {
@@ -151,6 +154,8 @@ export const proxyMiddleware = async (
 		if (shouldRefreshToken(jwt)) {
 			return refreshSessionCookie(jwt, request);
 		}
+		console.log(request);
+		
 		return intlMiddleware(request);
 	}
 

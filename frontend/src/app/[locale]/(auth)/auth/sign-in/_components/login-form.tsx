@@ -41,6 +41,9 @@ export const LoginForm = ({
         redirect: false,
       });
 
+      console.log(data);
+      
+
       if (data.error) {
         toast.error(data.error);
         return;

@@ -115,6 +115,9 @@ export const CredentialsProviderConfig: CredentialsConfig = {
 
             const response = await login({ body: formData });
 
+            console.log(response);
+            
+
             if (!response.ok) {
                 console.error("PATH: auth CredentialsProvider. Invalid credentials", {
                     cause: response,
@@ -129,6 +132,9 @@ export const CredentialsProviderConfig: CredentialsConfig = {
 
             const me = await getMe(response.data.access_token);
 
+            console.log(me);
+            
+
             const user: User = {
                 id: me.data.id.toString(),
                 userId: me.data.id,
@@ -139,6 +145,9 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 name: me.data.full_name,
                 email: me.data.email,
             };
+
+            console.log(user);
+            
 
             return user;
         } catch (error: unknown) {
