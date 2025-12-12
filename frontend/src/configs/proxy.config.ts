@@ -13,66 +13,68 @@ import { getMe } from "@/api/auth/get-me.api";
 export const intlMiddleware = createMiddleware({
 	locales,
 	defaultLocale,
-	localePrefix: {
-		mode: "as-needed",
-	},
+	localePrefix: { mode: "as-needed" },
 	localeDetection: false,
 });
 
-const protectedPages = ["/admin"];
+const protectedPages = [Routers.admin.home];
 
-export function removeLocaleFromPath(pathname: string) {
-	const localePattern = `^/(${locales.join("|")})(/|$)`;
-	return pathname.replace(new RegExp(localePattern, "i"), "/");
-}
+// -------------------------------------
+// Утилиты для маршрутов
+// -------------------------------------
 
-export function isProtectedRoute(path: string): boolean {
-	return protectedPages.some((page) => path.startsWith(page));
-}
+export const removeLocaleFromPath = (pathname: string) => {
+	const regex = new RegExp(`^/(${locales.join("|")})(/|$)`, "i");
+	return pathname.replace(regex, "/");
+};
 
-function shouldRefreshToken(jwt: JWT | null): boolean {
-	if (!jwt?.expiresAt) return false;
+export const isProtectedRoute = (path: string): boolean =>
+	protectedPages.some((page) => path.startsWith(page));
 
-	const now = Date.now();
-	const remaining = jwt.expiresAt - now;
+// Проверяем, нужно ли обновлять токен
+export const shouldRefreshToken = (token: JWT | null): boolean => {
+	if (!token || typeof token.expiresAt !== "number") return false;
 
-	const threshold = 5 * 60 * 1000;
+	const buffer = 15 * 60 * 1000; // Обновлять за 15 минут до истечения
+	return Date.now() >= token.expiresAt - buffer;
+};
 
-	console.log("Время истечения токена:", new Date(jwt.expiresAt).toISOString());
-	console.log("Осталось до истечения:", Math.round(remaining / 60000), "минут");
+// -------------------------------------
+// Хелперы редиректов
+// -------------------------------------
 
-	return remaining <= threshold;
-}
-
-async function mySignOut(request: NextRequest) {
-	const res = NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
-	res.cookies.delete({
-		name: SESSION_TOKEN_NAME,
-		path: "/",
-		secure: true,
-		httpOnly: true,
-	});
+// Выход пользователя + очистка cookie
+export const mySignOut = (request: NextRequest) => {
+	const res = NextResponse.redirect(
+		new URL(Routers.auth.signIn, request.nextUrl),
+	);
+	res.cookies.delete(SESSION_TOKEN_NAME);
 	return res;
-}
+};
 
-async function refreshAccessToken(jwt: JWT): Promise<JWT> {
-	const response = await refreshToken({
-		refresh_token: jwt.refreshToken,
-		token: jwt.accessToken
-	});
+// Редирект на главную + очистка cookie
+export const redirectHome = (request: NextRequest) => {
+	const res = NextResponse.redirect(new URL(Routers.home, request.url));
+	res.cookies.delete(SESSION_TOKEN_NAME);
+	return res;
+};
 
-	console.warn("refreshToken response", response);
+// -------------------------------------
+// Логика обновления токена
+// -------------------------------------
 
+// Обновление access_token через refresh_token
+export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
+	const res = await refreshToken(jwt.refreshToken);
 
-	if (!response.data.access_token) {
-		console.error("Path: Middleware. API: refreshToken", response.error);
+	if (!res?.data?.access_token) {
+		console.error("Path: Middleware. API: refreshToken", res.error);
 		return { ...jwt, error: "RefreshTokenError" };
 	}
 
-	const me = await getMe(response.data.access_token);
+	const me = await getMe(res.data.access_token);
 
-	if (!me.data.id) {
-		console.error("Path: Middleware. API: getMe", me.error);
+	if (!me?.data?.id) {
 		return { ...jwt, error: "RefreshTokenError" };
 	}
 
@@ -81,28 +83,24 @@ async function refreshAccessToken(jwt: JWT): Promise<JWT> {
 		id: me.data.id,
 		userId: me.data.id,
 		userEmail: me.data.email,
-		accessToken: response.data.access_token,
-		refreshToken: response.data.refresh_token,
+		accessToken: res.data.access_token,
+		refreshToken: res.data.refresh_token,
 		expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
 		name: me.data.full_name,
 		email: me.data.email,
 	};
-}
+};
 
-// Update session cookie with new session token
-async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
+// Перезапись session cookie новым токеном
+export const refreshSessionCookie = async (jwt: JWT, request: NextRequest) => {
 	const newJWT = await refreshAccessToken(jwt);
-	console.log("newJWT.error", newJWT.error);
-	console.log(
-		'newJWT.error === "RefreshTokenError"',
-		newJWT.error === "RefreshTokenError",
-	);
 
+	// Не удалось обновить → разлогиниваем
 	if (newJWT.error === "RefreshTokenError") {
 		return mySignOut(request);
 	}
-	// Encode new session token
-	const encodedSession = await encode({
+
+	const encoded = await encode({
 		token: newJWT,
 		secret: Env.AUTH_SECRET,
 		salt: SESSION_TOKEN_NAME,
@@ -112,7 +110,7 @@ async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
 
 	res.cookies.set({
 		name: SESSION_TOKEN_NAME,
-		value: encodedSession,
+		value: encoded,
 		path: "/",
 		httpOnly: true,
 		secure: true,
@@ -120,16 +118,17 @@ async function refreshSessionCookie(jwt: JWT, request: NextRequest) {
 	});
 
 	return res;
-}
+};
 
-export const proxyMiddleware = async (
-	request: NextRequest,
-): Promise<NextResponse<unknown>> => {
+// -------------------------------------
+// Основной middleware
+// -------------------------------------
+
+export const proxyMiddleware = async (request: NextRequest) => {
 	const pathname = request.nextUrl.pathname;
-	const pathWithoutLocale = removeLocaleFromPath(pathname);
-	const isPrivateRoute = isProtectedRoute(pathWithoutLocale);
+	const route = removeLocaleFromPath(pathname);
+	const isPrivate = isProtectedRoute(route);
 
-	// Получаем JWT
 	const jwt = await getToken({
 		req: request,
 		cookieName: SESSION_TOKEN_NAME,
@@ -138,19 +137,20 @@ export const proxyMiddleware = async (
 		salt: SESSION_TOKEN_NAME,
 	});
 
-	// Обработка защищённых маршрутов
-	if (isPrivateRoute) {
-		if (!jwt) {
-			return NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
-		}
+	// Защищённые маршруты
+	if (isPrivate) {
+		// Нет токена → разлогин
+		if (!jwt) return mySignOut(request);
 
-		if (jwt.error === "RefreshTokenError") {
-			return mySignOut(request);
-		}
+		// Ранее refresh уже упал
+		if (jwt.error === "RefreshTokenError") return mySignOut(request);
 
+		// Токен почти истёк → обновляем
 		if (shouldRefreshToken(jwt)) {
-			return refreshSessionCookie(jwt, request);
+			return await refreshSessionCookie(jwt, request);
 		}
+
+		// Доступ разрешён
 		return intlMiddleware(request);
 	}
 
