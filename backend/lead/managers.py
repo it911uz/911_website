@@ -41,6 +41,7 @@ class LeadManager(CacheMixin, BaseManager):
         await self.repo.update(lead)
         self.cache.delete(self.cache_entity)
 
+
 class LeadCommentManager(BaseManager):
     repo_class = LeadCommentRepository
     fk_fields = {
