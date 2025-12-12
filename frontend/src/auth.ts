@@ -3,10 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthConfig, CredentialsProviderConfig } from "./configs/auth.config";
 
 export const config = {
-	trustHost: true,
 	...AuthConfig,
 	providers: [
 		CredentialsProvider(CredentialsProviderConfig),
+		
 	],
 };
 
