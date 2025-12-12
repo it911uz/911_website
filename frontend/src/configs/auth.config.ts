@@ -113,11 +113,7 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 });
             }
 
-            console.log(formData);
-
             const response = await login({ body: formData });
-
-            console.log(response);
 
             if (!response.ok) {
                 console.error("PATH: auth CredentialsProvider. Invalid credentials", {
@@ -156,7 +152,10 @@ export const CredentialsProviderConfig: CredentialsConfig = {
 };
 
 async function refreshAccessToken(jwt: JWT): Promise<JWT> {
-    const response = await refreshToken(jwt.refreshToken);
+    const response = await refreshToken({
+        refresh_token: jwt.refreshToken,
+        token: jwt.accessToken
+    });
 
     if (!response.data.access_token) {
         return { ...jwt, error: "RefreshTokenError" };
