@@ -39,7 +39,7 @@ class LeadManager(CacheMixin, BaseManager):
             return
         lead.status_id = request.status_id
         await self.repo.update(lead)
-
+        self.cache.delete(self.cache_entity)
 
 class LeadCommentManager(BaseManager):
     repo_class = LeadCommentRepository
