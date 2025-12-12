@@ -152,10 +152,7 @@ export const CredentialsProviderConfig: CredentialsConfig = {
 };
 
 async function refreshAccessToken(jwt: JWT): Promise<JWT> {
-    const response = await refreshToken({
-        refresh_token: jwt.refreshToken,
-        token: jwt.accessToken
-    });
+    const response = await refreshToken(jwt.refreshToken);
 
     if (!response.data.access_token) {
         return { ...jwt, error: "RefreshTokenError" };
