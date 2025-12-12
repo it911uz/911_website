@@ -16,6 +16,7 @@ export const Routers = {
 		newPassword: "/auth/password",
 	},
 	admin: {
+		home: "/admin",
 		dashboard: "/admin/dashboard",
 		leads: "/admin/leads",
 		tasks: "/admin/tasks",

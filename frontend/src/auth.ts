@@ -6,7 +6,6 @@ export const config = {
 	...AuthConfig,
 	providers: [
 		CredentialsProvider(CredentialsProviderConfig),
-		
 	],
 };
 
