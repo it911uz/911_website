@@ -30,12 +30,7 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            ENV_FILE=".env.production"
-          else
-            ENV_FILE=".env.test"
-          fi
-
+          
           docker build \
             --no-cache \
             --build-arg ENV_FILE=$ENV_FILE \
