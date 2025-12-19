@@ -1,6 +1,7 @@
 import type { locales } from "@/configs/i18n.config";
 import type messages from "./../../messages/ru.json";
 import type { DefaultSession } from "next-auth";
+import type { Role } from "./user.type";
 
 // next-auth
 declare module "next-auth" {
@@ -10,6 +11,8 @@ declare module "next-auth" {
 		accessToken: string;
 		refreshToken: string;
 		expiresAt: number;
+		is_superuser: boolean;
+		role: Role;
 	}
 
 	interface Session {
@@ -25,6 +28,8 @@ declare module "next-auth/jwt" {
 		refreshToken: string;
 		expiresAt: number;
 		error?: "RefreshTokenError";
+		is_superuser: boolean;
+		role: Role;
 	}
 }
 

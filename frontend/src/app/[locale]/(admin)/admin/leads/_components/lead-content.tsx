@@ -4,30 +4,39 @@ import { CreateColumn } from "./create-column"
 import { CreateLead } from "./create-lead"
 import { auth } from "@/auth"
 import { getLeads } from "@/api/leads/get-leads.api"
+import { searchParamsCache } from "@/lib/search-params.util"
+import { PERMISSIONS } from "@/const/permissions.const"
 
 export const LeadContent = async () => {
     const session = await auth();
 
-    const leadStatuses = await getLeadStatuses(session?.user.accessToken);
+    const { array } = searchParamsCache.all();
 
-    const leads = await getLeads({
+    const leadStatuses = await getLeadStatuses({
         token: session?.user.accessToken,
     });
 
-    const columnsData: ColumnType[] = leadStatuses.data.map(status => {
+    const leads = await getLeads({
+        token: session?.user.accessToken,
+        statusIds: array ? array : undefined,
+    });
+
+    const columnsData: ColumnType[] = leadStatuses.data?.map((status) => {
         return {
             columnId: status.id,
-            hex: status.hex,
             name: status.name,
-            position: status.level,
-            leads: [...leads.data ?? []].filter(lead => lead.status_id === status.id).map((lead, index) => ({
+            leads: leads.data.filter(lead => lead.status_id === status.id).map((lead, index) => ({
                 ...lead,
                 status: status.id,
                 position: index + 1,
             })),
-            canEdit: status.can_edit
+            position: status.level,
+            canEdit: status.can_edit,
+            hex: status.hex,
         }
     }).sort((a, b) => a.position - b.position);
+    
+    const canCreateColumn = session?.user.role.permissions.some(userPer => userPer.codename)
 
     return (
         <>

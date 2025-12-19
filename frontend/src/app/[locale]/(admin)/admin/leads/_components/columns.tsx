@@ -13,6 +13,7 @@ import { editLeadPosition } from "@/api/leads/edit-lead-position";
 import type { Lead } from "@/types/leads.type";
 import { editLeadStatusPosition } from "@/api/leads/edit-lead-status-position.api";
 import { toastErrorResponse } from "@/lib/toast-error-response.util";
+import { ClientNoData } from "@/components/widgets/client-no-data";
 
 export const Columns = ({ columnsData = [] }: Props) => {
     const [pending, startTransition] = useTransition();
@@ -151,6 +152,8 @@ export const Columns = ({ columnsData = [] }: Props) => {
                 });
 
                 if (!response.ok) {
+                    console.log(response);
+
                     toastErrorResponse(response.data)
                     return;
                 }
@@ -192,33 +195,37 @@ export const Columns = ({ columnsData = [] }: Props) => {
     };
 
     return (
-        <section className={cn("px-4 lg:px-6 grid grid-cols-1", { "pointer-events-none opacity-50": pending })}>
-            <DndContext id="columns" onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-                <div className="w-full h-[80vh] overflow-y-scroll overflow-x-hidden">
-                    <div className={cn("grid overflow-x-auto gap-5")} style={{ gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)` }}>
-                        <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
-                            {optimisticColumns.map((column) => (
-                                <SortableContext key={column.columnId} id={`column-${column.columnId}`} items={column.leads.map((i) => `lead-${i.id}`)}>
-                                    <Column key={column.columnId} columnData={column} />
-                                </SortableContext>
-                            ))}
-                        </SortableContext>
-                    </div>
-                </div>
+        <section className={cn("px-4 lg:px-6 grid grid-cols-1 pb-10", { "pointer-events-none opacity-50": pending })}>
 
-                <DragOverlay>
-                    {activeItem?.type === "column" && (
-                        <div className="opacity-80 scale-[1.02]">
-                            <Column columnData={activeItem.data} />
+            {
+                optimisticColumns.length ? <DndContext id="columns" onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+                    <div className="w-full h-[80vh] overflow-y-scroll overflow-x-hidden">
+                        <div className={cn("grid overflow-x-auto gap-5")} style={{ gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)` }}>
+                            <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
+                                {optimisticColumns.map((column) => (
+                                    <SortableContext key={column.columnId} id={`column-${column.columnId}`} items={column.leads.map((i) => `lead-${i.id}`)}>
+                                        <Column key={column.columnId} columnData={column} />
+                                    </SortableContext>
+                                ))}
+                            </SortableContext>
                         </div>
-                    )}
-                    {activeItem?.type === "lead" && (
-                        <div className="opacity-80 scale-[1.02]">
-                            <LeadCard lead={activeItem.data} />
-                        </div>
-                    )}
-                </DragOverlay>
-            </DndContext>
+                    </div>
+
+                    <DragOverlay>
+                        {activeItem?.type === "column" && (
+                            <div className="opacity-80 scale-[1.02]">
+                                <Column columnData={activeItem.data} />
+                            </div>
+                        )}
+                        {activeItem?.type === "lead" && (
+                            <div className="opacity-80 scale-[1.02]">
+                                <LeadCard lead={activeItem.data} />
+                            </div>
+                        )}
+                    </DragOverlay>
+                </DndContext> : <ClientNoData />
+            }
+
         </section>
     );
 };

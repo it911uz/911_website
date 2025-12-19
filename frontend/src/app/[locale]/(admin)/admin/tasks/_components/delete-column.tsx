@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteLeadStatus } from "@/api/leads/delete-lead-status.api";
+import { deleteTaskStatus } from "@/api/tasks/delete-task-status.api";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useOpen } from "@/hooks/use-open";
 import { useRouter } from "@/i18n/navigation";
@@ -19,7 +19,7 @@ export const DeleteColumn = ({ columnId, hasTasks }: Props) => {
 
     const handleRemove = () => {
         startTransition(async () => {
-            const response = await deleteLeadStatus({
+            const response = await deleteTaskStatus({
                 id: columnId,
                 token: session.data?.user.accessToken
             });

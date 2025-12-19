@@ -25,7 +25,8 @@ export const TargetFilter = () => {
         })
     }
 
-    return <section data-slot="filter" className="px-4 py-10 lg:px-8">
+    return <section data-slot="filter" className="px-4 pb-10 lg:px-8">
+        <p className="text-lg font-bold mb-5">Фильтр таргет</p>
         <div className="flex gap-5">
             <Input value={query} onChange={(e) => setQuery({ query: e.target.value }, { startTransition })} type="search" placeholder="Поиск по названию" color="light" className="w-72" />
 
