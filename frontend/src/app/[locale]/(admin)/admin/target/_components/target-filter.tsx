@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { PreviewPage } from "@/const/preview-page.const";
 import { searchParamsParsers } from "@/lib/search-params.util";
 import { useQueryStates } from "nuqs";
@@ -10,58 +16,94 @@ import { useTransition } from "react";
 
 export const TargetFilter = () => {
     const [pending, startTransition] = useTransition();
-    const [{ query, perPage, isActive }, setQuery] = useQueryStates(searchParamsParsers);
+    const [{ query, perPage, isActive }, setQuery] =
+        useQueryStates(searchParamsParsers);
 
     const handleClear = () => {
         startTransition(() => {
-            setQuery({
-                query: null,
-                page: 1,
-                perPage: 10,
-                isActive: true
-            }, {
-                startTransition
-            });
-        })
-    }
+            setQuery(
+                {
+                    query: null,
+                    page: 1,
+                    perPage: 10,
+                    isActive: true,
+                },
+                { startTransition },
+            );
+        });
+    };
 
-    return <section data-slot="filter" className="px-4 py-10 lg:px-8">
-        <div className="flex gap-5">
-            <Input value={query} onChange={(e) => setQuery({ query: e.target.value }, { startTransition })} type="search" placeholder="Поиск по названию" color="light" className="w-72" />
+    return (
+        <section data-slot="filter" className="px-4 pb-10 lg:px-8">
+            <p className="text-lg font-bold mb-5">Фильтр таргет</p>
 
-            <Select value={`${isActive}`} onValueChange={(value) => setQuery({ isActive: value === "true" }, { startTransition })}>
-                <SelectTrigger size={"lg"} className="w-72">
-                    <SelectValue placeholder="Выберите статус" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value={"true"}>
-                        Активные
-                    </SelectItem>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                <Input
+                    value={query}
+                    onChange={(e) =>
+                        setQuery({ query: e.target.value }, { startTransition })
+                    }
+                    type="search"
+                    placeholder="Поиск по названию"
+                    color="light"
+                    className="w-full"
+                    wrapper={{
+                        className: "w-full"
+                    }}
+                />
 
-                    <SelectItem value={"false"}>
-                        Неактивные
-                    </SelectItem>
-                </SelectContent>
-            </Select>
+                <Select
+                    value={`${isActive}`}
+                    onValueChange={(value) =>
+                        setQuery(
+                            { isActive: value === "true" },
+                            { startTransition },
+                        )
+                    }
+                >
+                    <SelectTrigger size="lg" className="w-full">
+                        <SelectValue placeholder="Выберите статус" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="true">Активные</SelectItem>
+                        <SelectItem value="false">Неактивные</SelectItem>
+                    </SelectContent>
+                </Select>
 
-            <Select value={perPage.toString()} onValueChange={(value) => setQuery({ perPage: Number(value) }, { startTransition })}>
-                <SelectTrigger size={"lg"} className="w-72">
-                    <SelectValue placeholder="Выберите кол-во просмотров" />
-                </SelectTrigger>
-                <SelectContent>
-                    {
-                        PreviewPage.map((item) => (
-                            <SelectItem key={item.id} value={item.value.toString()}>
+                <Select
+                    value={perPage.toString()}
+                    onValueChange={(value) =>
+                        setQuery(
+                            { perPage: Number(value) },
+                            { startTransition },
+                        )
+                    }
+                >
+                    <SelectTrigger size="lg" className="w-full">
+                        <SelectValue placeholder="Выберите кол-во просмотров" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {PreviewPage.map((item) => (
+                            <SelectItem
+                                key={item.id}
+                                value={item.value.toString()}
+                            >
                                 {item.label}
                             </SelectItem>
-                        ))
-                    }
-                </SelectContent>
-            </Select>
+                        ))}
+                    </SelectContent>
+                </Select>
 
-            <Button disabled={pending} onClick={handleClear} size={"lg"}>
-                Сбросить
-            </Button>
-        </div>
-    </section>
-}
+                <div className="sm:col-span-2 xl:col-span-1">
+                    <Button
+                        disabled={pending}
+                        onClick={handleClear}
+                        size="lg"
+                    >
+                        Сбросить
+                    </Button>
+                </div>
+            </div>
+        </section>
+    );
+};

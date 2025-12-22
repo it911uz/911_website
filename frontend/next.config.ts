@@ -3,26 +3,20 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-
   logging: {
     fetches: {
       fullUrl: true,
       hmrRefreshes: true,
     },
   },
-
   poweredByHeader: false,
   typedRoutes: true,
   output: "standalone",
-
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
-
   images: {
     qualities: [75, 100]
   },
-
   reactCompiler: true,
-
   experimental: {
     inlineCss: true,
     dynamicOnHover: true,
@@ -61,12 +55,15 @@ const nextConfig: NextConfig = {
       "input-otp",
       "ky",
       "lucide-react",
+      "next",
       "next-auth",
       "next-intl",
       "next-themes",
       "nuqs",
+      "react",
       "react-apexcharts",
       "react-day-picker",
+      "react-dom",
       "react-headless-pagination",
       "react-hook-form",
       "react-responsive",
@@ -78,10 +75,9 @@ const nextConfig: NextConfig = {
       "suneditor-react",
       "tailwind-merge",
       "tw-animate-css",
-      "zod"
-    ],
+      "zod",
+    ]
   },
-
   headers: async () => {
     return [
       {

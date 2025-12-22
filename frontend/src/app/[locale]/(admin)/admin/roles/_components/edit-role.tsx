@@ -37,7 +37,9 @@ export const EditRole = ({ role }: Props) => {
     const updateRoleName = async (values: RoleSchemaType) => {
         const response = await editRole({
             id: role.id,
-            body: values,
+            body: {
+                name: values.name
+            },
             token: session.data?.user.accessToken
         })
 

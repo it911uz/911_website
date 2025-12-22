@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { SelectStatus } from "./select-status";
 import { DeleteLead } from "./delete-lead";
 import { toastErrorResponse } from "@/lib/toast-error-response.util";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const LeadOption = ({ lead }: Props) => {
     const { open, onOpenChange } = useOpen();
@@ -47,7 +48,7 @@ export const LeadOption = ({ lead }: Props) => {
     const queryClient = useQueryClient();
     const [pending, startTransition] = useTransition();
 
-    const { data } = useLeadComments({
+    const { data: comments } = useLeadComments({
         leadId: lead.id,
         token: session.data?.user?.accessToken,
     });
@@ -249,42 +250,46 @@ export const LeadOption = ({ lead }: Props) => {
                     </div>
                 ) : null}
 
-                <Accordion
-                    type="single"
-                    collapsible
-                    className="mt-10 w-full space-y-3 mb-10"
-                >
-                    {data?.data?.map((message) => (
-                        <AccordionItem
-                            key={message.id}
-                            value={message.id.toString()}
-                            className={cn(
-                                "rounded-2xl border border-gray-200 bg-white/70 shadow-sm hover:shadow-md transition-all"
-                            )}
-                        >
-                            <AccordionTrigger className="flex justify-between items-center px-6 py-4 text-gray-800 font-medium hover:text-blue-600 cursor-pointer">
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-5">
-                                    <p className="flex items-center gap-2 text-base">
-                                        <span className="text-blue-600">👤</span>
-                                        <span>{message.user?.full_name ?? "Неизвестный пользователь"}</span>
-                                    </p>
-                                    <p className="text-sm text-gray-500">
-                                        {dayjs(message.created_at).format("DD.MM.YYYY в HH:mm")}
-                                    </p>
-                                </div>
-                            </AccordionTrigger>
+                {
+                    comments?.data.length ? <Accordion
+                        type="single"
+                        collapsible
+                        className="mt-10 w-full space-y-3 mb-10"
+                    >
+                        {comments?.data.map((message) => (
+                            <AccordionItem
+                                key={message.id}
+                                value={message.id.toString()}
+                                className={cn(
+                                    "rounded-2xl border border-gray-200 bg-white/70 shadow-sm hover:shadow-md transition-all"
+                                )}
+                            >
+                                <AccordionTrigger className="flex justify-between items-center px-6 py-4 text-gray-800 font-medium hover:text-blue-600 cursor-pointer">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:gap-5">
+                                        <p className="flex items-center gap-2 text-base">
+                                            <span className="text-blue-600">👤</span>
+                                            <span>{message.user?.full_name ?? "Неизвестный пользователь"}</span>
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            {dayjs(message.created_at).format("DD.MM.YYYY в HH:mm")}
+                                        </p>
+                                    </div>
+                                </AccordionTrigger>
 
-                            <AccordionContent className="px-6 py-4 bg-gray-50 rounded-b-2xl space-y-3">
-                                <div
-                                    className="prose prose-sm max-w-none text-gray-800 leading-relaxed"
-                                    dangerouslySetInnerHTML={{
-                                        __html: message.comment,
-                                    }}
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
+                                <AccordionContent className="px-6 py-4 bg-gray-50 rounded-b-2xl space-y-3">
+                                    <div
+                                        className="prose prose-sm max-w-none text-gray-800 leading-relaxed"
+                                        dangerouslySetInnerHTML={{
+                                            __html: message.comment,
+                                        }}
+                                    />
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion> : null
+                }
+
+
             </SheetContent>
         </Sheet>
     );

@@ -45,7 +45,7 @@ export const SelectStatus = ({ lead }: Props) => {
         </SelectTrigger>
         <SelectContent>
             {
-                data?.data.map((item) => (
+                data?.data.sort((a, b) => a.level - b.level).map((item) => (
                     <SelectItem key={item.id} value={item.id.toString()}>
                         {item.name}
                     </SelectItem>

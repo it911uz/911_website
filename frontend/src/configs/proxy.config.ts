@@ -1,14 +1,15 @@
 import "server-only";
 
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { decode, encode, getToken, type JWT } from "next-auth/jwt";
 import createMiddleware from "next-intl/middleware";
+
 import { refreshToken } from "@/api/auth/refresh-token.api";
-import { SESSION_TOKEN_EXPIRATION, SESSION_TOKEN_NAME } from "./auth.config";
-import { Env } from "./env.config";
-import { defaultLocale, locales } from "./i18n.config";
-import { Routers } from "./router.config";
 import { getMe } from "@/api/auth/get-me.api";
+import { SESSION_TOKEN_EXPIRATION, SESSION_TOKEN_NAME } from "@/configs/auth.config";
+import { Env } from "@/configs/env.config";
+import { defaultLocale, locales } from "@/configs/i18n.config";
+import { Routers } from "@/configs/router.config";
 
 export const intlMiddleware = createMiddleware({
 	locales,
@@ -17,62 +18,38 @@ export const intlMiddleware = createMiddleware({
 	localeDetection: false,
 });
 
-const protectedPages = [Routers.admin.home];
+const protectedPages = ["/admin"];
 
-// -------------------------------------
-// Утилиты для маршрутов
-// -------------------------------------
+export const removeLocaleFromPath = (pathname: string) =>
+	pathname.replace(new RegExp(`^/(${locales.join("|")})(/|$)`, "i"), "/");
 
-export const removeLocaleFromPath = (pathname: string) => {
-	const regex = new RegExp(`^/(${locales.join("|")})(/|$)`, "i");
-	return pathname.replace(regex, "/");
-};
-
-export const isProtectedRoute = (path: string): boolean =>
+export const isProtectedRoute = (path: string) =>
 	protectedPages.some((page) => path.startsWith(page));
 
-// Проверяем, нужно ли обновлять токен
-export const shouldRefreshToken = (token: JWT | null): boolean => {
-	if (!token || typeof token.expiresAt !== "number") return false;
-
-	const buffer = 15 * 60 * 1000; // Обновлять за 15 минут до истечения
-	return Date.now() >= token.expiresAt - buffer;
+export const shouldRefreshToken = (jwt: JWT | null) => {
+	if (!jwt?.expiresAt) return false;
+	return jwt.expiresAt - Date.now() <= 5 * 60 * 1000;
 };
 
-// -------------------------------------
-// Хелперы редиректов
-// -------------------------------------
-
-// Выход пользователя + очистка cookie
-export const mySignOut = (request: NextRequest) => {
-	const res = NextResponse.redirect(
-		new URL(Routers.auth.signIn, request.nextUrl),
-	);
-	res.cookies.delete(SESSION_TOKEN_NAME);
+export const mySignOut = async (request: NextRequest) => {
+	const res = NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
+	res.cookies.delete({
+		name: SESSION_TOKEN_NAME,
+		path: "/",
+	});
 	return res;
 };
 
-// Редирект на главную + очистка cookie
-export const redirectHome = (request: NextRequest) => {
-	const res = NextResponse.redirect(new URL(Routers.home, request.url));
-	res.cookies.delete(SESSION_TOKEN_NAME);
-	return res;
-};
-
-// -------------------------------------
-// Логика обновления токена
-// -------------------------------------
-
-// Обновление access_token через refresh_token
 export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
-	const res = await refreshToken(jwt.refreshToken);
+	const response = await refreshToken({
+		refresh_token: jwt.refreshToken,
+	});
 
-	if (!res?.data?.access_token) {
-		console.error("Path: Middleware. API: refreshToken", res.error);
+	if (!response?.data?.access_token) {
 		return { ...jwt, error: "RefreshTokenError" };
 	}
 
-	const me = await getMe(res.data.access_token);
+	const me = await getMe(response.data.access_token);
 
 	if (!me?.data?.id) {
 		return { ...jwt, error: "RefreshTokenError" };
@@ -83,19 +60,17 @@ export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
 		id: me.data.id,
 		userId: me.data.id,
 		userEmail: me.data.email,
-		accessToken: res.data.access_token,
-		refreshToken: res.data.refresh_token,
+		accessToken: response.data.access_token,
+		refreshToken: response.data.refresh_token,
 		expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
 		name: me.data.full_name,
 		email: me.data.email,
 	};
 };
 
-// Перезапись session cookie новым токеном
 export const refreshSessionCookie = async (jwt: JWT, request: NextRequest) => {
 	const newJWT = await refreshAccessToken(jwt);
 
-	// Не удалось обновить → разлогиниваем
 	if (newJWT.error === "RefreshTokenError") {
 		return mySignOut(request);
 	}
@@ -120,14 +95,10 @@ export const refreshSessionCookie = async (jwt: JWT, request: NextRequest) => {
 	return res;
 };
 
-// -------------------------------------
-// Основной middleware
-// -------------------------------------
-
 export const proxyMiddleware = async (request: NextRequest) => {
 	const pathname = request.nextUrl.pathname;
-	const route = removeLocaleFromPath(pathname);
-	const isPrivate = isProtectedRoute(route);
+	const path = removeLocaleFromPath(pathname);
+	const isPrivate = isProtectedRoute(path);
 
 	const jwt = await getToken({
 		req: request,
@@ -137,23 +108,20 @@ export const proxyMiddleware = async (request: NextRequest) => {
 		salt: SESSION_TOKEN_NAME,
 	});
 
-	// Защищённые маршруты
 	if (isPrivate) {
-		// Нет токена → разлогин
-		if (!jwt) return mySignOut(request);
-
-		// Ранее refresh уже упал
-		if (jwt.error === "RefreshTokenError") return mySignOut(request);
-
-		// Токен почти истёк → обновляем
-		if (shouldRefreshToken(jwt)) {
-			return await refreshSessionCookie(jwt, request);
+		if (!jwt) {
+			return NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));
 		}
 
-		// Доступ разрешён
+		if (jwt.error === "RefreshTokenError") {
+			return mySignOut(request);
+		}
+
+		if (shouldRefreshToken(jwt)) {
+			return refreshSessionCookie(jwt, request);
+		}
 		return intlMiddleware(request);
 	}
 
-	// Публичные маршруты
 	return intlMiddleware(request);
 };

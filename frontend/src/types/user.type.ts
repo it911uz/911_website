@@ -5,17 +5,23 @@ export interface User {
     full_name: string;
     username: string;
     email: string;
-    is_superuser: boolean;
+    phone_number: null;
     role_id: number;
     id: number;
+    is_superuser: boolean;
     role: Role;
-    phone_number: string;
 }
 
-interface Role {
+export interface Role {
     name: string;
     id: number;
-    permissions: string[];
+    permissions: Permission[];
+}
+
+export interface Permission {
+    id: number;
+    name: string;
+    codename: string;
 }
 
 
