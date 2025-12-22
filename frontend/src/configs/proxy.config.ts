@@ -43,7 +43,6 @@ export const mySignOut = async (request: NextRequest) => {
 export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
 	const response = await refreshToken({
 		refresh_token: jwt.refreshToken,
-		token: jwt.accessToken,
 	});
 
 	if (!response?.data?.access_token) {
