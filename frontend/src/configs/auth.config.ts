@@ -65,6 +65,8 @@ export const AuthConfig: NextAuthConfig = {
                         accessToken: user.accessToken,
                         refreshToken: user.refreshToken,
                         expiresAt: user.expiresAt,
+                        is_superuser: user.is_superuser,
+                        role: user.role,
                     };
                 }
             } else if (Date.now() < token.expiresAt) {
@@ -89,19 +91,19 @@ export const AuthConfig: NextAuthConfig = {
 
             return null;
         },
-        session: ({ session, token }) => {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    userId: token.userId,
-                    userEmail: token.userEmail,
-                    accessToken: token.accessToken,
-                    refreshToken: token.refreshToken,
-                    expiresAt: token.expiresAt,
-                },
-            };
-        },
+        session: ({ session, token }) => ({
+            ...session,
+            user: {
+                ...session.user,
+                userId: token.userId,
+                userEmail: token.userEmail,
+                accessToken: token.accessToken,
+                refreshToken: token.refreshToken,
+                expiresAt: token.expiresAt,
+                is_superuser: token.is_superuser,
+                role: token.role,
+            },
+        }),
         authorized({ auth }) {
             return !!auth;
         },
