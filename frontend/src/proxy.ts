@@ -1,9 +1,7 @@
-import type { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { proxyMiddleware } from "./configs/proxy.config";
 
-export const proxy = async (
-	request: NextRequest,
-): Promise<NextResponse<unknown>> => {
+export const proxy = async (request: NextRequest) => {
 	return proxyMiddleware(request);
 };
 

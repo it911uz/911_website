@@ -108,6 +108,10 @@ export const proxyMiddleware = async (request: NextRequest) => {
 		salt: SESSION_TOKEN_NAME,
 	});
 
+	if (pathname.startsWith('/api/auth')) {
+		return NextResponse.next();
+	}
+
 	if (isPrivate) {
 		if (!jwt) {
 			return NextResponse.redirect(new URL(Routers.auth.signIn, request.nextUrl));

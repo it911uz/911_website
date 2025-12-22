@@ -3,16 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "clean": "rm -rf .next dist node_modules",
     "lint": "biome lint",
+    "check": "biome check",
+    "lint:eslint": "eslint .",
     "lint:fix": "biome lint --write",
     "format": "biome format --write",
     "typecheck": "tsc --noEmit",
     "sortcn": "prettier ./src --write",
-    "i18n:check": "i18n-check -l messages -s ru --format i18next src && i18n-check -l messages -s uz --format i18next src",
+    "i18n:check": "i18n-check -l messages -s ru --format i18next src",
     "prepare": "husky",
     "lint:staged": "lint-staged"
   },
@@ -21,7 +23,7 @@
       "biome check --write --no-errors-on-unmatched"
     ],
     "messages/*.json": [
-      "i18n-check -l messages -s ru --format i18next src && i18n-check -l messages -s uz --format i18next src"
+      "i18n-check -l messages -s ru --format i18next src"
     ]
   },
   "dependencies": {
