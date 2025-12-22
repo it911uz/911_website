@@ -56,6 +56,7 @@ export const AuthConfig: NextAuthConfig = {
     secret: Env.AUTH_SECRET,
     debug: Env.NODE_ENV === "development",
     providers: [],
+    basePath: "/api/auth",
     pages: {
         signIn: Routers.auth.signIn,
         newUser: Routers.auth.signUp,
@@ -102,6 +103,18 @@ export const AuthConfig: NextAuthConfig = {
         }),
         authorized: ({ auth }) => Boolean(auth),
     },
+    useSecureCookies: process.env.NODE_ENV === "production",
+    cookies: {
+        sessionToken: {
+            name: SESSION_TOKEN_NAME,
+            options: {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+            },
+        },
+    },
 };
 
 export const CredentialsProviderConfig: CredentialsConfig = {
@@ -113,40 +126,47 @@ export const CredentialsProviderConfig: CredentialsConfig = {
         password: { label: "Password", type: "password" },
     },
     authorize: async (credentials) => {
-        const parsed = safeParse(loginSchema, credentials);
+        try {
+            const parsed = safeParse(loginSchema, credentials);
 
-        if (!parsed.success) {
-            throw new InvalidLoginError("Неверные учетные данные", parsed.error);
+            if (!parsed.success) {
+                console.error('Validation error:', parsed.error);
+                throw new InvalidLoginError("Неверные учетные данные", parsed.error);
+            }
+
+            const formData = new FormData();
+            formData.append("username", parsed.data.username);
+            formData.append("password", parsed.data.password);
+
+            const response = await login({ body: formData });
+
+            if (!response.ok) {
+                console.error('Login API error:', response);
+                throw new InvalidLoginError(
+                    "Такой комбинации username и пароля не существует",
+                    response,
+                );
+            }
+
+            const me = await getMe(response.data.access_token);
+
+            const user: User = {
+                id: String(me.data.id),
+                userId: me.data.id,
+                userEmail: me.data.email,
+                accessToken: response.data.access_token,
+                refreshToken: response.data.refresh_token,
+                expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
+                name: me.data.full_name,
+                email: me.data.email,
+                is_superuser: me.data.is_superuser,
+                role: me.data.role,
+            };
+
+            return user;
+        } catch (error) {
+            console.error('Authorization error:', error);
+            throw error;
         }
-
-        const formData = new FormData();
-        formData.append("username", parsed.data.username);
-        formData.append("password", parsed.data.password);
-
-        const response = await login({ body: formData });
-
-        if (!response.ok) {
-            throw new InvalidLoginError(
-                "Такой комбинации username и пароля не существует",
-                response,
-            );
-        }
-
-        const me = await getMe(response.data.access_token);
-
-        const user: User = {
-            id: String(me.data.id),
-            userId: me.data.id,
-            userEmail: me.data.email,
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token,
-            expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
-            name: me.data.full_name,
-            email: me.data.email,
-            is_superuser: me.data.is_superuser,
-            role: me.data.role,
-        };
-
-        return user;
     },
 };
