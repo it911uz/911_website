@@ -4,7 +4,7 @@ import { CreateColumn } from "./create-column"
 import { CreateLead } from "./create-lead"
 import { auth } from "@/auth"
 import { getLeads } from "@/api/leads/get-leads.api"
-import { searchParamsCache } from "@/lib/search-params.util"
+import { searchParamsCache } from "@/lib/search-params.util";
 import { PERMISSIONS } from "@/const/permissions.const"
 
 export const LeadContent = async () => {
@@ -29,14 +29,15 @@ export const LeadContent = async () => {
                 ...lead,
                 status: status.id,
                 position: index + 1,
-            })),
+            })).sort((a, b) => a.position - b.position),
             position: status.level,
             canEdit: status.can_edit,
             hex: status.hex,
         }
     }).sort((a, b) => a.position - b.position);
-    
-    const canCreateColumn = session?.user.role.permissions.some(userPer => userPer.codename)
+
+    const canCreateColumn = session?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.createLeadStatuses);
+    const canCreateLead = session?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.createLeads);
 
     return (
         <>
@@ -56,8 +57,16 @@ export const LeadContent = async () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        <CreateColumn />
-                        <CreateLead />
+
+                        {
+                            canCreateColumn &&
+                            <CreateColumn />
+                        }
+
+                        {
+                            canCreateLead &&
+                            <CreateLead />
+                        }
                     </div>
                 </div>
             </section>

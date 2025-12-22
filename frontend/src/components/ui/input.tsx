@@ -36,7 +36,9 @@ export const inputVariants = cva(
     }
 )
 
-export function Input({ className, type, variant, border, color, sizes, ...props }: ComponentProps<"input"> & VariantProps<typeof inputVariants>) {
+export function Input({ className, type, variant, border, color, sizes, wrapper, ...props }: ComponentProps<"input"> & VariantProps<typeof inputVariants> & {
+    wrapper?: ComponentProps<"div">
+}) {
     const [inputType, setInputType] = useState(type);
 
     const isPassword = type === "password";
@@ -44,7 +46,7 @@ export function Input({ className, type, variant, border, color, sizes, ...props
     const isDarkBackground = color === 'default';
 
     return (
-        <div className="relative flex items-center w-fit">
+        <div className={cn("relative flex items-center w-fit", wrapper?.className)} {...wrapper}>
             <input
                 type={inputType}
                 data-slot="input"

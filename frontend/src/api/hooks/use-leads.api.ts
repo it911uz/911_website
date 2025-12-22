@@ -46,7 +46,7 @@ interface LeadFilesProps {
 export const useGetLeadStatuses = ({ token, enabled }: GetLeadStatusesProps) => {
     return useQuery({
         queryKey: [leadsQueryKey.status.getLeadStatuses],
-        queryFn: async () => await getLeadStatuses(token),
+        queryFn: async () => await getLeadStatuses({ token }),
         enabled,
     })
 }

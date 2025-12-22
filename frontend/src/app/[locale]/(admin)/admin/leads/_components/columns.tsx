@@ -167,16 +167,16 @@ export const Columns = ({ columnsData = [] }: Props) => {
 
         const newLeads = arrayMove(activeCol.leads, oldIndex, newIndex);
 
-        setOptimisticColumns((columns) =>
-            columns.map((column) => {
-                if (column.columnId === activeCol.columnId) {
-                    return { ...column, leads: newLeads };
-                }
-                return column;
-            })
-        );
+        const newOptimisticColumns = optimisticColumns.map((column) => {
+            if (column.columnId === activeCol.columnId) {
+                return { ...column, leads: newLeads };
+            }
+            return column;
+        });
 
         startTransition(async () => {
+            setOptimisticColumns(newOptimisticColumns);
+
             const response = await editLeadPosition({
                 token: session.data?.user.accessToken,
                 body: {

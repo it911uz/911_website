@@ -9,6 +9,8 @@ import { useState } from "react";
 import type { LeadType } from "./columns";
 import { LeadOption } from "./lead-option";
 import dayjs from "dayjs";
+import { useSession } from "next-auth/react";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const LeadCard = ({ lead }: Props) => {
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
@@ -17,6 +19,8 @@ export const LeadCard = ({ lead }: Props) => {
 
     const [showAll, setShowAll] = useState(false);
 
+    const session = useSession();
+
     const style: React.CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
@@ -24,6 +28,8 @@ export const LeadCard = ({ lead }: Props) => {
         boxShadow: isDragging ? "0 10px 20px rgba(0,0,0,0.2)" : "0 2px 6px rgba(0,0,0,0.05)",
         scale: isDragging ? "1.03" : "1",
     };
+
+    const canEditLead = session.data?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.updateLeads);
 
     return (
         <Card
@@ -103,7 +109,10 @@ export const LeadCard = ({ lead }: Props) => {
                     {dayjs(lead.created_at).format("HH:mm YYYY-MM-DD")}
                 </time>
 
-                <LeadOption lead={lead} />
+                {
+                    canEditLead &&
+                    <LeadOption lead={lead} />
+                }
             </CardFooter>
         </Card>
     );

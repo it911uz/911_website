@@ -33,6 +33,7 @@ const RootLayout = async ({ params, children }: LayoutProps<"/[locale]">) => {
 				<link rel="shortcut icon" href="/favicon/favicon.ico" />
 				<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
 				<meta name="apple-mobile-web-app-title" content="IT 911" />
+				<meta name="theme-color" content="black" />
 				<link rel="manifest" href="/favicon/site.webmanifest" />
 			</head>
 			<body className="min-h-screen flex flex-col justify-between">

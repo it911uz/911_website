@@ -16,11 +16,13 @@ import { useOpen } from "@/hooks/use-open"
 import { columnSchema, type ColumnSchemaType } from "@/schemas/lead.schema"
 import { createLeadStatus } from "@/api/leads/create-lead-status.api"
 import { toastErrorResponse } from "@/lib/toast-error-response.util"
+import { useRouter } from "@/i18n/navigation"
 
 export const CreateColumn = () => {
-    const { open, onOpenChange } = useOpen()
-    const { data: session } = useSession()
-    const [pending, startTransition] = useTransition()
+    const { open, onOpenChange } = useOpen();
+    const { data: session } = useSession();
+    const [pending, startTransition] = useTransition();
+    const router = useRouter();
 
     const {
         register,
@@ -33,12 +35,11 @@ export const CreateColumn = () => {
     })
 
     const onSubmit = (values: ColumnSchemaType) => {
-        if (!session?.user.accessToken) return
 
         startTransition(async () => {
             const response = await createLeadStatus({
                 body: values,
-                token: session.user.accessToken,
+                token: session?.user.accessToken,
             })
 
             if (!response.ok) {
@@ -47,7 +48,8 @@ export const CreateColumn = () => {
             }
 
             toast.success("Колонка создана")
-            window.location.reload()
+            router.refresh();
+            reset();
             onOpenChange(false)
         })
     }
