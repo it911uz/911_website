@@ -11,6 +11,7 @@ import { login } from "@/api/auth/login.api";
 import { getMe } from "@/api/auth/get-me.api";
 
 export const SESSION_TOKEN_NAME = "authjs.session-token";
+
 export const SESSION_TOKEN_EXPIRATION = 110 * 60 * 1000;
 
 class InvalidLoginError extends CredentialsSignin {
@@ -54,6 +55,8 @@ export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
 export const AuthConfig: NextAuthConfig = {
     trustHost: true,
     secret: Env.AUTH_SECRET,
+    debug: Env.NODE_ENV === "development",
+    providers: [],
     callbacks: {
         jwt: async ({ token, user, account }) => {
             if (account) {
@@ -91,25 +94,23 @@ export const AuthConfig: NextAuthConfig = {
 
             return null;
         },
-        session: ({ session, token }) => ({
-            ...session,
-            user: {
-                ...session.user,
-                userId: token.userId,
-                userEmail: token.userEmail,
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken,
-                expiresAt: token.expiresAt,
-                is_superuser: token.is_superuser,
-                role: token.role,
-            },
-        }),
-        authorized({ auth }) {
-            return !!auth;
+        session: ({ session, token }) => {
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    userId: token.userId,
+                    userEmail: token.userEmail,
+                    accessToken: token.accessToken,
+                    refreshToken: token.refreshToken,
+                    expiresAt: token.expiresAt,
+                    is_superuser: token.is_superuser,
+                    role: token.role,
+                },
+            };
         },
+        authorized: ({ auth }) => !!auth,
     },
-    debug: Env.NODE_ENV === "development",
-    providers: [],
 };
 
 export const CredentialsProviderConfig: CredentialsConfig = {
