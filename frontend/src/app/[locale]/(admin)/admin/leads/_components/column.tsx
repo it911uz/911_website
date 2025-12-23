@@ -34,9 +34,6 @@ export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit 
         transition,
     };
 
-    const canColumnEdit = session.data?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.updateLeadStatuses);
-    const canColumnDelete = session.data?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.deleteLeadStatuses);
-
     return (
         <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, borderColor: hex }} {...attributes}>
             <div className="flex justify-between items-center">
@@ -45,14 +42,14 @@ export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit 
                 </h3>
 
                 <div className="flex gap-2">
-                    {(canEdit || canColumnEdit) && (
+                    {canEdit && (
                         <div className="group relative">
                             <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                             <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
                                 <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
 
                                 {
-                                    (!leads.length || canColumnDelete) && <DeleteColumn columnId={columnId} />
+                                    !leads.length && <DeleteColumn columnId={columnId} />
                                 }
 
                             </div>

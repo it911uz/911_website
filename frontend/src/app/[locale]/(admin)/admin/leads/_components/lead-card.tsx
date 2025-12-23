@@ -29,8 +29,6 @@ export const LeadCard = ({ lead }: Props) => {
         scale: isDragging ? "1.03" : "1",
     };
 
-    const canEditLead = session.data?.user.role.permissions.some(permission => permission.codename === PERMISSIONS.updateLeads);
-
     return (
         <Card
             ref={setNodeRef}
@@ -109,10 +107,7 @@ export const LeadCard = ({ lead }: Props) => {
                     {dayjs(lead.created_at).format("HH:mm YYYY-MM-DD")}
                 </time>
 
-                {
-                    canEditLead &&
-                    <LeadOption lead={lead} />
-                }
+                <LeadOption lead={lead} />
             </CardFooter>
         </Card>
     );
