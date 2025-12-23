@@ -104,8 +104,6 @@ export const AuthConfig: NextAuthConfig = {
                     accessToken: token.accessToken,
                     refreshToken: token.refreshToken,
                     expiresAt: token.expiresAt,
-                    is_superuser: token.is_superuser,
-                    role: token.role,
                 },
             };
         },
