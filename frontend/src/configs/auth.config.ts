@@ -68,8 +68,6 @@ export const AuthConfig: NextAuthConfig = {
                         accessToken: user.accessToken,
                         refreshToken: user.refreshToken,
                         expiresAt: user.expiresAt,
-                        is_superuser: user.is_superuser,
-                        role: user.role,
                     };
                 }
             } else if (Date.now() < token.expiresAt) {
@@ -99,7 +97,11 @@ export const AuthConfig: NextAuthConfig = {
                 ...session,
                 user: {
                     ...session.user,
-                    ...token,
+                    accessToken: token.accessToken,
+                    expiresAt: token.expiresAt,
+                    refreshToken: token.refreshToken,
+                    userEmail: token.userEmail,
+                    userId: token.userId,
                 },
             };
         },
@@ -164,8 +166,6 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
                 name: me.data.full_name,
                 email: me.data.email,
-                is_superuser: me.data.is_superuser,
-                role: me.data.role,
             };
 
             return user;
