@@ -99,11 +99,7 @@ export const AuthConfig: NextAuthConfig = {
                 ...session,
                 user: {
                     ...session.user,
-                    userId: token.userId,
-                    userEmail: token.userEmail,
-                    accessToken: token.accessToken,
-                    refreshToken: token.refreshToken,
-                    expiresAt: token.expiresAt,
+                    ...token,
                 },
             };
         },
