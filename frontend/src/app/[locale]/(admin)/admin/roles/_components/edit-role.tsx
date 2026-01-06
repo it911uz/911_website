@@ -56,7 +56,7 @@ export const EditRole = ({ role }: Props) => {
         const response = await createRolePermissions({
             body: {
                 role_id: role.id,
-                permissions: values?.permissions || []
+                permissions: values?.permissions?.map(permission => Number(permission)) || []
             },
             token: session.data?.user.accessToken
         })
