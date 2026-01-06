@@ -18,13 +18,13 @@ from target.repository import TargetCompanyRepository
 from user.repository import UserRepository
 
 
-class LeadManager(CacheMixin, BaseManager):
+class LeadManager(BaseManager):
     repo_class = LeadRepository
     fk_fields = {
         "status_id": LeadStatusRepository,
         "target_id": TargetCompanyRepository
     }
-    cache_entity = "lead"
+    # cache_entity = "lead"
     read_schema = LeadRead
 
     def __init__(
@@ -32,6 +32,7 @@ class LeadManager(CacheMixin, BaseManager):
             db: AsyncSession
     ):
         super().__init__(db)
+        self.db = db
 
     async def move_lead(self, request: LeadMove):
         lead = await self.repo.get(request.lead_id)
@@ -39,7 +40,8 @@ class LeadManager(CacheMixin, BaseManager):
             return
         lead.status_id = request.status_id
         await self.repo.update(lead)
-        self.cache.delete(self.cache_entity)
+        await self.db.commit()
+        # self.cache.delete(self.cache_entity)
 
 
 class LeadCommentManager(BaseManager):
