@@ -36,6 +36,8 @@ export const LeadContent = async () => {
         }
     }).sort((a, b) => a.position - b.position);
 
+    console.log(session?.user);
+
     return (
         <>
             <section

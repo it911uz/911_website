@@ -45,10 +45,8 @@ export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
         accessToken: response.data.access_token,
         refreshToken: response.data.refresh_token,
         expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
-        name: me.data.full_name,
-        email: me.data.email,
-        is_superuser: me.data.is_superuser,
-        role: me.data.role,
+        isSuperuser: me.data.is_superuser,
+        permissions: me.data.role.permissions.map(p => p.codename), //
     };
 };
 
@@ -68,6 +66,8 @@ export const AuthConfig: NextAuthConfig = {
                         accessToken: user.accessToken,
                         refreshToken: user.refreshToken,
                         expiresAt: user.expiresAt,
+                        isSuperuser: user.isSuperuser, //
+                        permissions: user.permissions, //
                     };
                 }
             } else if (Date.now() < token.expiresAt) {
@@ -97,11 +97,13 @@ export const AuthConfig: NextAuthConfig = {
                 ...session,
                 user: {
                     ...session.user,
+                    userId: token.userId,
+                    userEmail: token.userEmail,
                     accessToken: token.accessToken,
                     expiresAt: token.expiresAt,
                     refreshToken: token.refreshToken,
-                    userEmail: token.userEmail,
-                    userId: token.userId,
+                    isSuperuser: token.isSuperuser ?? false, //
+                    permissions: token.permissions ?? [], //
                 },
             };
         },
@@ -166,6 +168,8 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
                 name: me.data.full_name,
                 email: me.data.email,
+                isSuperuser: me.data.is_superuser, //
+                permissions: me.data.role.permissions.map((p) => p.codename), //
             };
 
             return user;

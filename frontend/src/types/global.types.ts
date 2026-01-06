@@ -11,7 +11,8 @@ declare module "next-auth" {
 		accessToken: string;
 		refreshToken: string;
 		expiresAt: number;
-		
+		isSuperuser: boolean; //
+		permissions: string[]; //
 	}
 
 	interface Session {
@@ -26,6 +27,8 @@ declare module "next-auth/jwt" {
 		accessToken: string;
 		refreshToken: string;
 		expiresAt: number;
+		isSuperuser?: boolean;
+		permissions?: string[];
 		error?: "RefreshTokenError";
 	}
 }

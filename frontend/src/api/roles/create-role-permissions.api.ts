@@ -12,6 +12,6 @@ interface Params {
     token?: string;
     body: {
         role_id: number;
-        permissions: string[];
+        permissions: number[];
     };
 }
