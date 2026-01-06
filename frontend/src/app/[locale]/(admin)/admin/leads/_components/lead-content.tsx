@@ -36,7 +36,8 @@ export const LeadContent = async () => {
         }
     }).sort((a, b) => a.position - b.position);
 
-    console.log(session?.user);
+    const canCreateStatus = session?.user.permissions.includes(PERMISSIONS.createLeadStatuses);
+    const canCreateColumn = session?.user.permissions.includes(PERMISSIONS.createLeadStatuses);
 
     return (
         <>
@@ -57,9 +58,9 @@ export const LeadContent = async () => {
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
 
-                        <CreateColumn />
+                        {canCreateColumn && <CreateColumn />}
 
-                        <CreateLead />
+                        {canCreateStatus && <CreateLead />}
                     </div>
                 </div>
             </section>
