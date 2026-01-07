@@ -63,18 +63,23 @@ class TaskManager(BaseManager):
     async def create(self, **kwargs):
         tag_ids = kwargs.pop('tag_ids', [])
         user_ids = kwargs.pop('user_ids', [])
-        tag = await super().create(**kwargs)
-        tag = await self.repo.get(tag.id)
-        await self.add_tags(tag, tag_ids, True)
-        await self.add_users(tag, user_ids, True)
-        return tag
+        task = await super().create(**kwargs)
+        task = await self.repo.get(task.id)
+        task = await self.add_tags(task, tag_ids, True)
+        task = await self.add_users(task, user_ids, True)
+        await self.db.commit()
+        await self.db.refresh(task)
+
+        return task
 
     async def update(self, obj_id, **kwargs):
         tag_ids = kwargs.pop('tag_ids', [])
         user_ids = kwargs.pop('user_ids', [])
-        obj = await super().update(obj_id, **kwargs)
-        await self.add_tags(obj, tag_ids)
-        await self.add_users(obj, user_ids)
+        await super().update(obj_id, **kwargs)
+        obj = await self.repo.get(obj_id)
+        obj = await self.add_tags(obj, tag_ids)
+        obj = await self.add_users(obj, user_ids)
+        await self.repo.update(obj)
 
     async def move_task(self, request: TaskMove):
         task = await self.repo.get(request.task_id)
@@ -82,6 +87,7 @@ class TaskManager(BaseManager):
             raise NotFound("Task Not Found")
         task.status_id = request.status_id
         await self.repo.update(task)
+        await self.db.commit()
 
 
 class TaskStatusManager(BaseManager):
