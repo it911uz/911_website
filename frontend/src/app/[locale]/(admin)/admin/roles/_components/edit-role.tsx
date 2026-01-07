@@ -35,6 +35,11 @@ export const EditRole = ({ role }: Props) => {
     const session = useSession();
 
     const updateRoleName = async (values: RoleSchemaType) => {
+        if (role.id === 1 || role.id === 2) {
+            toast.warning("Нельзя изменить роль");
+            return
+        }
+
         const response = await editRole({
             id: role.id,
             body: {
@@ -78,7 +83,7 @@ export const EditRole = ({ role }: Props) => {
                 updateRolePermissions(values)
             ]);
 
-            if (!name.ok || !permissions.ok) {
+            if (!name?.ok || !permissions.ok) {
                 return;
             }
 

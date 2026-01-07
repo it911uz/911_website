@@ -62,12 +62,12 @@ export const NavMain = ({ items }: Props) => {
 
 interface Props {
     items: {
-        title: string
-        url?: string
-        icon: any
+        title: string;
+        url?: string;
+        icon: any;
         items?: {
-            title: string
-            url: string
+            title: string;
+            url: string;
         }[]
     }[]
 }

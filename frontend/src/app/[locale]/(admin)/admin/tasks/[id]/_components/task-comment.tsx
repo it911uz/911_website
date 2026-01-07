@@ -7,6 +7,7 @@ import { CustomSunEditor } from "@/components/ui/editor";
 import { ErrorMassage } from "@/components/ui/error-message";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PERMISSIONS } from "@/const/permissions.const";
 import { useRouter } from "@/i18n/navigation";
 import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { taskCommentSchema, type TaskCommentSchemaType } from "@/schemas/task.schema";
@@ -71,7 +72,9 @@ export const TaskComment = () => {
         });
     };
 
-    return (
+    const canCreateTaskComment = session.data?.user.permissions.includes(PERMISSIONS.create_task_comments)
+
+    return canCreateTaskComment && (
         <form
             className="space-y-6 bg-white/60 backdrop-blur p-6 rounded-2xl shadow border border-gray-200"
             onSubmit={handleSubmit(onSubmit)}

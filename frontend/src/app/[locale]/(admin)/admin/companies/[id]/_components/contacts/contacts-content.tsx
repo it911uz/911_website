@@ -5,6 +5,7 @@ import { getCompanyContacts } from "@/api/companies/get-company-contacts.api";
 import { ClientNoData } from "@/components/widgets/client-no-data";
 import { EditContact } from "./edit-contact";
 import { DeleteContact } from "./delete-contact";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const ContactsContent = async ({ companyId }: Props) => {
     const session = await auth();
@@ -14,17 +15,24 @@ export const ContactsContent = async ({ companyId }: Props) => {
         id: companyId
     });
 
+    const canCreateCompanyContacts = session?.user.permissions.includes(PERMISSIONS.create_company_contacts);
+    const canSeeCompanyContacts = session?.user.permissions.includes(PERMISSIONS.view_company_contacts);
+    const canEditCompanyContacts = session?.user.permissions.includes(PERMISSIONS.update_company_contacts);
+    const canDeleteCompanyContacts = session?.user.permissions.includes(PERMISSIONS.delete_company_contacts);
+
     return (
         <section
             data-slot="contacts"
             className="py-7 space-y-5"
         >
-            <div className="text-right">
-                <CreateCompany />
-            </div>
+            {
+                canCreateCompanyContacts && <div className="text-right">
+                    <CreateCompany />
+                </div>
+            }
 
             {
-                data.length ? <TableWrapper>
+                data.length ? canSeeCompanyContacts && <TableWrapper>
                     <Table>
                         <TableHeader>
                             <TableHeaderCell>№</TableHeaderCell>
@@ -46,9 +54,13 @@ export const ContactsContent = async ({ companyId }: Props) => {
                                         <TableCell>{contact.email}</TableCell>
                                         <TableCell>
                                             <div className="flex gap-5 justify-end">
-                                                <EditContact contact={contact} />
+                                                {
+                                                    canEditCompanyContacts && <EditContact contact={contact} />
+                                                }
 
-                                                <DeleteContact contactId={contact.id} />
+                                                {
+                                                    canDeleteCompanyContacts && <DeleteContact contactId={contact.id} />
+                                                }
                                             </div>
                                         </TableCell>
                                     </TableRow>

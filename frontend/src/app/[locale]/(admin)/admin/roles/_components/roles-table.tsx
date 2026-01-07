@@ -5,18 +5,23 @@ import { searchParamsCache } from "@/lib/search-params.util";
 import { RolesTableRow } from "./roles-table-row";
 import { RolesPagination } from "./roles-pagination";
 import { ServerNoData } from "@/components/widgets/server-no-data";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const RolesTable = async () => {
     const { page, query, perPage } = await searchParamsCache.all();
 
     const session = await auth();
 
-    const { data } = await getRoles({
+    const { data, error } = await getRoles({
         page: page,
         perPage: perPage,
         token: session?.user.accessToken,
         query
-    })
+    });
+
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return <section data-slot="roles" className="px-4 py-10 lg:px-8 ">
 

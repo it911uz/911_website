@@ -7,6 +7,8 @@ import { getTasksStatuses } from "@/api/tasks/get-task-statuses.api"
 import { getTasks } from "@/api/tasks/get-tasks.api"
 import { searchParamsCache } from "@/lib/search-params.util"
 import { TaskFilter } from "./task-filter"
+import { PERMISSIONS } from "@/const/permissions.const"
+import { PrivacyError } from "@/components/widgets/privacy-error"
 
 export const TasksContent = async () => {
     const session = await auth();
@@ -39,6 +41,15 @@ export const TasksContent = async () => {
         }
     }).sort((a, b) => a.position - b.position);
 
+    const canCreateStatus = session?.user.permissions.includes(PERMISSIONS.create_task_statuses);
+    const canCreateTasks = session?.user.permissions.includes(PERMISSIONS.create_tasks);
+    const canCreateTags = session?.user.permissions.includes(PERMISSIONS.create_tags);
+    const canSeeTasks = session?.user.permissions.includes(PERMISSIONS.view_tasks);
+
+    if (taskStatuses.error?.response.status === 403 || tasks.error?.response.status === 403) {
+        return <PrivacyError />
+    }
+
     return (
         <>
             <section
@@ -56,16 +67,34 @@ export const TasksContent = async () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        <CreateColumn />
-                        <CreateTag />
-                        <CreateTask />
+                        {
+                            canCreateStatus && (
+                                <CreateColumn />
+                            )
+                        }
+                        {
+                            canCreateTags && (
+                                <CreateTag />
+                            )
+                        }
+                        {
+                            canCreateTasks && (
+                                <CreateTask />
+                            )
+                        }
                     </div>
                 </div>
             </section>
 
-            <TaskFilter />
+            {
+                canSeeTasks && (
+                    <>
+                        <TaskFilter />
 
-            <Columns columnsData={columnsData} />
+                        <Columns columnsData={columnsData} />
+                    </>
+                )
+            }
         </>
     )
 }

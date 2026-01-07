@@ -6,6 +6,7 @@ import { auth } from "@/auth"
 import { getLeads } from "@/api/leads/get-leads.api"
 import { searchParamsCache } from "@/lib/search-params.util";
 import { PERMISSIONS } from "@/const/permissions.const"
+import { PrivacyError } from "@/components/widgets/privacy-error"
 
 export const LeadContent = async () => {
     const session = await auth();
@@ -36,8 +37,12 @@ export const LeadContent = async () => {
         }
     }).sort((a, b) => a.position - b.position);
 
-    const canCreateStatus = session?.user.permissions.includes(PERMISSIONS.createLeadStatuses);
-    const canCreateColumn = session?.user.permissions.includes(PERMISSIONS.createLeadStatuses);
+    const canCreateLeadStatus = session?.user.permissions.includes(PERMISSIONS.create_lead_statuses);
+    const canCreateLead = session?.user.permissions.includes(PERMISSIONS.create_leads);
+
+    if (leadStatuses.error?.response.status === 403 || leads.error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return (
         <>
@@ -58,9 +63,9 @@ export const LeadContent = async () => {
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
 
-                        {canCreateColumn && <CreateColumn />}
+                        {canCreateLeadStatus && <CreateColumn />}
 
-                        {canCreateStatus && <CreateLead />}
+                        {canCreateLead && <CreateLead />}
                     </div>
                 </div>
             </section>

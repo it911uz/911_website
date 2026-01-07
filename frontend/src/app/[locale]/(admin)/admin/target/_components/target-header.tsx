@@ -1,6 +1,12 @@
+import { auth } from "@/auth";
 import { CreateTarget } from "./create-target";
+import { PERMISSIONS } from "@/const/permissions.const";
 
-export const TargetHeader = () => {
+export const TargetHeader = async () => {
+    const session = await auth();
+
+    const canCreateTarget = session?.user.permissions.includes(PERMISSIONS.create_target_companies);
+
     return (
         <section
             data-slot="targets"
@@ -16,9 +22,11 @@ export const TargetHeader = () => {
                     </p>
                 </div>
 
-                <div className="w-full sm:w-auto">
-                    <CreateTarget />
-                </div>
+                {
+                    canCreateTarget && <div className="w-full sm:w-auto">
+                        <CreateTarget />
+                    </div>
+                }
             </div>
         </section>
     );

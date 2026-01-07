@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 
 export const TaskComments = ({ comments = [], files = [] }: Props) => {
     const { id } = useParams<{ id: string }>();
+
+
     return (
         <>
             {files.length ? (

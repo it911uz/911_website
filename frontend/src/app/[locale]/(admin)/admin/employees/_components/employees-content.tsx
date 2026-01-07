@@ -1,8 +1,15 @@
+import { auth } from "@/auth";
 import { CreateEmploy } from "./create-employ";
 import { EmployeesFilter } from "./employees-filter";
 import { EmployeesTable } from "./employees-table";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const EmployeesContent = async () => {
+    const session = await auth();
+
+    const canCreateEmploy = session?.user.permissions.includes(PERMISSIONS.create_users);
+    const canSeeEmployees = session?.user.permissions.includes(PERMISSIONS.view_users);
+
     return <>
         <section
             data-slot="leads"
@@ -18,12 +25,18 @@ export const EmployeesContent = async () => {
                     </p>
                 </div>
 
-                <CreateEmploy />
+                {
+                    canCreateEmploy && <CreateEmploy />
+                }
             </div>
         </section>
 
-        <EmployeesFilter />
+        {
+            canSeeEmployees && <>
+                <EmployeesFilter />
 
-        <EmployeesTable />
+                <EmployeesTable />
+            </>
+        }
     </>
 };

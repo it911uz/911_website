@@ -1,7 +1,14 @@
+import { auth } from "@/auth";
 import { CreateService } from "./create-servie"
 import { ServicesTable } from "./service-table"
+import { PERMISSIONS } from "@/const/permissions.const";
 
-export const ServiceContent = () => {
+export const ServiceContent = async () => {
+    const session = await auth();
+
+    const canCreateService = session?.user.permissions.includes(PERMISSIONS.create_services);
+    const canSeeServices = session?.user.permissions.includes(PERMISSIONS.view_services);
+
     return <>
         <section data-slot="service" className="px-4 py-10 lg:px-8">
             <div className="flex flex-col gap-6 lg:flex-row sm:items-center sm:justify-between">
@@ -14,10 +21,14 @@ export const ServiceContent = () => {
                     </p>
                 </div>
 
-                <CreateService />
+                {
+                    canCreateService && <CreateService />
+                }
             </div>
         </section>
 
-        <ServicesTable />
+        {
+            canSeeServices && <ServicesTable />
+        }
     </>
 }
