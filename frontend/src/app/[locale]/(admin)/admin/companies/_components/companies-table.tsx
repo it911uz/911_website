@@ -5,18 +5,24 @@ import { auth } from "@/auth";
 import { searchParamsCache } from "@/lib/search-params.util";
 import { CompaniesTableRow } from "./companies-table-row";
 import { ClientNoData } from "@/components/widgets/client-no-data";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const CompaniesTable = async () => {
 
     const session = await auth();
+
     const { page, query, perPage, status } = await searchParamsCache.all();
-    const { data } = await getCompanies({
+    const { data, error } = await getCompanies({
         token: session?.user.accessToken,
         page: page,
         perPage: perPage,
         query,
         status
     });
+
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return <section
         data-slot="table"

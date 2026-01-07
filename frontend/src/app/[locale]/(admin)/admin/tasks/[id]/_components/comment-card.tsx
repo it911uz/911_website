@@ -1,8 +1,16 @@
+"use client";
+
 import type { TaskComment } from "@/types/tasks.type";
 import dayjs from "dayjs";
 import { DeleteTaskComment } from "./delete-task-comment";
+import { useSession } from "next-auth/react";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const CommentCard = ({ comment }: Props) => {
+    const session = useSession();
+
+    const canDeleteComment = session.data?.user.permissions.includes(PERMISSIONS.delete_task_comments);
+
     return (
         <article className="p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow transition">
             <header className="flex gap-4 mb-4 justify-between">
@@ -19,7 +27,9 @@ export const CommentCard = ({ comment }: Props) => {
                     </time>
                 </div>
 
-                <DeleteTaskComment comment={comment} />
+                {
+                    canDeleteComment && <DeleteTaskComment comment={comment} />
+                }
             </header>
 
             <div

@@ -1,14 +1,19 @@
 import { getCompany } from "@/api/companies/get-company.api";
 import { auth } from "@/auth";
 import { CompanyTabs } from "./company-tabs";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const CompanyContent = async ({ companyId }: Props) => {
     const session = await auth();
 
-    const { data } = await getCompany({
+    const { data, error } = await getCompany({
         token: session?.user.accessToken,
         id: companyId
     });
+
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return (
         <>

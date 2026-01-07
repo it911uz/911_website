@@ -7,8 +7,16 @@ import { Eye } from "lucide-react";
 import { EditCompany } from "./edit-company";
 import { DeleteCompany } from "./delete-company";
 import { SwitchStatus } from "./switch-status";
+import { auth } from "@/auth";
+import { PERMISSIONS } from "@/const/permissions.const";
 
-export const CompaniesTableRow = ({ index, company }: Props) => {
+export const CompaniesTableRow = async ({ index, company }: Props) => {
+    const session = await auth();
+
+    const canSeeCompany = session?.user.permissions.includes(PERMISSIONS.view_companies);
+    const canEditCompany = session?.user.permissions.includes(PERMISSIONS.update_companies);
+    const canDeleteCompany = session?.user.permissions.includes(PERMISSIONS.delete_companies);
+
     return (
         <TableRow>
             <TableCell>
@@ -29,15 +37,21 @@ export const CompaniesTableRow = ({ index, company }: Props) => {
 
             <TableCell >
                 <div className="flex gap-5 justify-end items-center">
-                    <Link href={Routers.admin.companiesById(company.id)}>
-                        <Hint >
-                            <Eye className="text-2xl cursor-pointer hover:text-blue-600" />
-                        </Hint>
-                    </Link>
+                    {
+                        canSeeCompany && <Link href={Routers.admin.companiesById(company.id)}>
+                            <Hint >
+                                <Eye className="text-2xl cursor-pointer hover:text-blue-600" />
+                            </Hint>
+                        </Link>
+                    }
 
-                    <EditCompany company={company} />
+                    {
+                        canEditCompany && <EditCompany company={company} />
+                    }
 
-                    <DeleteCompany id={company.id} />
+                    {
+                        canDeleteCompany && <DeleteCompany id={company.id} />
+                    }
                 </div>
             </TableCell>
         </TableRow>

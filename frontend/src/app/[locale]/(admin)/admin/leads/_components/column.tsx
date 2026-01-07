@@ -34,8 +34,8 @@ export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit 
         transition,
     };
 
-    const canColumnEdit = session.data?.user.permissions.includes(PERMISSIONS.updateLeadStatuses);
-    const canColumnDelete = session.data?.user.permissions.includes(PERMISSIONS.deleteLeads);
+    const canEditLeadStatus = session.data?.user.permissions.includes(PERMISSIONS.update_lead_statuses);
+    const canDeleteLeadStatus = session.data?.user.permissions.includes(PERMISSIONS.delete_leads);
 
     return (
         <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, borderColor: hex }} {...attributes}>
@@ -50,11 +50,11 @@ export const Column = ({ columnData: { columnId, hex, name, leads = [], canEdit 
                             <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                             <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
                                 {
-                                    canColumnEdit && <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
+                                    canEditLeadStatus && <ColumnEdit columnsData={{ columnId, hex, name, canEdit }} />
                                 }
 
                                 {
-                                    (!leads.length || canColumnDelete) && <DeleteColumn columnId={columnId} />
+                                    (!leads.length || canDeleteLeadStatus) && <DeleteColumn columnId={columnId} />
                                 }
 
                             </div>

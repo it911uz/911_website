@@ -1,8 +1,15 @@
+import { auth } from "@/auth";
 import { CompaniesFilter } from "./companies-filter";
 import { CompaniesTable } from "./companies-table";
 import { CreateCompany } from "./create-company";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const CompaniesContent = async () => {
+    const session = await auth();
+
+    const canCreateCompany = session?.user.permissions.includes(PERMISSIONS.create_companies);
+    const canSeeCompanies = session?.user.permissions.includes(PERMISSIONS.view_companies);
+
     return (
         <div className="space-y-6">
             <section
@@ -20,15 +27,21 @@ export const CompaniesContent = async () => {
                         </p>
                     </div>
 
-                    <div className="w-full sm:w-auto">
-                        <CreateCompany />
-                    </div>
+                    {
+                        canCreateCompany && <div className="w-full sm:w-auto">
+                            <CreateCompany />
+                        </div>
+                    }
                 </div>
             </section>
 
-            <CompaniesFilter />
+            {
+                canSeeCompanies && <>
+                    <CompaniesFilter />
 
-            <CompaniesTable />
+                    <CompaniesTable />
+                </>
+            }
         </div>
     );
 };

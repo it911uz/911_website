@@ -6,14 +6,18 @@ import { Plus } from "lucide-react";
 import { EditService } from "./edit-service";
 import { DeleteService } from "./delete-service";
 import { ClientNoData } from "@/components/widgets/client-no-data";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const ServicesTable = async () => {
     const session = await auth();
 
-    const { data } = await getServices(session?.user.accessToken);
+    const { data, error } = await getServices(session?.user.accessToken);
+
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return <section data-slot="table" className="px-4 py-10 lg:px-8">
-
         {
             data.length ? <TableWrapper>
                 <Table>
@@ -71,6 +75,5 @@ export const ServicesTable = async () => {
                 </Table>
             </TableWrapper> : <ClientNoData />
         }
-
     </section>
 }

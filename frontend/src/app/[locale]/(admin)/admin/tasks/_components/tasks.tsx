@@ -1,9 +1,7 @@
-"use client";
-
 import { TaskCard } from "./task-card";
 import type { LeadType } from "./columns";
 
-export const Tasks = ({ tasks = [] }: { tasks: LeadType[] }) => {
+export const Tasks = ({ tasks = [] }: Props) => {
     return (
         <ul className="space-y-2.5">
             {tasks.sort((a, b) => b.position - a.position).map((task) => (
@@ -14,3 +12,5 @@ export const Tasks = ({ tasks = [] }: { tasks: LeadType[] }) => {
         </ul>
     );
 };
+
+interface Props { tasks: LeadType[] }

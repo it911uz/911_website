@@ -11,8 +11,12 @@ import { Tasks } from "./tasks";
 import type { ColumnType } from "./columns";
 import { ColumnEdit } from "./column-edit";
 import { DeleteColumn } from "./delete-column";
+import { useSession } from "next-auth/react";
+import { PERMISSIONS } from "@/const/permissions.const";
 
-export const Column = ({ columnData: { columnId, name, tasks = [], hex, isCompleted } }: ComponentProps<"div"> & { columnData: ColumnType }) => {
+export const Column = ({ columnData: { columnId, name, tasks = [], hex, isCompleted } }: Props) => {
+    const session = useSession();
+
     const { setNodeRef: setSortableRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: `column-${columnId}`,
     });
@@ -31,6 +35,9 @@ export const Column = ({ columnData: { columnId, name, tasks = [], hex, isComple
         borderColor: hex,
     };
 
+    const canColumnEdit = session.data?.user.permissions.includes(PERMISSIONS.update_task_statuses);
+    const canColumnDelete = session.data?.user.permissions.includes(PERMISSIONS.delete_task_statuses);
+
     return (
         <div ref={combinedRef} className={cn("bg-white relative border border-dashed rounded-xl px-4 py-6 space-y-6 w-md", { "z-10 shadow-xl drop-shadow-2xl": isDragging })} style={{ ...style, }} {...attributes}>
             <div className="flex justify-between items-center">
@@ -42,8 +49,17 @@ export const Column = ({ columnData: { columnId, name, tasks = [], hex, isComple
                     <div className="group relative">
                         <GripVertical className="text-gray-500 hover:text-blue-500 cursor-pointer" />
                         <div className="absolute -top-5 -left-1/2 opacity-0 group-hover:opacity-100 space-y-2.5 bg-white p-1.5 rounded transition-all duration-300 transform -translate-x-1/2 ">
-                            <ColumnEdit columnData={{ columnId, name, hex, isCompleted }} />
-                            <DeleteColumn columnId={columnId} hasTasks={!(tasks.length > 0)} />
+                            {
+                                canColumnEdit && (
+                                    <ColumnEdit columnData={{ columnId, name, hex, isCompleted }} />
+                                )
+                            }
+
+                            {
+                                canColumnDelete && (
+                                    <DeleteColumn columnId={columnId} hasTasks={!(tasks.length > 0)} />
+                                )
+                            }
                         </div>
                     </div>
 
@@ -57,3 +73,5 @@ export const Column = ({ columnData: { columnId, name, tasks = [], hex, isComple
         </div>
     );
 };
+
+type Props = ComponentProps<"div"> & { columnData: ColumnType }

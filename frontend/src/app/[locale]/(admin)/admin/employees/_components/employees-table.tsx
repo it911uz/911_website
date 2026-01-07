@@ -5,13 +5,14 @@ import { getUsers } from "@/api/users/get-users.api";
 import { EmployeesTableRow } from "./employees-table-row";
 import { EmployeesPagination } from "./employees-pagination";
 import { ClientNoData } from "@/components/widgets/client-no-data";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const EmployeesTable = async () => {
     const { page, query, perPage, userRole } = await searchParamsCache.all();
 
     const session = await auth();
 
-    const { data } = await getUsers({
+    const { data, error } = await getUsers({
         page: page,
         perPage: perPage,
         token: session?.user.accessToken,
@@ -19,8 +20,11 @@ export const EmployeesTable = async () => {
         roleId: userRole,
     });
 
-    return <section data-slot="roles" className="px-4 py-10 lg:px-8 ">
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
+    return <section data-slot="roles" className="px-4 py-10 lg:px-8 ">
         {
             data.items.length ? <>
                 <TableWrapper>

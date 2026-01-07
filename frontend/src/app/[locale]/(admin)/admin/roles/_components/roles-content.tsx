@@ -1,8 +1,15 @@
+import { auth } from "@/auth";
 import { CreateRole } from "./create-role"
 import { RolesFilter } from "./roles-filter"
 import { RolesTable } from "./roles-table"
+import { PERMISSIONS } from "@/const/permissions.const";
 
-export const RolesContent = () => {
+export const RolesContent = async () => {
+    const session = await auth();
+
+    const canCreateRole = session?.user.permissions.includes(PERMISSIONS.create_roles);
+    const canSeeRoles = session?.user.permissions.includes(PERMISSIONS.view_roles);
+
     return <>
         <section
             data-slot="leads"
@@ -18,12 +25,18 @@ export const RolesContent = () => {
                     </p>
                 </div>
 
-                <CreateRole />
+                {
+                    canCreateRole && <CreateRole />
+                }
             </div>
         </section>
 
-        <RolesFilter />
+        {
+            canSeeRoles && <>
+                <RolesFilter />
 
-        <RolesTable />
+                <RolesTable />
+            </>
+        }
     </>
 }

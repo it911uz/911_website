@@ -5,20 +5,28 @@ import { DeleteTask } from "./delete-task";
 import { TaskComments } from "./task-comments";
 import { getTaskComments } from "@/api/tasks/get-task-comments.api";
 import { getTaskFiles } from "@/api/tasks/get-task-files.api";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const TaskContent = async ({ taskId }: Props) => {
     const session = await auth();
 
-    const [taskData, commentData, filesData] = await Promise.all([getTask({
-        token: session?.user.accessToken,
-        id: taskId,
-    }), getTaskComments({
-        token: session?.user.accessToken,
-        id: taskId
-    }), getTaskFiles({
-        token: session?.user.accessToken,
-        taskId
-    })]);
+    const [taskData, commentData, filesData] = await Promise.all([
+        getTask({
+            token: session?.user.accessToken,
+            id: taskId,
+        }),
+        getTaskComments({
+            token: session?.user.accessToken,
+            id: taskId
+        }),
+        getTaskFiles({
+            token: session?.user.accessToken,
+            taskId
+        })
+    ]);
+
+    const cantUpdateTask = !session?.user.permissions.includes(PERMISSIONS.update_tasks);
+    const cantDeleteTask = !session?.user.permissions.includes(PERMISSIONS.delete_tasks);
 
     return (
         <section className="px-4 py-12 lg:px-6 space-y-10">
@@ -57,8 +65,12 @@ export const TaskContent = async ({ taskId }: Props) => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                    <EditTask task={taskData.data} />
-                    <DeleteTask taskId={taskData.data.id} />
+                    {
+                        cantUpdateTask && <EditTask task={taskData.data} />
+                    }
+                    {
+                        cantDeleteTask && <DeleteTask taskId={taskData.data.id} />
+                    }
                 </div>
             </div>
 

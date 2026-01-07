@@ -29,7 +29,7 @@ export const LeadCard = ({ lead }: Props) => {
         scale: isDragging ? "1.03" : "1",
     };
 
-    const canLeadEdit = session.data?.user.permissions.includes(PERMISSIONS.updateLeads);
+    const canEditLead = session.data?.user.permissions.includes(PERMISSIONS.update_leads);
 
     return (
         <Card
@@ -110,7 +110,7 @@ export const LeadCard = ({ lead }: Props) => {
                 </time>
 
                 {
-                    canLeadEdit && <LeadOption lead={lead} />
+                    canEditLead && <LeadOption lead={lead} />
                 }
             </CardFooter>
         </Card>

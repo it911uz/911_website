@@ -11,11 +11,15 @@ import dayjs from "dayjs";
 import { EditTag } from "./edit-tag";
 import { Link } from "@/i18n/navigation";
 import { Routers } from "@/configs/router.config";
+import { useSession } from "next-auth/react";
+import { PERMISSIONS } from "@/const/permissions.const";
 
 export const TaskCard = ({ task }: Props) => {
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: `task-${task.id}`,
     });
+
+    const session = useSession();
 
     const [showAll, setShowAll] = useState(false);
 
@@ -28,6 +32,8 @@ export const TaskCard = ({ task }: Props) => {
     };
 
     const isExistDate = dayjs().diff(dayjs(task.updated_at), "hour") > 24;
+
+    const canSeeTask = session.data?.user.permissions.includes(PERMISSIONS.view_tasks);
 
     return (
         <Card
@@ -67,7 +73,7 @@ export const TaskCard = ({ task }: Props) => {
                     {isExistDate && (
                         <span className="flex items-center gap-1 ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-md">
                             <ClockAlert className="w-3 h-3" />
-                            Просрочено
+                            <span>Просрочено</span>
                         </span>
                     )}
                 </CardDescription>
@@ -110,11 +116,15 @@ export const TaskCard = ({ task }: Props) => {
                     ))}
                 </div>
 
-                <div className="ml-auto opacity-0 group-hover:opacity-100 transition">
-                    <Link href={Routers.admin.tasksById(task.id)}>
-                        <Eye className="w-5 h-5 text-gray-600 hover:text-black" />
-                    </Link>
-                </div>
+                {
+                    canSeeTask && <div className="ml-auto opacity-0 group-hover:opacity-100 transition">
+                        <Link href={Routers.admin.tasksById(task.id)}>
+                            <Eye className="w-5 h-5 text-gray-600 hover:text-black" />
+                        </Link>
+                    </div>
+                }
+
+
             </CardFooter>
         </Card>
     );

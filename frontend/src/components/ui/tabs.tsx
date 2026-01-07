@@ -19,7 +19,7 @@ function TabsList({ className, ...props }: ComponentProps<typeof TabsPrimitive.L
         <TabsPrimitive.List
             data-slot="tabs-list"
             className={cn(
-                "bg-gray-100 text-gray-600 inline-flex w-fit items-center justify-center rounded-lg p-[3px]",
+                "bg-gray-100 text-gray-600 inline-flex w-fit items-center justify-center rounded-lg p-0.75",
                 className
             )}
             {...props}

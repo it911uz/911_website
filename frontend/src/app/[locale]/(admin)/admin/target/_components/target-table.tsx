@@ -5,19 +5,24 @@ import { TargetTableRow } from "./target-table-row";
 import { auth } from "@/auth";
 import { ClientNoData } from "@/components/widgets/client-no-data";
 import { TargetPagination } from "./target-pagination";
+import { PrivacyError } from "@/components/widgets/privacy-error";
 
 export const TargetTable = async () => {
     const { perPage, page, isActive, query } = searchParamsCache.all();
 
     const session = await auth();
 
-    const { data } = await getTargets({
+    const { data, error } = await getTargets({
         page: page,
         perPage: perPage,
         isActive: isActive,
         token: session?.user.accessToken,
         query
     });
+
+    if (error?.response.status === 403) {
+        return <PrivacyError />
+    }
 
     return data.items.length ? <section data-slot="targets" className="px-4 py-10 lg:px-8 ">
         <TableWrapper>

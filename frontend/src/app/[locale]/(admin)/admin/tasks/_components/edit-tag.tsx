@@ -66,7 +66,7 @@ export const EditTag = ({ tag }: Props) => {
     }
 
     return <Sheet open={open} onOpenChange={onOpenChange}>
-        <span onClick={() => onOpenChange(true)} className="border rounded-full px-3 cursor-pointer" style={{ borderColor: tag.hex }}>
+        <span onClick={() => onOpenChange(true)} className="border rounded-full px-3 cursor-pointer hover:bg-gray-200" style={{ borderColor: tag.hex }}>
             {tag.name}
         </span>
 
