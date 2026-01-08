@@ -46,7 +46,7 @@ export const refreshAccessToken = async (jwt: JWT): Promise<JWT> => {
         refreshToken: response.data.refresh_token,
         expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
         isSuperuser: me.data.is_superuser,
-        permissions: me.data.role.permissions.map(p => p.codename), //
+        permissions: me.data.role.permissions.map((p) => p.codename),
     };
 };
 
@@ -92,21 +92,19 @@ export const AuthConfig: NextAuthConfig = {
 
             return null;
         },
-        session: ({ session, token }) => {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    userId: token.userId,
-                    userEmail: token.userEmail,
-                    accessToken: token.accessToken,
-                    expiresAt: token.expiresAt,
-                    refreshToken: token.refreshToken,
-                    isSuperuser: token.isSuperuser ?? false, //
-                    permissions: token.permissions ?? [], //
-                },
-            };
-        },
+        session: ({ session, token }) => ({
+            ...session,
+            user: {
+                ...session.user,
+                userId: token.userId,
+                userEmail: token.userEmail,
+                accessToken: token.accessToken,
+                expiresAt: token.expiresAt,
+                refreshToken: token.refreshToken,
+                isSuperuser: token.isSuperuser ?? false,
+                permissions: token.permissions ?? [],
+            },
+        }),
         authorized: ({ auth }) => !!auth,
     },
 };
@@ -124,22 +122,25 @@ export const CredentialsProviderConfig: CredentialsConfig = {
     },
     authorize: async (credentials) => {
         try {
-            const data = safeParse(loginSchema, credentials);
+            const parsed = safeParse(loginSchema, credentials);
+            if (!parsed.success) {
+                throw new CredentialsSignin("Неверные данные формы");
+            }
 
             const formData = new FormData();
 
-            if (data.success) {
-                formData.append("username", data.data.username);
-                formData.append("password", data.data.password);
+            if (parsed.success) {
+                formData.append("username", parsed.data.username);
+                formData.append("password", parsed.data.password);
             }
 
-            if (!data.success) {
+            if (!parsed.success) {
                 console.error(
                     "PATH: auth CredentialsProvider. Invalid credentials in CredentialsProvider",
-                    data,
+                    parsed,
                 );
                 throw new InvalidLoginError("Неверные учетные данные", {
-                    cause: data,
+                    cause: parsed,
                 });
             }
 
@@ -149,32 +150,32 @@ export const CredentialsProviderConfig: CredentialsConfig = {
                 console.error("PATH: auth CredentialsProvider. Invalid credentials", {
                     cause: response,
                 });
-                throw new InvalidLoginError(
-                    "Такой комбинации username и пароля не существует",
-                    {
-                        cause: response,
-                    },
+                throw new CredentialsSignin(
+                    response.error?.detail ?? "Неверный логин или пароль",
                 );
             }
 
-            const me = await getMe(response.data.access_token);
+            const me = await getMe(response.data?.access_token as string);
 
             const user: User = {
                 id: String(me.data.id),
                 userId: me.data.id,
                 userEmail: me.data.email,
-                accessToken: response.data.access_token,
-                refreshToken: response.data.refresh_token,
+                accessToken: response.data?.access_token as string,
+                refreshToken: response.data?.refresh_token as string,
                 expiresAt: Date.now() + SESSION_TOKEN_EXPIRATION,
                 name: me.data.full_name,
                 email: me.data.email,
-                isSuperuser: me.data.is_superuser, //
-                permissions: me.data.role.permissions.map((p) => p.codename), //
+                isSuperuser: me.data.is_superuser,
+                permissions: me.data.role.permissions.map((p) => p.codename),
             };
 
             return user;
         } catch (error: unknown) {
-            if (error instanceof CredentialsSignin) throw error;
+            if (error instanceof CredentialsSignin) {
+                throw error;
+            };
+
             throw new InvalidLoginError(
                 error instanceof Error ? error.message : "Ошибка авторизации",
                 error,
