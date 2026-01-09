@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -52,7 +51,7 @@ export const ColumnEdit = ({ columnData }: Props) => {
             }
 
             toast.success("Колонка обновлена");
-             router.refresh();
+            router.refresh();
             queryClient.invalidateQueries({ queryKey: [tasksQueryKey.status.getTasksStatuses] });
             onOpenChange(false);
         })
@@ -74,7 +73,7 @@ export const ColumnEdit = ({ columnData }: Props) => {
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -84,7 +83,7 @@ export const ColumnEdit = ({ columnData }: Props) => {
 
                     <Input color="light" defaultValue={"#000"} id="hex" type="color" sizes={"lg"} {...register("hex")} />
 
-                    <ErrorMassage error={errors.hex?.message} />
+                    <FieldError errors={[errors.hex]} />
                 </Field>
 
                 <Field>
@@ -96,7 +95,7 @@ export const ColumnEdit = ({ columnData }: Props) => {
                         <Input id="checkbox" type="checkbox" {...register("is_completed")} />
                     </div>
 
-                    <ErrorMassage error={errors.is_completed?.message} />
+                    <FieldError errors={[errors.is_completed]} />
                 </Field>
 
                 <Button loading={pending} variant={"black"} size={"lg"}>

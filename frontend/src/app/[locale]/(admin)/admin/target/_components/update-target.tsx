@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -9,7 +9,6 @@ import { targetSchema, type TargetSchemaType } from "@/schemas/target.schema";
 import { PenLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { useTransition } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -66,7 +65,7 @@ export const UpdateTarget = ({ target }: Props) => {
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите имя" {...register("name")} />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -78,7 +77,7 @@ export const UpdateTarget = ({ target }: Props) => {
                         <Input id="is_active" type="checkbox" sizes={"lg"} color="light" {...register("is_active")} />
                     </div>
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.is_active]} />
                 </Field>
 
                 <Button loading={pending} variant={"black"} size={"lg"}>

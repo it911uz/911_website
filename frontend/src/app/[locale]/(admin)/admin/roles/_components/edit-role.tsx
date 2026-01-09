@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -109,19 +108,21 @@ export const EditRole = ({ role }: Props) => {
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Controller
                     control={control}
                     name="permissions"
-                    render={({ field }) => (
+                    render={({ field, formState: { errors } }) => (
                         <Field>
                             <FieldLabel className="text-lg" required htmlFor="permissions">
                                 Права
                             </FieldLabel>
 
                             <SelectPermissions onValueChange={field.onChange} defaultValue={field.value} />
+
+                            <FieldError errors={[errors.permissions]} />
                         </Field>
                     )}
                 />

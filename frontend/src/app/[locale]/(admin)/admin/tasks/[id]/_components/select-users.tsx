@@ -56,6 +56,7 @@ export const SelectUsers = ({ onValueChange, defaultValue }: Props) => {
             onChange={handleChange}
             placeholder="Выберите исполнителей"
             noOptionsMessage={() => "Нет доступных пользователей"}
+            className="z-10"
         />
     );
 };

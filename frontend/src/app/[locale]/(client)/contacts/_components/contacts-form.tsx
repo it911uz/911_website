@@ -1,14 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { leadSchema, type LeadSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { contactAction } from "@/actions/contact.action";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -57,7 +56,7 @@ export const ContactsForm = () => {
 
             <Input border={false} type="text" id="name" placeholder={t("namePlaceholder")} {...register("full_name")} />
 
-            <ErrorMassage error={errors.full_name?.message} />
+            <FieldError errors={[errors.full_name]} />
         </Field>
 
         <Field>
@@ -67,7 +66,7 @@ export const ContactsForm = () => {
 
             <Input border={false} type="text" id="phone" placeholder={t("phonePlaceholder")} {...register("phone")} />
 
-            <ErrorMassage error={errors.phone?.message} />
+            <FieldError errors={[errors.phone]} />
         </Field>
 
         <Field>
@@ -77,7 +76,7 @@ export const ContactsForm = () => {
 
             <Input border={false} type="email" id="email" placeholder={t("emailPlaceholder")} {...register("email")} />
 
-            <ErrorMassage error={errors.email?.message} />
+            <FieldError errors={[errors.email]} />
         </Field>
 
         <Field>
@@ -87,7 +86,7 @@ export const ContactsForm = () => {
 
             <Input border={false} type="text" id="company_name" placeholder={t("organizationNamePlaceholder")} {...register("company_name")} />
 
-            <ErrorMassage error={errors.company_name?.message} />
+            <FieldError errors={[errors.company_name]} />
         </Field>
 
         <Field>
@@ -97,7 +96,7 @@ export const ContactsForm = () => {
 
             <Textarea bordered={false} placeholder={t("organizationInfoPlaceholder")} {...register("company_info")} />
 
-            <ErrorMassage error={errors.company_info?.message} />
+            <FieldError errors={[errors.company_info]} />
         </Field>
 
         <Button disabled={!isDirty} loading={pending} rounded={true} size={"lg"} className="font-black" variant={"red"}>

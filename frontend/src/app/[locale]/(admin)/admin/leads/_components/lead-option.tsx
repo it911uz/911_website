@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
     Sheet,
@@ -19,7 +19,6 @@ import {
 import { useOpen } from "@/hooks/use-open";
 import { CircleEllipsis, FolderDown, Mail, Phone, FileText } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { messageSchema, type MessageSchemaType } from "@/schemas/lead.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -167,14 +166,14 @@ export const LeadOption = ({ lead }: Props) => {
                     <Controller
                         control={control}
                         name="message"
-                        render={({ field, fieldState }) => (
+                        render={({ field, fieldState: { error } }) => (
                             <Field>
                                 <CustomSunEditor
                                     setContents={field.value}
                                     defaultValue={field.value}
                                     onChange={field.onChange}
                                 />
-                                <ErrorMassage error={fieldState.error?.message} />
+                                <FieldError errors={[error]} />
                             </Field>
                         )}
                     />
@@ -182,7 +181,7 @@ export const LeadOption = ({ lead }: Props) => {
                     <Controller
                         control={control}
                         name="files"
-                        render={({ field, fieldState }) => (
+                        render={({ field, fieldState: { error } }) => (
                             <Field>
                                 <FieldLabel className="text-lg font-medium text-gray-700 mb-2">
                                     📎 Прикрепить файлы
@@ -198,7 +197,7 @@ export const LeadOption = ({ lead }: Props) => {
                                         field.onChange(Array.from(e.target.files || []))
                                     }
                                 />
-                                <ErrorMassage error={fieldState.error?.message} />
+                                <FieldError errors={[error]} />
                             </Field>
                         )}
                     />

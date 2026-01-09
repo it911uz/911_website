@@ -4,8 +4,7 @@ import { createTaskComment } from "@/api/tasks/create-task-comment.api";
 import { uploadTaskFile } from "@/api/tasks/upload-task-file.api";
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PERMISSIONS } from "@/const/permissions.const";
 import { useRouter } from "@/i18n/navigation";
@@ -84,14 +83,14 @@ export const TaskComment = () => {
             <Controller
                 name="comment"
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <Field>
                         <CustomSunEditor
                             setContents={field.value}
                             defaultValue={field.value}
                             onChange={field.onChange}
                         />
-                        <ErrorMassage error={fieldState.error?.message} />
+                        <FieldError errors={[error]} />
                     </Field>
                 )}
             />
@@ -99,7 +98,7 @@ export const TaskComment = () => {
             <Controller
                 name="files"
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <Field>
                         <FieldLabel className="text-lg font-medium text-gray-700 mb-2">
                             📎 Прикрепить файлы
@@ -115,7 +114,7 @@ export const TaskComment = () => {
                                 field.onChange(Array.from(e.target.files || []))
                             }
                         />
-                        <ErrorMassage error={fieldState.error?.message} />
+                        <FieldError errors={[error]} />
                     </Field>
                 )}
             />

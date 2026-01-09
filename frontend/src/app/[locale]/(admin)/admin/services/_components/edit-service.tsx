@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -74,7 +73,7 @@ export const EditService = ({ service }: Props) => {
                     <Field>
                         <FieldLabel required>Название</FieldLabel>
                         <Input color="light" {...register("name")} />
-                        <ErrorMassage error={errors.name?.message} />
+                        <FieldError errors={[errors.name]} />
                     </Field>
 
                     <Field >
@@ -86,7 +85,7 @@ export const EditService = ({ service }: Props) => {
                                 valueAsNumber: true,
                             })}
                         />
-                        <ErrorMassage error={errors.price?.message} />
+                        <FieldError errors={[errors.price]} />
                     </Field>
 
                     <Field >
@@ -95,6 +94,8 @@ export const EditService = ({ service }: Props) => {
                         <div>
                             <Input color="light" type="checkbox"  {...register("is_subscription")} />
                         </div>
+
+                        <FieldError errors={[errors.is_subscription]} />
                     </Field>
 
                     <Controller
@@ -111,7 +112,7 @@ export const EditService = ({ service }: Props) => {
                                     onChange={field.onChange}
                                 />
 
-                                <ErrorMassage error={errors.description?.message} />
+                                <FieldError errors={[errors.description]} />
                             </Field>
                         )}
                     />

@@ -1,8 +1,7 @@
 "use client";
 
 import { useGetRoles } from "@/api/hooks/use-roles.api";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import Select from 'react-select'
 import type { EmploySchemaType } from "@/schemas/employ.schema";
 import { useSession } from "next-auth/react";
@@ -39,7 +38,7 @@ export const SelectRole = ({ control }: Props) => {
                         placeholder="Выберите роль"
                     />
 
-                    <ErrorMassage error={errors.role_id?.message} />
+                    <FieldError errors={[errors.role_id]} />
                 </Field>
             )}
         />

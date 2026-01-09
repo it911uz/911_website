@@ -14,7 +14,6 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Mail, User, Phone, Briefcase, KeyRound } from "lucide-react";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { type EmploySchemaType } from "@/schemas/employ.schema";
 import { useTransition } from "react";
 import { editUser } from "@/api/users/edit-user.api";
@@ -22,6 +21,7 @@ import { useSession } from "next-auth/react";
 import { toastErrorResponse } from "@/lib/toast-error-response.util";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { FieldError } from "@/components/ui/field";
 
 export const ProfileForm = ({ user }: Props) => {
     const [pending, startTransition] = useTransition();
@@ -88,7 +88,7 @@ export const ProfileForm = ({ user }: Props) => {
                             <User className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                         </div>
 
-                        <ErrorMassage error={errors.username?.message} />
+                        <FieldError errors={[errors.username]} />
                     </div>
 
                     <div className="space-y-2">
@@ -103,7 +103,7 @@ export const ProfileForm = ({ user }: Props) => {
                             />
                             <KeyRound className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                         </div>
-                        <ErrorMassage error={errors.full_name?.message} />
+                        <FieldError errors={[errors.full_name]} />
                     </div>
 
                     <div className="space-y-2 col-span-1 md:col-span-2">
@@ -118,7 +118,7 @@ export const ProfileForm = ({ user }: Props) => {
                             />
                             <Mail className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                         </div>
-                        <ErrorMassage error={errors.email?.message} />
+                        <FieldError errors={[errors.email]} />
                     </div>
 
                     <div className="space-y-2">
@@ -134,7 +134,7 @@ export const ProfileForm = ({ user }: Props) => {
                             />
                             <Phone className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                         </div>
-                        <ErrorMassage error={errors.phone_number?.message} />
+                        <FieldError errors={[errors.phone_number]} />
                     </div>
 
                     <div className="space-y-2">
@@ -157,8 +157,9 @@ export const ProfileForm = ({ user }: Props) => {
                         disabled={pending}
                         variant={"black"}
                         size={"lg"}
+                        loading={pending}
                     >
-                        {pending ? "Сохранение..." : "Сохранить"}
+                        Сохранить
                     </Button>
                 </CardFooter>
             </form>

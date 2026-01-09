@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -71,7 +70,7 @@ export const CreateComment = () => {
                 <Controller
                     name="comment"
                     control={control}
-                    render={({ field }) => (
+                    render={({ field, formState: { errors } }) => (
                         <Field>
                             <FieldLabel className="text-lg" required htmlFor="info">
                                 Описание компании
@@ -80,7 +79,7 @@ export const CreateComment = () => {
                                 defaultValue={field.value}
                                 onChange={field.onChange}
                             />
-                            <ErrorMassage error={errors.comment?.message} />
+                            <FieldError errors={[errors.comment]} />
                         </Field>
                     )}
                 />

@@ -15,9 +15,8 @@ import {
 	type ComponentProps,
 	type HTMLAttributes,
 	type KeyboardEvent,
-	type ReactNode,
 } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
