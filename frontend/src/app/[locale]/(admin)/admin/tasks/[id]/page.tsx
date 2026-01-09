@@ -6,7 +6,6 @@ import { redirect } from "@/i18n/navigation";
 import { Routers } from "@/configs/router.config";
 import { auth } from "@/auth";
 import { PERMISSIONS } from "@/const/permissions.const";
-
 const Page = async ({ params, searchParams }: PageProps<"/[locale]/admin/tasks/[id]">) => {
     const { locale, id } = await params;
     setRequestLocale(locale as Locale);

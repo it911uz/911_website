@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -67,7 +66,7 @@ export const CreateTag = () => {
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -77,7 +76,7 @@ export const CreateTag = () => {
 
                     <Input id="hex" type="color" sizes={"lg"} color="light" placeholder="Введите цвет" {...register("hex")} />
 
-                    <ErrorMassage error={errors.hex?.message} />
+                    <FieldError errors={[errors.hex]} />
                 </Field>
 
                 <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>

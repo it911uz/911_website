@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -85,7 +84,7 @@ export const EditCompany = ({ company }: Props) => {
                             placeholder="Введите название"
                             {...register("name")}
                         />
-                        <ErrorMassage error={errors.name?.message} />
+                        <FieldError errors={[errors.name]} />
                     </Field>
 
                     <Field>
@@ -100,7 +99,7 @@ export const EditCompany = ({ company }: Props) => {
                             placeholder="Введите номер"
                             {...register("phone_number")}
                         />
-                        <ErrorMassage error={errors.phone_number?.message} />
+                        <FieldError errors={[errors.phone_number]} />
                     </Field>
 
                     <Controller
@@ -115,7 +114,7 @@ export const EditCompany = ({ company }: Props) => {
                                     defaultValue={field.value}
                                     onChange={field.onChange}
                                 />
-                                <ErrorMassage error={errors.info?.message} />
+                                <FieldError errors={[errors.info]} />
                             </Field>
                         )}
                     />
@@ -141,7 +140,7 @@ export const EditCompany = ({ company }: Props) => {
                                         <SelectItem value="pending">Ожидает</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <ErrorMassage error={errors.status?.message} />
+                                <FieldError errors={[errors.status]} />
                             </Field>
                         )}
                     />

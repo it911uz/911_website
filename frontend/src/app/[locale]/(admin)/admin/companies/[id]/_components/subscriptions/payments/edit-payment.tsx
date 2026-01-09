@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -85,22 +84,26 @@ export const UpdatePayment = ({ subscriptionId, paymentData }: Props) => {
                             placeholder="Введите сумму"
                             {...register("amount", { valueAsNumber: true })}
                         />
-                        <ErrorMassage error={errors.amount?.message} />
+                        <FieldError errors={[errors.amount]} />
                     </Field>
 
-                    <Controller name="status" control={control} render={({ field }) => <Select onValueChange={(value) => field.onChange(value)} defaultValue={field.value} value={field.value}>
-                        <SelectTrigger className="w-full" size="lg">
-                            <SelectValue placeholder="Выберите услугу" />
-                        </SelectTrigger>
+                    <Controller name="status" control={control} render={({ field, formState: { errors } }) => <Field>
+                        <Select onValueChange={(value) => field.onChange(value)} defaultValue={field.value} value={field.value}>
+                            <SelectTrigger className="w-full" size="lg">
+                                <SelectValue placeholder="Выберите услугу" />
+                            </SelectTrigger>
 
-                        <SelectContent>
-                            {PAYMENT_VALUES.map((item) => (
-                                <SelectItem key={item.value} value={item.value}>
-                                    {item.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>} />
+                            <SelectContent>
+                                {PAYMENT_VALUES.map((item) => (
+                                    <SelectItem key={item.value} value={item.value}>
+                                        {item.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        <FieldError errors={[errors.status]} />
+                    </Field>} />
 
                     <Button loading={pending} variant="black" size="lg" type="submit">
                         Сохранить

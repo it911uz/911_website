@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -83,7 +82,7 @@ export const EditEmploy = ({ user }: Props) => {
                             placeholder="Введите ФИО"
                             {...register("full_name")}
                         />
-                        <ErrorMassage error={errors.full_name?.message} />
+                        <FieldError errors={[errors.full_name]} />
                     </Field>
 
                     <Field>
@@ -97,7 +96,7 @@ export const EditEmploy = ({ user }: Props) => {
                             placeholder="Введите имя пользователя"
                             {...register("username")}
                         />
-                        <ErrorMassage error={errors.username?.message} />
+                        <FieldError errors={[errors.username]} />
                     </Field>
 
                     <Field>
@@ -111,7 +110,7 @@ export const EditEmploy = ({ user }: Props) => {
                             placeholder="Введите почту"
                             {...register("email")}
                         />
-                        <ErrorMassage error={errors.email?.message} />
+                        <FieldError errors={[errors.email]} />
                     </Field>
 
                     <SelectRole control={control} />
@@ -127,7 +126,7 @@ export const EditEmploy = ({ user }: Props) => {
                             placeholder="+998901234567"
                             {...register("phone_number")}
                         />
-                        <ErrorMassage error={errors.phone_number?.message} />
+                        <FieldError errors={[errors.phone_number]} />
                     </Field>
 
                     <Field>
@@ -141,7 +140,7 @@ export const EditEmploy = ({ user }: Props) => {
                             placeholder="Введите пароль"
                             {...register("password")}
                         />
-                        <ErrorMassage error={errors.password?.message} />
+                        <FieldError errors={[errors.password]} />
                     </Field>
 
                     <Button loading={pending} type="submit" size="lg" variant="black">

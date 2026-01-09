@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -115,7 +114,7 @@ export const CreateSubscription = () => {
                                     }}
                                     value={field.value?.toString()}
                                 />
-                                <ErrorMassage error={errors.service_id?.message} />
+                                <FieldError errors={[errors.service_id]} />
                             </Field>
                         )}
                     />
@@ -141,7 +140,7 @@ export const CreateSubscription = () => {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    <ErrorMassage error={errors.payment_type?.message} />
+                                    <FieldError errors={[errors.payment_type]} />
                                 </Field>
                             )}
                         />
@@ -158,7 +157,7 @@ export const CreateSubscription = () => {
                             placeholder="Введите сумму"
                             {...register("price", { valueAsNumber: true })}
                         />
-                        <ErrorMassage error={errors.price?.message} />
+                        <FieldError errors={[errors.price]} />
                     </Field>
 
                     <Field>
@@ -171,7 +170,7 @@ export const CreateSubscription = () => {
                             color="light"
                             {...register("start_date")}
                         />
-                        <ErrorMassage error={errors.start_date?.message} />
+                        <FieldError errors={[errors.start_date]} />
                     </Field>
 
                     {selectedService?.is_subscription && ["monthly", "annually"].includes(watchPaymentType || "") && (
@@ -185,7 +184,7 @@ export const CreateSubscription = () => {
                                 color="light"
                                 {...register("end_date")}
                             />
-                            <ErrorMassage error={errors.end_date?.message} />
+                            <FieldError errors={[errors.end_date]} />
                         </Field>
                     )}
 

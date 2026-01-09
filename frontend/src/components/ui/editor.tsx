@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
-	loading: () => <Skeleton className="h-[366px] w-full" />,
+	loading: () => <Skeleton className="h-91.5 w-full" />,
 });
 
 export const CustomSunEditor = ({
@@ -17,7 +17,7 @@ export const CustomSunEditor = ({
 	...restEditorProps
 }: Props) => {
 	return (
-		<div className={cn("*:font-[inherit]! min-h-[366px]", wrapperClass)}>
+		<div className={cn("*:font-[inherit]! min-h-91.5", wrapperClass)}>
 			<SunEditor
 				// lang="ru"
 				setOptions={{
@@ -29,7 +29,7 @@ export const CustomSunEditor = ({
 					},
 					imageAccept:
 						"image/jpeg,image/png,image/webp,image/avif,image/svg+xml",
-					imageUploadSizeLimit: 2 * 10 ** 6, // 2mb
+					imageUploadSizeLimit: 2 * 10 ** 6,
 					imageMultipleFile: true,
 					paragraphStyles: ["bordered", "spaced"],
 					formats: ["p", "h1", "h2", "h3", "h4", "h5", "h6"],

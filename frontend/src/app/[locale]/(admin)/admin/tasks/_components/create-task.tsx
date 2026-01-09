@@ -2,10 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+} from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
 import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -26,8 +30,19 @@ export const CreateTask = () => {
     const [pending, startTransition] = useTransition();
     const session = useSession();
     const router = useRouter();
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm<TaskSchemaType>({
-        resolver: zodResolver(taskSchema)
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+        reset,
+    } = useForm<TaskSchemaType>({
+        resolver: zodResolver(taskSchema),
+        defaultValues: {
+            tags: [],
+            users: [],
+        },
     });
 
     const onSubmit = (values: TaskSchemaType) => {
@@ -39,13 +54,13 @@ export const CreateTask = () => {
                     name: values.name,
                     status_id: values.status_id,
                     tag_ids: values.tags,
-                    user_ids: values.users
+                    user_ids: values.users,
                 },
-                token: session.data?.user.accessToken
+                token: session.data?.user.accessToken,
             });
 
             if (!response.ok) {
-                toastErrorResponse(response.data)
+                toastErrorResponse(response.data);
                 return;
             }
 
@@ -53,104 +68,145 @@ export const CreateTask = () => {
             router.refresh();
             reset();
             onOpenChange(false);
-        })
-    }
+        });
+    };
 
-    return <Sheet open={open} onOpenChange={onOpenChange}>
-        <Button className="text-lg" onClick={() => onOpenChange(true)} size={"md"} variant={"black"}>
-            <Plus />
+    return (
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <Button
+                className="text-lg"
+                onClick={() => onOpenChange(true)}
+                size="md"
+                variant="black"
+            >
+                <Plus />
+                <span>Добавить таск</span>
+            </Button>
 
-            <span>
-                Добавить таск
-            </span>
-        </Button>
+            <SheetContent className="w-3/5">
+                <SheetHeader>
+                    <SheetTitle>Создание таска</SheetTitle>
+                </SheetHeader>
 
-        <SheetContent className="w-3/5">
-            <SheetHeader>
-                <SheetTitle>Создание таска</SheetTitle>
-            </SheetHeader>
-
-            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-                <Field>
-                    <FieldLabel className="text-lg" required htmlFor="name">
-                        Название
-                    </FieldLabel>
-
-                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
-
-                    <ErrorMassage error={errors.name?.message} />
-                </Field>
-
-                <Field>
-                    <FieldLabel className="text-lg" required htmlFor="deadline">
-                        Срок выполнения
-                    </FieldLabel>
-
-                    <Input id="deadline" type="date" sizes={"lg"} color="light" placeholder="Введите дедлайн" {...register("deadline")} />
-
-                    <ErrorMassage error={errors.deadline?.message} />
-                </Field>
-
-                <Controller
-                    name="status_id"
-                    control={control}
-                    render={({ field }) => <Field>
-                        <FieldLabel className="text-lg" required htmlFor="status_id">
-                            Статус
+                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                    <Field>
+                        <FieldLabel className="text-lg" required htmlFor="name">
+                            Название
                         </FieldLabel>
 
-                        <SelectStatus onValueChange={(v) => field.onChange(Number(v))} />
-
-                        <ErrorMassage error={errors.status_id?.message} />
-                    </Field>}
-                />
-
-                <Controller
-                    name="tags"
-                    control={control}
-                    render={({ field }) => <Field>
-                        <FieldLabel className="text-lg" required htmlFor="tags">
-                            Теги
-                        </FieldLabel>
-
-                        <SelectTags
-                            defaultValue={field.value?.map(String)}
-                            onValueChange={(arr) => field.onChange(arr.map(Number))}
+                        <Input
+                            id="name"
+                            type="text"
+                            sizes="md"
+                            color="light"
+                            placeholder="Введите название"
+                            className="shadow-none"
+                            {...register("name")}
                         />
 
-                        <ErrorMassage error={errors.tags?.message} />
-                    </Field>}
-                />
+                        <FieldError errors={[errors.name]} />
+                    </Field>
 
-                <Controller
-                    name="users"
-                    control={control}
-                    render={({ field }) => <Field>
-                        <FieldLabel className="text-lg" required htmlFor="users">
-                            Исполнители
+                    <Field>
+                        <FieldLabel className="text-lg" required htmlFor="deadline">
+                            Срок выполнения
                         </FieldLabel>
 
-                        <SelectUsers
-                            defaultValue={field.value?.map(String)}
-                            onValueChange={(arr) => field.onChange(arr.map(Number))}
+                        <Input
+                            id="deadline"
+                            type="date"
+                            sizes="md"
+                            color="light"
+                            className="shadow-none"
+                            {...register("deadline")}
                         />
-                    </Field>}
-                />
 
-                <Controller
-                    name="description"
-                    control={control}
-                    render={({ field }) => <Field>
-                        <FieldLabel className="text-lg" required htmlFor="description">
-                            Описание организации
-                        </FieldLabel>
+                        <FieldError errors={[errors.deadline]} />
+                    </Field>
 
-                        <CustomSunEditor defaultValue={field.value} onChange={field.onChange} />
-                    </Field>}
-                />
+                    <Controller
+                        name="status_id"
+                        control={control}
+                        render={({ field }) => (
+                            <Field>
+                                <FieldLabel className="text-lg" required>
+                                    Статус
+                                </FieldLabel>
 
-                <Button loading={pending} type="submit" size={"lg"} variant={"black"}>Создать</Button>
-            </form>
-        </SheetContent>
-    </Sheet>
+                                <SelectStatus
+                                    defaultValue={field.value?.toString()}
+                                    onValueChange={(v) => field.onChange(Number(v))}
+                                />
+
+                                <FieldError errors={[errors.status_id]} />
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="tags"
+                        control={control}
+                        render={({ field }) => (
+                            <Field>
+                                <FieldLabel className="text-lg" required>
+                                    Теги
+                                </FieldLabel>
+
+                                <SelectTags
+                                    defaultValue={(field.value ?? []).map(String)}
+                                    onValueChange={(arr) =>
+                                        field.onChange(arr.map(Number))
+                                    }
+                                />
+
+                                <FieldError errors={[errors.tags]} />
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="users"
+                        control={control}
+                        render={({ field, formState: { errors } }) => (
+                            <Field>
+                                <FieldLabel className="text-lg" required>
+                                    Исполнители
+                                </FieldLabel>
+
+                                <SelectUsers
+                                    defaultValue={(field.value ?? []).map(String)}
+                                    onValueChange={(arr) =>
+                                        field.onChange(arr.map(Number))
+                                    }
+                                />
+
+                                <FieldError errors={[errors.users]} />
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="description"
+                        control={control}
+                        render={({ field, formState: { errors } }) => (
+                            <Field>
+                                <FieldLabel className="text-lg" required>
+                                    Описание организации
+                                </FieldLabel>
+
+                                <CustomSunEditor defaultValue={field.value} onChange={field.onChange}
+                                />
+
+                                <FieldError errors={[errors.description]} />
+                            </Field>
+                        )}
+                    />
+
+                    <Button loading={pending} type="submit" size="lg" variant="black">
+                        Создать
+                    </Button>
+                </form>
+            </SheetContent>
+        </Sheet>
+    );
 };

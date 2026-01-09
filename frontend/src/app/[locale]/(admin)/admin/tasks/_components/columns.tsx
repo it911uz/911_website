@@ -200,7 +200,7 @@ export const Columns = ({ columnsData = [] }: Props) => {
             {
                 optimisticColumns.length ? <DndContext id="columns" onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
                     <div className="w-full h-[80vh] overflow-y-scroll overflow-x-hidden">
-                        <div className={cn("grid overflow-x-auto gap-5")} style={{ gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)` }}>
+                        <div className={cn("grid overflow-x-auto gap-5 pb-10")} style={{ gridTemplateColumns: `repeat(${optimisticColumns.length}, 1fr)` }}>
                             <SortableContext items={optimisticColumns.map((col) => `column-${col.columnId}`)}>
                                 {optimisticColumns.map((column) => (
                                     <SortableContext key={column.columnId} id={`column-${column.columnId}`} items={column.tasks.map((i) => `task-${i.id}`)}>

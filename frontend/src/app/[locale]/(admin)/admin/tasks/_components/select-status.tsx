@@ -1,32 +1,61 @@
-"use client"
+"use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useSession } from "next-auth/react"
 import { useGetTasksStatuses } from "@/api/hooks/use-tasks.api";
+import type { OptionType } from "@/types/components.type";
+import { useSession } from "next-auth/react";
+import { useMemo, useCallback } from "react";
+import Select, { type SingleValue, type ActionMeta } from "react-select";
 
-export const SelectStatus = ({ onValueChange }: Props) => {
+export const SelectStatus = ({ onValueChange, defaultValue }: Props) => {
     const session = useSession();
-    const { data } = useGetTasksStatuses({
-        token: session.data?.user.accessToken
+
+    const { data, isLoading } = useGetTasksStatuses({
+        token: session.data?.user.accessToken,
     });
 
-    return <Select onValueChange={onValueChange}>
-        <SelectTrigger size="lg" className="w-72">
-            <SelectValue placeholder="Выберите статус" />
-        </SelectTrigger>
-        <SelectContent>
-            {
-                (data?.data?.length ?? 0) ? data?.data.map((item) => (
-                    <SelectItem key={item.id} value={item.id.toString()}>
-                        {item.name}
-                    </SelectItem>
-                )) : <p>Статусов нет</p>
-            }
+    const options = useMemo<OptionType[]>(() => {
+        return (
+            data?.data?.map((item) => ({
+                value: item.id.toString(),
+                label: item.name,
+            })) ?? []
+        );
+    }, [data?.data]);
 
-        </SelectContent>
-    </Select>
-}
+    const value = useMemo<OptionType | null>(() => {
+        if (!defaultValue || !options.length) return null;
+
+        return options.find(
+            (option) => option.value === defaultValue
+        ) ?? null;
+    }, [defaultValue, options]);
+
+    const handleChange = useCallback(
+        (
+            newValue: SingleValue<OptionType>,
+            _: ActionMeta<OptionType>
+        ) => {
+            if (!newValue) return;
+            onValueChange?.(newValue.value);
+        },
+        [onValueChange]
+    );
+
+    return (
+        <Select<OptionType, false>
+            isSearchable
+            isClearable
+            isLoading={isLoading}
+            options={options}
+            value={value}
+            onChange={handleChange}
+            placeholder="Выберите статус"
+            noOptionsMessage={() => "Статусов нет"}
+        />
+    );
+};
 
 interface Props {
-    onValueChange?(value: string): void
+    onValueChange?(value: string): void;
+    defaultValue?: string;
 }

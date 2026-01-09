@@ -1,14 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ErrorMassage } from "@/components/ui/error-message";
 import { useTransition } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -65,7 +64,7 @@ export const CreateColumn = () => {
 
                     <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -75,7 +74,7 @@ export const CreateColumn = () => {
 
                     <Input color="light" defaultValue={"#000"} id="hex" type="color" sizes={"lg"} {...register("hex")} />
 
-                    <ErrorMassage error={errors.hex?.message} />
+                    <FieldError errors={[errors.hex]} />
                 </Field>
 
                 <Field>
@@ -87,7 +86,7 @@ export const CreateColumn = () => {
                         <Input color="light" id="checkbox" type="checkbox" {...register("is_completed")} />
                     </div>
 
-                    <ErrorMassage error={errors.is_completed?.message} />
+                    <FieldError errors={[errors.is_completed]} />
                 </Field>
 
                 <Button loading={pending} variant={"black"} size={"lg"}>

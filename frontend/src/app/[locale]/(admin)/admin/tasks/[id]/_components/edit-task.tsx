@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
-import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -88,9 +87,17 @@ export const EditTask = ({ task }: Props) => {
                         Название
                     </FieldLabel>
 
-                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
+                    <Input
+                        id="name"
+                        type="text"
+                        sizes="md"
+                        color="light"
+                        placeholder="Введите название"
+                        className="shadow-none"
+                        {...register("name")}
+                    />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -98,15 +105,22 @@ export const EditTask = ({ task }: Props) => {
                         Срок выполнения
                     </FieldLabel>
 
-                    <Input id="deadline" type="date" sizes={"lg"} color="light" placeholder="Введите дедлайн" {...register("deadline")} />
+                    <Input
+                        id="deadline"
+                        type="date"
+                        sizes="md"
+                        color="light"
+                        className="shadow-none"
+                        {...register("deadline")}
+                    />
 
-                    <ErrorMassage error={errors.deadline?.message} />
+                    <FieldError errors={[errors.deadline]} />
                 </Field>
 
                 <Controller
                     name="status_id"
                     control={control}
-                    render={({ field }) => (
+                    render={({ field, formState: { errors } }) => (
                         <Field>
                             <FieldLabel className="text-lg" required htmlFor="status">
                                 Статус
@@ -116,6 +130,8 @@ export const EditTask = ({ task }: Props) => {
                                 value={field.value}
                                 onValueChange={(v) => field.onChange(Number(v))}
                             />
+
+                            <FieldError errors={[errors.status_id]} />
                         </Field>
                     )}
                 />
@@ -133,14 +149,14 @@ export const EditTask = ({ task }: Props) => {
                             onValueChange={(arr) => field.onChange(arr.map(Number))}
                         />
 
-                        <ErrorMassage error={errors.tags?.message} />
+                        <FieldError errors={[errors.tags]} />
                     </Field>}
                 />
 
                 <Controller
                     name="users"
                     control={control}
-                    render={({ field }) => <Field>
+                    render={({ field, formState: { errors } }) => <Field>
                         <FieldLabel className="text-lg" htmlFor="users">
                             Исполнители
                         </FieldLabel>
@@ -149,18 +165,22 @@ export const EditTask = ({ task }: Props) => {
                             defaultValue={field.value?.map(String)}
                             onValueChange={(arr) => field.onChange(arr.map(Number))}
                         />
+
+                        <FieldError errors={[errors.users]} />
                     </Field>}
                 />
 
                 <Controller
                     name="description"
                     control={control}
-                    render={({ field }) => <Field>
+                    render={({ field, formState: { errors } }) => <Field>
                         <FieldLabel className="text-lg" required htmlFor="description">
                             Описание организации
                         </FieldLabel>
 
                         <CustomSunEditor defaultValue={field.value} onChange={field.onChange} />
+
+                        <FieldError errors={[errors.description]} />
                     </Field>}
                 />
 

@@ -4,6 +4,10 @@ import { useGetPermissions } from "@/api/hooks/use-permissions.api";
 import Select, { type MultiValue, type ActionMeta } from 'react-select'
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
+import type { OptionType } from "@/types/components.type";
+import { Field } from "@/components/ui/field";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export const SelectPermissions = ({ onValueChange, defaultValue }: Props) => {
     const session = useSession();
@@ -28,7 +32,7 @@ export const SelectPermissions = ({ onValueChange, defaultValue }: Props) => {
 
     const value = useMemo(() => {
         if (!data?.data || !defaultValue) return [];
-        
+
         return defaultValue.map(value => {
             const permission = data.data.find(item => item.id.toString() === value);
             return {
@@ -38,25 +42,44 @@ export const SelectPermissions = ({ onValueChange, defaultValue }: Props) => {
         }).filter(option => option.label !== "");
     }, [data?.data, defaultValue]);
 
+    const handleSelectAll = () => {
+        const allValues = allOptions.map(item => item.value);
+        onValueChange(allValues);
+    };
+
     return (
-        <Select<OptionType, true>
-            value={value}
-            isSearchable={true}
-            closeMenuOnSelect={false}
-            onChange={handleChange}
-            isMulti
-            isLoading={isLoading}
-            options={allOptions}
-            placeholder="Выберите разрешения"
-            noOptionsMessage={() => "Нет доступных разрешений"}
-        />
+        <Field>
+            <Label className="flex gap-5 items-center">
+                <Checkbox
+                    onCheckedChange={value => {
+                        if (value) {
+                            handleSelectAll();
+                        } else {
+                            onValueChange([]);
+                        }
+
+                    }}
+                />
+
+                <span>
+                    Выбрать все права
+                </span>
+            </Label>
+
+            <Select<OptionType, true>
+                value={value}
+                isSearchable={true}
+                closeMenuOnSelect={false}
+                onChange={handleChange}
+                isMulti
+                isLoading={isLoading}
+                options={allOptions}
+                placeholder="Выберите разрешения"
+                noOptionsMessage={() => "Нет доступных разрешений"}
+            />
+        </Field>
     )
 }
-
-type OptionType = {
-    value: string;
-    label: string;
-};
 
 interface Props {
     onValueChange: (value: string[]) => void;
