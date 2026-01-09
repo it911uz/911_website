@@ -1,25 +1,61 @@
 "use client";
 
 import { useGetUsers } from "@/api/hooks/use-users.api";
-import { MultiSelect } from "@/components/ui/multi-select";
+import type { OptionType } from "@/types/components.type";
 import { useSession } from "next-auth/react";
+import { useMemo, useCallback } from "react";
+import Select, { type MultiValue, type ActionMeta } from "react-select";
+
+interface Props {
+    onValueChange(value: string[]): void;
+    defaultValue?: string[];
+}
 
 export const SelectUsers = ({ onValueChange, defaultValue }: Props) => {
     const session = useSession();
 
-    const { data } = useGetUsers({
+    const { data, isLoading } = useGetUsers({
         token: session.data?.user.accessToken,
     });
 
-    return <MultiSelect
-        items={data?.data.items?.map(item => ({ value: item.id.toString(), label: item.full_name })) ?? []}
-        placeholder="Выберите исполнителей"
-        onValueChange={onValueChange}
-        defaultValue={defaultValue}
-    />
-};
+    const options = useMemo<OptionType[]>(() => {
+        return (
+            data?.data.items?.map((item) => ({
+                value: item.id.toString(),
+                label: item.full_name,
+            })) ?? []
+        );
+    }, [data?.data.items]);
 
-interface Props {
-    onValueChange(value: string[]): void;
-    defaultValue?: string[]
-}
+    const value = useMemo<OptionType[]>(() => {
+        if (!defaultValue?.length || !options.length) return [];
+
+        return options.filter((option) =>
+            defaultValue.includes(option.value)
+        );
+    }, [defaultValue, options]);
+
+    const handleChange = useCallback(
+        (
+            newValue: MultiValue<OptionType>,
+            _: ActionMeta<OptionType>
+        ) => {
+            onValueChange(newValue.map((item) => item.value));
+        },
+        [onValueChange]
+    );
+
+    return (
+        <Select<OptionType, true>
+            isMulti
+            isSearchable
+            closeMenuOnSelect={false}
+            isLoading={isLoading}
+            options={options}
+            value={value}
+            onChange={handleChange}
+            placeholder="Выберите исполнителей"
+            noOptionsMessage={() => "Нет доступных пользователей"}
+        />
+    );
+};

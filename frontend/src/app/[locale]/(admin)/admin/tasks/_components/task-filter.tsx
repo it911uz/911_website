@@ -8,9 +8,10 @@ import { startTransition } from "react";
 import { SelectUsers } from "./select-users";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { SelectTags } from "./select-tags";
 
 export const TaskFilter = () => {
-    const [{ query }, setQuery] = useQueryStates(searchParamsParsers);
+    const [{ query, array, users, tags }, setQuery] = useQueryStates(searchParamsParsers);
 
     const handleReset = () => {
         startTransition(() => {
@@ -19,6 +20,7 @@ export const TaskFilter = () => {
                     query: null,
                     array: null,
                     users: null,
+                    tags: null
                 },
                 { startTransition }
             );
@@ -33,12 +35,12 @@ export const TaskFilter = () => {
             <div className="rounded-xl space-y-4">
                 <h3 className="text-lg font-semibold">Фильтр задач</h3>
 
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                     <Input
-                        className="w-96"
+                        className="w-96 shadow-none"
                         value={query ?? ""}
                         placeholder="Поиск задач..."
-                        sizes="lg"
+                        sizes={"md"}
                         color="light"
                         onChange={(e) =>
                             setQuery(
@@ -55,6 +57,19 @@ export const TaskFilter = () => {
                                 { startTransition }
                             );
                         }}
+                        defaultValue={array?.[0]?.toString() ?? ""}
+                    />
+
+                    <SelectTags
+                        defaultValue={tags?.map(String)}
+                        onValueChange={(values) => {
+                            setQuery(
+                                {
+                                    tags: values.map(Number),
+                                },
+                                { startTransition }
+                            );
+                        }}
                     />
 
                     <SelectUsers
@@ -67,12 +82,12 @@ export const TaskFilter = () => {
                     />
 
                     <Button
-                        size="lg"
-                        className="gap-2"
+                        className="gap-2 h-10"
                         onClick={handleReset}
                     >
                         <X className="h-4 w-4" />
-                        Сбросить
+
+                        <span>Сбросить</span>
                     </Button>
                 </div>
             </div>

@@ -31,3 +31,8 @@ export interface DynamicMetadata<
 	params: Promise<Params>;
 	searchParams: Promise<SearchParams>;
 }
+
+export interface OptionType {
+	value: string;
+	label: string;
+};

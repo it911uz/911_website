@@ -85,6 +85,10 @@ export const searchParamsParsers = {
         history: "replace",
         clearOnDefault: true,
     }),
+    tags: parseAsArrayOf(parseAsInteger).withOptions({
+        shallow: false,
+        history: "push",
+    }),
 };
 
 export const serialize = createSerializer(searchParamsParsers);

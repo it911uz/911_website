@@ -4,6 +4,7 @@ import { useGetPermissions } from "@/api/hooks/use-permissions.api";
 import Select, { type MultiValue, type ActionMeta } from 'react-select'
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
+import type { OptionType } from "@/types/components.type";
 
 export const SelectPermissions = ({ onValueChange, defaultValue }: Props) => {
     const session = useSession();
@@ -52,11 +53,6 @@ export const SelectPermissions = ({ onValueChange, defaultValue }: Props) => {
         />
     )
 }
-
-type OptionType = {
-    value: string;
-    label: string;
-};
 
 interface Props {
     onValueChange: (value: string[]) => void;

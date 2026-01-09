@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { CustomSunEditor } from "@/components/ui/editor";
 import { ErrorMassage } from "@/components/ui/error-message";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useOpen } from "@/hooks/use-open";
@@ -88,9 +88,17 @@ export const EditTask = ({ task }: Props) => {
                         Название
                     </FieldLabel>
 
-                    <Input id="name" type="text" sizes={"lg"} color="light" placeholder="Введите название" {...register("name")} />
+                    <Input
+                        id="name"
+                        type="text"
+                        sizes="md"
+                        color="light"
+                        placeholder="Введите название"
+                        className="shadow-none"
+                        {...register("name")}
+                    />
 
-                    <ErrorMassage error={errors.name?.message} />
+                    <FieldError errors={[errors.name]} />
                 </Field>
 
                 <Field>
@@ -98,9 +106,16 @@ export const EditTask = ({ task }: Props) => {
                         Срок выполнения
                     </FieldLabel>
 
-                    <Input id="deadline" type="date" sizes={"lg"} color="light" placeholder="Введите дедлайн" {...register("deadline")} />
+                    <Input
+                        id="deadline"
+                        type="date"
+                        sizes="md"
+                        color="light"
+                        className="shadow-none"
+                        {...register("deadline")}
+                    />
 
-                    <ErrorMassage error={errors.deadline?.message} />
+                    <FieldError errors={[errors.deadline]} />
                 </Field>
 
                 <Controller
