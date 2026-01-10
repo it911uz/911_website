@@ -31,7 +31,7 @@ export const TaskCard = ({ task }: Props) => {
         scale: isDragging ? "1.03" : "1",
     };
 
-    const isExistDate = dayjs().diff(dayjs(task.updated_at), "hour") > 24;
+    const isExistDate = dayjs().isAfter(dayjs(task.deadline));
 
     const canSeeTask = session.data?.user.permissions.includes(PERMISSIONS.view_tasks);
 
