@@ -2,6 +2,8 @@ import { getCompany } from "@/api/companies/get-company.api";
 import { auth } from "@/auth";
 import { CompanyTabs } from "./company-tabs";
 import { PrivacyError } from "@/components/widgets/privacy-error";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Routers } from "@/configs/router.config";
 
 export const CompanyContent = async ({ companyId }: Props) => {
     const session = await auth();
@@ -21,6 +23,20 @@ export const CompanyContent = async ({ companyId }: Props) => {
                 data-slot="company"
                 className="px-4 py-10 lg:px-8"
             >
+                <Breadcrumb className="mb-10">
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href={Routers.admin.companies}>Компании</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>
+                                {data.name}
+                            </BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+
                 <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
 
                     <div className="space-y-6 flex-1">
