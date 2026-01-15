@@ -1,71 +1,88 @@
-import CyberSecurityImage from "@public/images/cyber-security.jpg"
-import AiIntegrationImage from "@public/images/ai-integration.jpg"
-import DataCenterImage from "@public/images/data-center.jpg"
-import TechConferenceImage from "@public/images/tech-conference.jpg"
+import CrmSystemImage from "@public/images/crm-system.jpg";
+import MobileAppImage from "@public/images/mobile-development.webp";
+import TelegramBotImage from "@public/images/telegram-bots.webp";
+import WebAutomationImage from "@public/images/web-automation.png";
+import WebDevelopmentImage from "@public/images/web-development.jpg";
 
 export const newsData = [
-    {
-        id: 1,
-        name: {
-            ru: "Интеграция AI в систему мониторинга IT 911",
-            en: "AI Integration into IT 911 Monitoring System",
-            uz: "IT 911 monitoring tizimiga AI integratsiyasi",
-        },
-        created_at: new Date("2025-10-25T10:00:00.000Z"),
-        category: "ai",
-        image: AiIntegrationImage,
-        short_description: {
-            ru: "IT 911 внедрила искусственный интеллект в систему мониторинга. Теперь система способна предсказывать сбои и автоматически реагировать на критические ситуации.",
-            en: "IT 911 has integrated AI into its monitoring system. It can now predict failures and respond automatically to critical events.",
-            uz: "IT 911 monitoring tizimiga sun’iy intellekt qo‘shildi. Endi tizim nosozliklarni oldindan aniqlab, avtomatik javob bera oladi.",
-        }
-    },
-    {
-        id: 2,
-        name: {
-            ru: "Открытие нового дата-центра в Ташкенте",
-            en: "New Data Center Opened in Tashkent",
-            uz: "Toshkentda yangi ma’lumotlar markazi ochildi",
-        },
-        created_at: new Date("2025-11-01T15:00:00.000Z"),
-        category: "infrastructure",
-        image: DataCenterImage,
-        short_description: {
-            ru: "Мы открыли новый высокотехнологичный дата-центр, который обеспечивает более высокую скорость и надежность всех наших сервисов.",
-            en: "We’ve opened a new high-tech data center providing higher speed and reliability for all IT 911 services.",
-            uz: "Biz barcha IT 911 xizmatlari uchun yuqori tezlik va ishonchlilikni ta’minlovchi yangi texnologik ma’lumotlar markazini ochdik.",
-        }
-    },
-    {
-        id: 3,
-        name: {
-            ru: "Кибербезопасность 2025: новые протоколы защиты",
-            en: "Cybersecurity 2025: New Protection Protocols",
-            uz: "Kiberxavfsizlik 2025: yangi himoya protokollari",
-        },
-        created_at: new Date("2025-11-10T11:00:00.000Z"),
-        category: "security",
-        image: CyberSecurityImage,
-        short_description: {
-            ru: "IT 911 внедрила обновлённые протоколы безопасности, включая поведенческий анализ и систему предотвращения атак нулевого дня.",
-            en: "IT 911 implemented updated security protocols, including behavioral analytics and zero-day attack prevention systems.",
-            uz: "IT 911 yangilangan xavfsizlik protokollarini joriy etdi, ular orasida xulq-atvor tahlili va nol kunlik hujumlarni oldini olish tizimi mavjud.",
-        }
-    },
-    {
-        id: 4,
-        name: {
-            ru: "IT 911 на международной конференции TechFuture 2025",
-            en: "IT 911 at TechFuture 2025 Conference",
-            uz: "IT 911 TechFuture 2025 konferensiyasida",
-        },
-        created_at: new Date("2025-11-25T09:00:00.000Z"),
-        category: "events",
-        image: TechConferenceImage,
-        short_description: {
-            ru: "Наша команда представила инновационные решения в области кибербезопасности и AI-автоматизации на международной конференции TechFuture 2025.",
-            en: "Our team presented innovative cybersecurity and AI automation solutions at the TechFuture 2025 international conference.",
-            uz: "Jamoamiz TechFuture 2025 xalqaro konferensiyasida kiberxavfsizlik va AI avtomatlashtirish bo‘yicha innovatsion yechimlarni taqdim etdi.",
-        }
-    }
+	{
+		id: 1,
+		name: {
+			ru: "Запуск Telegram-ботов для автоматизации бизнеса",
+			en: "Launch of Telegram Bots for Business Automation",
+			uz: "Biznes jarayonlari uchun Telegram-botlar ishga tushirildi",
+		},
+		created_at: new Date("2025-12-03T11:00:00.000Z"),
+		category: "telegram",
+		image: TelegramBotImage,
+		short_description: {
+			ru: "IT 911 запустила разработку Telegram-ботов для приема заявок, уведомлений клиентов и автоматизации внутренних процессов компаний.",
+			en: "IT 911 launched Telegram bot development for handling requests, customer notifications, and automating internal company processes.",
+			uz: "IT 911 kompaniyalar uchun so‘rovlarni qabul qilish, xabarnomalar va ichki jarayonlarni avtomatlashtiruvchi Telegram-botlarni ishga tushirdi.",
+		},
+	},
+	{
+		id: 2,
+		name: {
+			ru: "Внедрение CRM-систем под бизнес-процессы клиентов",
+			en: "CRM Systems Tailored to Client Business Processes",
+			uz: "Mijozlar biznesiga mos CRM tizimlari joriy etildi",
+		},
+		created_at: new Date("2025-12-15T14:30:00.000Z"),
+		category: "crm",
+		image: CrmSystemImage,
+		short_description: {
+			ru: "Команда IT 911 внедрила CRM-системы с учётом специфики продаж, поддержки и аналитики для малого и среднего бизнеса.",
+			en: "The IT 911 team implemented CRM systems tailored to sales, support, and analytics needs for small and medium-sized businesses.",
+			uz: "IT 911 jamoasi kichik va o‘rta biznes uchun sotuv, qo‘llab-quvvatlash va tahlilga mos CRM tizimlarini joriy qildi.",
+		},
+	},
+	{
+		id: 3,
+		name: {
+			ru: "Автоматизация веб-сайтов и онлайн-сервисов",
+			en: "Website and Online Service Automation",
+			uz: "Veb-saytlar va onlayn xizmatlarni avtomatlashtirish",
+		},
+		created_at: new Date("2026-01-05T10:15:00.000Z"),
+		category: "automation",
+		image: WebAutomationImage,
+		short_description: {
+			ru: "IT 911 реализовала автоматизацию веб-сайтов: формы заявок, уведомления, интеграции с CRM и сторонними сервисами.",
+			en: "IT 911 implemented website automation including request forms, notifications, CRM integrations, and third-party services.",
+			uz: "IT 911 veb-saytlarda ariza shakllari, xabarnomalar va CRM integratsiyalarini avtomatlashtirdi.",
+		},
+	},
+	{
+		id: 4,
+		name: {
+			ru: "Разработка корпоративных веб-сайтов нового поколения",
+			en: "Next-Generation Corporate Website Development",
+			uz: "Yangi avlod korporativ veb-saytlari ishlab chiqildi",
+		},
+		created_at: new Date("2026-01-18T09:40:00.000Z"),
+		category: "web",
+		image: WebDevelopmentImage,
+		short_description: {
+			ru: "IT 911 представила современные веб-сайты с адаптивным дизайном, высокой скоростью загрузки и удобной административной панелью.",
+			en: "IT 911 introduced modern websites with responsive design, high performance, and user-friendly admin panels.",
+			uz: "IT 911 moslashuvchan dizayn, tezkor ishlash va qulay admin-panelga ega zamonaviy veb-saytlarni taqdim etdi.",
+		},
+	},
+	{
+		id: 5,
+		name: {
+			ru: "Старт мобильной разработки для бизнеса",
+			en: "Launch of Mobile App Development for Businesses",
+			uz: "Biznes uchun mobil ilovalar ishlab chiqish boshlandi",
+		},
+		created_at: new Date("2026-01-29T16:00:00.000Z"),
+		category: "mobile",
+		image: MobileAppImage,
+		short_description: {
+			ru: "IT 911 начала разработку мобильных приложений для управления заявками, клиентами и бизнес-процессами с iOS и Android.",
+			en: "IT 911 started developing mobile applications for managing requests, clients, and business processes on iOS and Android.",
+			uz: "IT 911 iOS va Android uchun arizalar, mijozlar va biznes jarayonlarini boshqaruvchi mobil ilovalarni ishlab chiqishni boshladi.",
+		},
+	},
 ] as const;
